@@ -7,6 +7,9 @@ on:
     paths:
       - 'gnl/**'
 
+permissions:
+  contents: write
+
 jobs:
   zip-tests:
     runs-on: ubuntu-latest
@@ -27,6 +30,6 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add zip/gnl.zip || true
+          git add -f zip/gnl.zip || true
           git diff --cached --quiet || git commit -m "Auto-update zipped gnl tests archive"
           git push origin master || echo "No changes to push"
