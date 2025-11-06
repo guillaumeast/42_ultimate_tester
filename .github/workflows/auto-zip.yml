@@ -25,31 +25,19 @@ jobs:
           mkdir -p zip
           zip -r "gnl.zip" "gnl/"
 
-      - name: Commit and push updated zip to gnl branch
+      - name: Commit and push updated gnl.zip to zip branch
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git checkout --orphan gnl
-          git reset
-          git add gnl.zip
-          git commit -m "Auto-update gnl.zip from master"
-          git push --force origin gnl
-
-      - name: Commit and push updated zip to gnl branch
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          if git ls-remote --exit-code --heads origin gnl >/dev/null 2>&1; then
-            git fetch origin gnl
-            git switch --detach gnl
+          if git ls-remote --exit-code --heads origin zip >/dev/null 2>&1; then
+            git fetch origin zip
+            git switch --detach zip
           else
-            git checkout --orphan gnl
+            git checkout --orphan zip
           fi
 
           git reset
           git add gnl.zip
           git commit -m "Auto-update gnl.zip from master"
-          git push --force origin HEAD:gnl
-
+          git push --force origin HEAD:zip
