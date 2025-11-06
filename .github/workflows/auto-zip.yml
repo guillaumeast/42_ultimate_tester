@@ -1,0 +1,32 @@
+name: Auto-zip tests
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'gnl/**'
+
+jobs:
+  zip-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create gnl zip archive
+        run: |
+          mkdir -p zip
+          zip -r "zip/gnl.zip" "gnl/"
+
+      - name: Commit and push updated zip
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add zip/gnl.zip || true
+          git diff --cached --quiet || git commit -m "Auto-update zipped gnl tests archive"
+          git push origin master || echo "No changes to push"
