@@ -30,6 +30,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
+          git checkout --orphan tmp
           git reset
           git add gnl.zip
           git commit -m "Auto-update gnl.zip from master"
