@@ -23,7 +23,7 @@ jobs:
       - name: Create gnl zip archive
         run: |
           mkdir -p zip
-          zip -r gnl.zip gnl/*
+          zip -r /tmp/gnl.zip gnl/*
 
       - name: Commit and push updated gnl.zip to zip branch
         run: |
@@ -32,6 +32,7 @@ jobs:
 
           git checkout --orphan tmp
           git reset
+          mv /tmp/gnl.zip gnl.zip
           git add gnl.zip
           git commit -m "Auto-update gnl.zip from master"
           git push --force origin HEAD:zip
