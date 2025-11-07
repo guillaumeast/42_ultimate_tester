@@ -41,7 +41,7 @@ download_tests()
 	fi
 	unzip -q "$tmp_zip" -d "$tests_dir"
 	rm -f "$tmp_zip"
-	echo "✅ Tests installed in './$tests_dir/"
+	echo "✅ Tests installed in ./$tests_dir/"
 }
 
 run_tests()
