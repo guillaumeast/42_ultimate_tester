@@ -53,7 +53,7 @@ check_files()
 {
 	echo "👉 Checking files..."
 	for f in "${files[@]}"; do
-		if [[ ! -f ../"${f}" ]]; then
+		if [[ ! -f "${f}" ]]; then
 			echo "❌ ${f} not found"
 			exit 1
 		fi

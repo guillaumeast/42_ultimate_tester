@@ -2,7 +2,7 @@
 
 tests_dir="42_ultimate_tests"
 tests_script="${tests_dir}/test.zsh"
-gnl_zip_url="https://github.com/guillaumeast/42_ultimate_tester/raw/zip/gnl.zip"
+gnl_zip_url="https://raw.githubusercontent.com/guillaumeast/42_ultimate_tester/zip/gnl.zip"
 tmp_zip="/tmp/42_ultimate_tests.zip"
 
 project=""
