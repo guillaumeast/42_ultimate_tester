@@ -2,7 +2,7 @@
 
 **Think your 42 project is bulletproof? Test it!** 💥\
 
-`42_ultimate_tester` is a **dependence-free** one-command testing tool for 42 projects
+`42_ultimate_tester` is a **dependence-free**, one-command testing tool for 42 projects
 > _Built to make your life easier and your code cry (just a little)_
 
 ---

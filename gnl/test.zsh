@@ -65,7 +65,7 @@ compile()
 	local buffer_size=$1
 
 	cc -Wall -Wextra -Werror -D BUFFER_SIZE=$buffer_size \
-		main.c ../get_next_line.c ../get_next_line_utils.c -I.. \
+		main.c get_next_line.c get_next_line_utils.c \
 			-o "${target}"
 	if [[ $? -ne 0 ]]; then
 		echo "❌ Compilation failed for BUFFER_SIZE=$buffer_size"
