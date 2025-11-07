@@ -77,7 +77,7 @@ rm -rf ./42_ultimate_tests
 ### 🧩 Contributing
 
 Want to make other 42 students cry too? 😈  
-You can help expand **42_ultimate_tester** by adding new test suites!
+You can help expand `42_ultimate_tester` by adding new test suites!
 
 1. Fork the repo: [guillaumeast/42_ultimate_tester](https://github.com/guillaumeast/42_ultimate_tester)
 2. Add your test folder (e.g. `libft/`, `printf/`, etc.)
