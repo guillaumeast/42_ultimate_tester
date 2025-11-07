@@ -1,17 +1,18 @@
-name: Auto-zip gnl
+name: Auto-tar
 
 on:
   push:
     branches:
       - master
     paths:
-      - 'gnl/**'
+      - 'core/**'
+      - 'tests/**'
 
 permissions:
   contents: write
 
 jobs:
-  zip-tests:
+  tar:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,20 +21,18 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Create gnl zip archive
+      - name: Create tar archive
         run: |
-          cd gnl
-          zip -r /tmp/gnl.zip .
-          cd ..
+          tar -czf /tmp/all.tar.gz core/ tests/
 
-      - name: Commit and push updated gnl.zip to zip branch
+      - name: Commit and push updated archive to tar branch
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           git checkout --orphan tmp
           git reset
-          mv /tmp/gnl.zip gnl.zip
-          git add gnl.zip
-          git commit -m "Auto-update gnl.zip from master"
-          git push --force origin HEAD:zip
+          mv /tmp/all.tar.gz all.tar.gz
+          git add all.tar.gz
+          git commit -m "Auto-update tar archive from master"
+          git push --force origin HEAD:tar

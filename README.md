@@ -7,53 +7,33 @@
 
 ---
 
+## ⚙️ How to Install
+
+From anywhere, just run:
+```bash
+curl -fsSL https://raw.githubusercontent.com/guillaumeast/42_ultimate_tester/master/install.zsh | zsh
+```
+
+This will:
+1. Install `42 Ultimate Tester` globally in `~/.42_ultimate_tester/`
+2. Add the aliases `test` and `rmtest` to your `.zshrc` file
+3. Display a short help message explaining how to use them
+
+> No setup, no dependecy, no `Makefile` editing, no excuses.
+
+---
+
 ## 🚀 How to Use
 
 From your project root (e.g. `get_next_line/`), just run:
 
 ``` bash
-curl -fsSL https://raw.githubusercontent.com/guillaumeast/42_ultimate_tester/master/42_ultimate_tester.zsh | zsh
+test
 ```
 
-The script will:
+This will:
 1. Detect which project you're in
-2. Download the matching test suite
-3. Install it inside a local folder `./42_ultimate_tests/`
-4. Run the test suite automatically
-
-No setup, no `Makefile` editing, no excuses.
-
----
-
-## ⚡️ Recommended Aliases
-
-Want to make testing even faster? Add these handy aliases to your
-`~/.zshrc`:
-
-``` bash
-# Installs and runs the appropriate test suite automatically
-alias test="curl -fsSL https://raw.githubusercontent.com/guillaumeast/42_ultimate_tester/master/42_ultimate_tester.zsh | zsh"
-
-# Re-runs the last downloaded test suite
-alias retest="./42_ultimate_tests/test.zsh"
-
-# Cleans up downloaded tests
-alias rmtest="rm -rf ./42_ultimate_tests"
-```
-
-After adding them, reload your shell with:
-
-``` bash
-source ~/.zshrc
-```
-
-Then you can simply use:
-
-``` bash
-test      # to install + run
-retest    # to re-run existing tests
-rmtest    # to remove test files
-```
+2. Run the matching test suite
 
 > 💡 Perfect for testing projects lightning-fast during the 42 cursus.
 
@@ -89,9 +69,8 @@ Nothing fancy --- just make sure you've got these:
 
 | Tool | Why |
 |------|--------|
-| `git` | To grab the branches and updates |
-| `curl` | To fetch the script and test archives |
-| `unzip` | To unpack the test files |
+| `curl` | To fetch the `42_ultimate_tester` archive |
+| `tar` | To unpack the `42_ultimate_tester` archive |
 | `zsh` | Because we're not animals |
 
 > 💡 Don't worry --- all of these come preinstalled on the 42 Ubuntu machines.
@@ -103,7 +82,7 @@ Nothing fancy --- just make sure you've got these:
 Wanna start fresh? Easy:
 
 ``` bash
-rm -rf ./42_ultimate_tests
+rmtest
 ```
 
 ---
