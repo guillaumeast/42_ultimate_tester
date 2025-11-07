@@ -2,7 +2,7 @@
 
 tests_dir="42_ultimate_tests"
 
-target="test_gnl"
+target="${tests_dir}/test_gnl"
 files=("get_next_line.c" "get_next_line_utils.c" "get_next_line.h")
 buffer_size_values=(1 2 3 4 5 10 42 1000 9999 10000000)
 
@@ -32,7 +32,7 @@ main()
 			output_file="${output_dir}/${filename}"
 
 			# Test with file as argument
-			"${tests_dir}"/"${target}" "${input_file}" | cat -e > "${output_file}"
+			./"${target}" "${input_file}" | cat -e > "${output_file}"
 			check_output "BUFFER_SIZE=$buffer_size\n${tests_dir}/${target} ${input_file} | cat -e" "${expected_file}" "${output_file}"
 
 			# Test with file as stdin
@@ -66,7 +66,7 @@ compile()
 {
 	local buffer_size=$1
 
-	cc -Wall -Wextra -Werror -D BUFFER_SIZE=$buffer_size \
+	cc -Wall -Wextra -Werror -D BUFFER_SIZE=$buffer_size -I. \
 		${tests_dir}/main.c get_next_line.c get_next_line_utils.c \
 			-o "${target}"
 	if [[ $? -ne 0 ]]; then
