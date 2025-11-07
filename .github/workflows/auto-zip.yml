@@ -22,8 +22,9 @@ jobs:
 
       - name: Create gnl zip archive
         run: |
-          mkdir -p zip
-          zip -r /tmp/gnl.zip gnl/*
+          cd gnl
+          zip -r /tmp/gnl.zip .
+          cd ..
 
       - name: Commit and push updated gnl.zip to zip branch
         run: |
