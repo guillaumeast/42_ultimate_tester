@@ -1,8 +1,9 @@
 # 🧪 42 Ultimate Tester
 
-**Think your 42 project is bulletproof? Test it!** 💥
-`42_ultimate_tester` is a **dependence-free** one-command testing tool for 42 projects ---
-built to make your life easier and your code cry (just a little).
+**Think your 42 project is bulletproof? Test it!** 💥\
+
+`42_ultimate_tester` is a **dependence-free** one-command testing tool for 42 projects
+> _Built to make your life easier and your code cry (just a little)_
 
 ---
 
@@ -52,12 +53,12 @@ norminette
 
 Nothing fancy --- just make sure you've got these:
 
-  Tool      Why
-  --------- ---------------------------------------
-  `git`     To grab the branches and updates
-  `curl`    To fetch the script and test archives
-  `unzip`   To unpack the test files
-  `zsh`     Because we're not animals
+| Tool | Why |
+|------|--------|
+| `git` | To grab the branches and updates |
+| `curl` | To fetch the script and test archives |
+| `unzip` | To unpack the test files |
+| `zsh` | Because we're not animals |
 
 > 💡 Don't worry --- all of these come preinstalled on the 42 Ubuntu machines.
 

@@ -25,7 +25,7 @@ check_project()
 		zip_url="$gnl_zip_url"
 	else
 		# TODO: let user self_select project (numeroted list)
-		echo "❌ Unable to identify current project"
+		echo "❌ Unable to identify current project" >&2
 		exit 1
 	fi
 }
@@ -46,12 +46,12 @@ download_tests()
 
 run_tests()
 {
-	if [[ ! -f "${tests_script}" ]]
-		echo "❌ Unable to find ${tests_script}"
+	if [[ ! -f "${tests_script}" ]]; then
+		echo "❌ Unable to find ${tests_script}" >&2
 		exit 3
 	fi
 	if ! chmod +x "${tests_script}"; then
-		echo "❌ Unable to make ${tests_script} executable"
+		echo "❌ Unable to make ${tests_script} executable" >&2
 		exit 3
 	fi
 	echo "🚀 Running tests..."
