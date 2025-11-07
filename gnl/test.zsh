@@ -1,12 +1,14 @@
 #!/usr/bin/env zsh
 
+tests_dir="42_ultimate_tests"
+
 target="test_gnl"
 files=("get_next_line.c" "get_next_line_utils.c" "get_next_line.h")
 buffer_size_values=(1 2 3 4 5 10 42 1000 9999 10000000)
 
-inputs_dir="inputs"
-expected_dir="expected"
-output_dir="outputs"
+inputs_dir="${tests_dir}/inputs"
+expected_dir="${tests_dir}/expected"
+output_dir="${tests_dir}/outputs"
 
 passed=0
 failed=0
@@ -30,8 +32,8 @@ main()
 			output_file="${output_dir}/${filename}"
 
 			# Test with file as argument
-			./"${target}" "${input_file}" | cat -e > "${output_file}"
-			check_output "BUFFER_SIZE=$buffer_size\n./${target} ${input_file} | cat -e" "${expected_file}" "${output_file}"
+			"${tests_dir}"/"${target}" "${input_file}" | cat -e > "${output_file}"
+			check_output "BUFFER_SIZE=$buffer_size\n${tests_dir}/${target} ${input_file} | cat -e" "${expected_file}" "${output_file}"
 
 			# Test with file as stdin
 			output_file="${output_dir}/stdin_${filename}"
@@ -65,7 +67,7 @@ compile()
 	local buffer_size=$1
 
 	cc -Wall -Wextra -Werror -D BUFFER_SIZE=$buffer_size \
-		main.c get_next_line.c get_next_line_utils.c \
+		${tests_dir}/main.c get_next_line.c get_next_line_utils.c \
 			-o "${target}"
 	if [[ $? -ne 0 ]]; then
 		echo "❌ Compilation failed for BUFFER_SIZE=$buffer_size"
