@@ -14,6 +14,10 @@ passed=0
 failed=0
 total=0
 
+RED="\033[0;31m"
+GREEN="\033[0;32m"
+YELLOW="\033[0;33m"
+
 main()
 {
 	echo
@@ -56,7 +60,7 @@ check_files()
 	echo "👉 Checking files..."
 	for f in "${files[@]}"; do
 		if [[ ! -f "${f}" ]]; then
-			echo "❌ ${f} not found"
+			echo "❌ ${RED}${f} not found${NONE}"
 			exit 1
 		fi
 	done
@@ -70,13 +74,13 @@ compile()
 		${tests_dir}/main.c get_next_line.c get_next_line_utils.c \
 			-o "${target}"
 	if [[ $? -ne 0 ]]; then
-		echo "❌ Compilation failed for BUFFER_SIZE=$buffer_size"
+		echo "❌ ${RED}Compilation failed for BUFFER_SIZE=$buffer_size${NONE}"
 		exit 1
 	elif [[ ! -f "${target}" ]]; then
-		echo "❌ ${target} not found"
+		echo "❌ ${RED}${target} not found${NONE}"
 		exit 1
 	elif [[ ! -x "${target}" ]]; then
-		echo "❌ ${target} is not executable"
+		echo "❌ ${RED}${target} is not executable${NONE}"
 		exit 2
 	fi
 }
@@ -88,7 +92,7 @@ check_output()
 	local output_file="$3"
 
 	if [[ ! -f "$expected_file" ]]; then
-		echo "⚠️ Missing expected file: $expected_file"
+		echo "⚠️ ${YELLOW}Missing expected file: $expected_file${NONE}"
 		((failed++))
 	elif diff -q "${expected_file}" "${output_file}" > /dev/null; then
 		((passed++))
@@ -96,7 +100,7 @@ check_output()
 		((failed++))
 		echo "------------------------------"
 		echo
-		echo "❌ ${test_name}"
+		echo "❌ ${RED}${test_name}${NONE}"
 		echo
 		echo "⮕ diff ${expected_file} ${output_file}"
 		echo
@@ -111,10 +115,10 @@ print_results()
 {
 	echo
 	if (( failed == 0 )); then
-		echo "===> ✅ ${passed} / ${total} tests passed"
+		echo "===> ✅ ${GREEN}${passed} / ${total} tests passed${NONE}"
 		exit 0
 	else
-		echo "===> ❌ ${failed} / ${total} tests failed"
+		echo "===> ❌ ${RED}${failed} / ${total} tests failed${NONE}"
 		exit 1
 	fi
 }

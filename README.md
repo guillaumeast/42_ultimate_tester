@@ -25,6 +25,40 @@ No setup, no `Makefile` editing, no excuses.
 
 ---
 
+## ⚡️ Recommended Aliases
+
+Want to make testing even faster? Add these handy aliases to your
+`~/.zshrc`:
+
+``` bash
+# Installs and runs the appropriate test suite automatically
+alias test="curl -fsSL https://raw.githubusercontent.com/guillaumeast/42_ultimate_tester/master/42_ultimate_tester.zsh | zsh"
+
+# Re-runs the last downloaded test suite
+alias retest="./42_ultimate_tests/test.zsh"
+
+# Cleans up downloaded tests
+alias rmtest="rm -rf ./42_ultimate_tests"
+```
+
+After adding them, reload your shell with:
+
+``` bash
+source ~/.zshrc
+```
+
+Then you can simply use:
+
+``` bash
+test      # to install + run
+retest    # to re-run existing tests
+rmtest    # to remove test files
+```
+
+> 💡 Perfect for testing projects lightning-fast during the 42 cursus.
+
+---
+
 ## 📦 Supported Projects
 
 | Project | Status |
