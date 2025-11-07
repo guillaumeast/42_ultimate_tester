@@ -9,8 +9,8 @@ TAR_URL="https://raw.githubusercontent.com/guillaumeast/42_ultimate_tester/tar/$
 TMP_TAR="/tmp/${TAR}"
 
 ZSHRC="${HOME}/.zshrc"
-ZSHRC_CONTENT_START="#----- 42_ultimate_tester -----#"
-ZSHRC_CONTENT_END="#------------------------------#"
+ZSHRC_CONTENT_START="#-----------------------42_ultimate_tester----------------------#"
+ZSHRC_CONTENT_END="#---------------------------------------------------------------#"
 ZSHRC_CONTENT="\
 	alias test=\"${SCRIPTS_DIR}/run.zsh\"\n\
 	alias rmtest=\"${SCRIPTS_DIR}/uninstall.zsh\"\n"
