@@ -71,6 +71,7 @@ update_zshrc()
 			echo " ${YELLOW}⚠ Unable to find .zshrc inside ${HOME}/${NONE}" >&2
 			echo " ℹ You should manually add an alias to run tests : /Users/gui/.42_ultimate_tester/core/run.zsh" >&2
 			echo " ℹ You should manually add an alias to uninstall tests : /Users/gui/.42_ultimate_tester/core/uninstall.zsh" >&2
+			return 1
 		fi
 	fi
 
@@ -81,6 +82,7 @@ update_zshrc()
 			echo " ${YELLOW}⚠ Alias '${alias_name}' already exists in ${ZSHRC}.${NONE}" >&2
 			echo " ℹ You should manually add an alias to run tests : /Users/gui/.42_ultimate_tester/core/run.zsh" >&2
 			echo " ℹ You should manually add an alias to uninstall tests : /Users/gui/.42_ultimate_tester/core/uninstall.zsh" >&2
+			return 1
 		fi
 	done
 
