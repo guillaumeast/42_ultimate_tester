@@ -1,12 +1,16 @@
 # 🧪 42 Ultimate Tester
 
+[![42](https://img.shields.io/badge/-black?logo=42&style=flat)](#)
+[![Zsh](https://img.shields.io/badge/Shell-Zsh-89e051?style=flat&logo=gnu-bash)](#)
+[![C](https://img.shields.io/badge/Language-C-A8B9CC?style=flat&logo=c&logoColor=white)](#)
+
 **Think your 42 project is bulletproof? Test it!** 💥
 
-> ✌️ No setup, no dependecy, no `Makefile` editing, no excuses.
+> ✌️ No setup, no dependency, no `Makefile` editing, no excuses.
 
 ---
 
-## ⚙️ How to Install
+## ⚙️ Install
 
 From anywhere, just run:
 ```bash
@@ -19,7 +23,7 @@ This will:
 
 ---
 
-## 🚀 How to Use
+## 🚀 Use
 
 From your project root (e.g. `get_next_line/`), just run:
 
@@ -28,9 +32,15 @@ test
 ```
 
 This will:
-1. Auto-update test cases
+1. Auto-update
 2. Detect which project you're in
 3. Run the matching test suite
+
+### Example
+
+> Example output when running tests for `ft_printf`
+
+<img width="514" height="866" alt="Capture d’écran 2025-11-08 à 19 30 05" src="https://github.com/user-attachments/assets/4580112c-06b2-4bcc-89be-44127e68bdd2" />
 
 ---
 
@@ -89,7 +99,7 @@ You can help expand `42_ultimate_tester` by adding new test suites!
 
 1. Fork the repo: [guillaumeast/42_ultimate_tester](https://github.com/guillaumeast/42_ultimate_tester)
 2. Add your test folder (e.g. `libft/`, `printf/`, etc.)
-3. Keep it **dependence-free** and **removable** (no external setup, no global installs)
+3. Keep it **fully standalone** and **easily removable** (no external setup, no global installs)
 4. Open a pull request with a short description of what your tests cover
 
 > 💬 Bonus points if your test breaks your own code first — that’s science
