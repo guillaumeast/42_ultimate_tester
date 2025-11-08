@@ -2,7 +2,6 @@
 
 **Think your 42 project is bulletproof? Test it!** 💥
 
-`42_ultimate_tester` is a **dependence-free**, one-command testing tool for 42 projects
 > ✌️ No setup, no dependecy, no `Makefile` editing, no excuses.
 
 ---
@@ -33,18 +32,16 @@ This will:
 2. Detect which project you're in
 3. Run the matching test suite
 
-> 💡 Perfect for testing projects lightning-fast during the 42 cursus.
-
 ---
 
 ## 📦 Supported Projects
 
-| Project | Mandatory Test Cases | Bonus Test Cases |
-|---------|----------------------|------------------|
-| `get_next_line` | ~150 🧨 | 📋 Planned |
-| `ft_printf` | ~100 🧨 | 📋 Planned |
-| `libft` | 🧱 Work in progress | 📋 Planned |
-| Others | 🤷‍♂️ We'll see | n.a. |
+| Project | Status | Mandatory Test Cases | Bonus Test Cases |
+|---------|--------|----------------------|------------------|
+| `get_next_line` | ✅ Ready | ~150 🧨 | 0 (Work in progress) |
+| `ft_printf` | ✅ Ready | ~100 🧨 | 0 (Work in progress) |
+| `libft` | 🧱 Work in progress | 0 (Work in progress) | 0 (Work in progress) |
+| Others | 🤷‍♂️ We'll see | n.a. | n.a. |
 
 ---
 
