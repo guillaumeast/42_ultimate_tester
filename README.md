@@ -1,12 +1,16 @@
-# 🧪 42 Ultimate Tester
+<p>
+  <img width="100%" alt="Capture d’écran 2025-11-08 à 19 52 42" src="https://github.com/user-attachments/assets/22ebd326-5736-4643-897f-db7c725c5bc1" />
+</p>
 
-[![42](https://img.shields.io/badge/-black?logo=42&style=flat)](#)
-[![Zsh](https://img.shields.io/badge/Shell-Zsh-89e051?style=flat&logo=gnu-bash)](#)
-[![C](https://img.shields.io/badge/Language-C-A8B9CC?style=flat&logo=c&logoColor=white)](#)
+<p>
+  
+  [![42](https://img.shields.io/badge/-black?logo=42&style=flat)](#)
+  [![Zsh](https://img.shields.io/badge/Shell-Zsh-89e051?style=flat&logo=gnu-bash)](#)
+  [![C](https://img.shields.io/badge/Language-C-A8B9CC?style=flat&logo=c&logoColor=white)](#)
+  
+</p>
 
 **Think your 42 project is bulletproof? Test it!** 💥
-
-> ✌️ No setup, no dependency, no `Makefile` editing, no excuses.
 
 ---
 
@@ -20,6 +24,8 @@ curl -fsSL https://raw.githubusercontent.com/guillaumeast/42_ultimate_tester/mas
 This will:
 1. Install `42 Ultimate Tester` globally in `~/.42_ultimate_tester/`
 2. Add the aliases `test` and `rmtest` to your `.zshrc` file
+
+> ✌️ No setup, no dependency, no `Makefile` editing, no excuses.
 
 ---
 
@@ -36,9 +42,7 @@ This will:
 2. Detect which project you're in
 3. Run the matching test suite
 
-### Example
-
-> Example output when running tests for `ft_printf`
+> 👇 Example output when running tests for `ft_printf`
 
 <img width="514" height="866" alt="Capture d’écran 2025-11-08 à 19 30 05" src="https://github.com/user-attachments/assets/4580112c-06b2-4bcc-89be-44127e68bdd2" />
 
