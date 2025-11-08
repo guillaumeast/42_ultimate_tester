@@ -3,6 +3,7 @@
 NAME="42_ultimate_tester"
 REPO_URL="https://github.com/guillaumeast/42_ultimate_tester"
 
+TMP_DIR="/tmp/${NAME}"
 INSTALL_DIR="${HOME}/.${NAME}"
 RUNNER="${INSTALL_DIR}/core/run.zsh"
 UNINSTALLER="${INSTALL_DIR}/core/uninstall.zsh"
@@ -45,10 +46,10 @@ download()
 {
 	echo " ${GREY}⏱${NONE} Downloading ${NAME} into ${INSTALL_DIR}..."
 
-	rm -rf "${INSTALL_DIR}" > /dev/null 2>&1
-	mkdir -p "${INSTALL_DIR}"
-
-	git clone "${REPO_URL}" "${INSTALL_DIR}" > /dev/null 2>&1
+	rm -rf "${TMP_DIR}" > /dev/null 2>&1
+	git clone --depth=1 "${REPO_URL}" "${TMP_DIR}" > /dev/null 2>&1 || fail "Unable to clone ${REPO_URL}"
+	rm -rf "${INSTALL_DIR}"
+	mv "${TMP_DIR}" "${INSTALL_DIR}"
 }
 
 update_zshrc()
@@ -95,7 +96,7 @@ fail()
 
 	echo -e "\n ❌ Installation canceled: ${RED}${message}${NONE}" >&2
 
-	rm -f "${TMP_TAR}" > /dev/null 2>&1
+	rm -f "${TMP_DIR}" > /dev/null 2>&1
 	rm -rf "${INSTALL_DIR}" > /dev/null 2>&1
 
 	echo " 🧹 All downloaded files have been deleted"
