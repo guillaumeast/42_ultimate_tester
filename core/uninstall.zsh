@@ -25,4 +25,4 @@ else
 	sed -i '' "/${ZSHRC_CONTENT_START}/,/${ZSHRC_CONTENT_END}/d" "${ZSHRC}" 2>/dev/null
 fi
 echo -e "🧹 ${ZSHRC} has been restored\n"
-echo -e "✅ ${GREEN}${NAME}${NONE} has been uninstalled\n"
+echo -e "${GREEN}✔ ${NAME}${NONE} has been uninstalled"

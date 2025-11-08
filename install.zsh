@@ -85,10 +85,15 @@ clean_zshrc()
 
 print_help()
 {
-	echo -e "✅ ${GREEN}${NAME}${NONE} has been installed in ${INSTALL_DIR} 🚀\n"
+	echo -e "${GREEN}✔ ${NAME}${NONE} has been installed in ${INSTALL_DIR} 🚀\n"
+
+	echo "👇 Restart needed to enable this commands:"
 	echo "💡 Run ${YELLOW}'test'${NONE} inside a 42 project to test it"
-	echo "💡 Run ${YELLOW}'rmtest'${NONE} anywhere to uninstall ${NAME}"
-	echo -e "\n👉 Restart your terminal or run 'source \"${ZSHRC}\"'"
+	echo "💡 Run ${YELLOW}'rmtest'${NONE} anywhere to uninstall ${NAME}\n"
+
+	echo -n "👉 Reload your terminal now? [Y/n]"
+	read answer
+	[[ "${answer:l}" == "y" ]] && exec zsh
 }
 
 fail()
