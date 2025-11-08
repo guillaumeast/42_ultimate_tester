@@ -22,7 +22,7 @@ main()
 
 print_ascii_art()
 {
-	printf "${YELLOW}                               )\\      \`           *                         * )    \` )\\     \n"
+	printf "\n${YELLOW}                               )\\      \`           *                         * )    \` )\\     \n"
 	printf "  \` *           (  \`.         /((                \`      /((    \`   )          /(\`   /((.\\    \n"
 	printf "${ORANGE}    (           )\\ /(        / (*   .     *    (        )\\        ()   \`     /)(_))\\ /( (    \n"
 	printf " ${RED}_  ${ORANGE})\\ ${RED}___    _ ${ORANGE}((_|_${ORANGE})   ${RED}___${ORANGE}(_|_))${RED}_${ORANGE}()${RED}_  __${ORANGE})\\ _ )\\ ${RED}_____ ${ORANGE}(_)   ${RED}___${ORANGE}(_)${RED}_______ ${ORANGE}(_(_()|(${RED}_${ORANGE})(${RED}__${ORANGE})${RED}   \n"
