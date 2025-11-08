@@ -2,9 +2,13 @@
 
 NAME="42_ultimate_tester"
 INSTALL_DIR="${HOME}/.42_ultimate_tester"
+
 ZSHRC="${HOME}/.zshrc"
 ZSHRC_CONTENT_START="#-----------------------42_ultimate_tester----------------------#"
 ZSHRC_CONTENT_END="#---------------------------------------------------------------#"
+
+GREEN="\033[0;32m"
+NONE="\033[0m"
 
 rm -rf "${INSTALL_DIR}" > /dev/null 2>&1
 echo -e "\n🧹 All downloaded files have been deleted"
