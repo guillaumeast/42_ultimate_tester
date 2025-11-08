@@ -41,8 +41,9 @@ update()
 			echo " ${YELLOW}⚠ Update failed. Skipping.${NONE}" >&2
 			echo " ${GREY}ℹ You can manually update by running 'curl -fsSL ${INSTALLER_URL}'${NONE}"
 		else
-			echo -e " ${GREY}✔ Updated${NONE}\n"
+			echo " ${GREY}✔ Updated${NONE}"
 		fi
+		echo
 	)
 }
 
