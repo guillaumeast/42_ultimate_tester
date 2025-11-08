@@ -60,12 +60,12 @@ dispatch()
 	fi
 
 	if grep -q "libftprintf\.a" Makefile 2>/dev/null; then
-		echo -e "🧪 Testing ${YELLOW}PRINTF${NONE} project...\n"
+		echo -e " 🧪 Testing ${YELLOW}PRINTF${NONE} project...\n"
 		"${TESTS_DIR}/printf/${RUNNER}"
 		exit $?
 	fi
 
-	echo "❌ Error: ${RED}Unable to identify current project${NONE}" >&2
+	echo " ❌ Error: ${RED}Unable to identify current project${NONE}" >&2
 	exit 1
 }
 

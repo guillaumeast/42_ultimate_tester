@@ -11,13 +11,13 @@ GREEN="\033[0;32m"
 NONE="\033[0m"
 
 rm -rf "${INSTALL_DIR}" > /dev/null 2>&1
-echo -e "\n🧹 All downloaded files have been deleted"
+echo -e "\n 🧹 All downloaded files have been deleted"
 
 if [[ ! -f "${ZSHRC}" ]]; then
 	ZSHRC=$(find "${HOME}" -maxdepth 3 -type f -name ".zshrc" 2>/dev/null | head -n 1)
 	[[ -f "${ZSHRC}" ]] || {
-		echo "⚠️  Unable to find .zshrc inside ${HOME}/"
-		echo "👉 Remove ${NAME} aliases manually in your .zshrc"
+		echo " ⚠️  Unable to find .zshrc inside ${HOME}/"
+		echo " 👉 Remove ${NAME} aliases manually in your .zshrc"
 		exit 0
 	}
 fi
@@ -28,5 +28,5 @@ else
 	# BSD sed (macOS)
 	sed -i '' "/${ZSHRC_CONTENT_START}/,/${ZSHRC_CONTENT_END}/d" "${ZSHRC}" 2>/dev/null
 fi
-echo -e "🧹 ${ZSHRC} has been restored\n"
-echo -e "${GREEN}✔ ${NAME}${NONE} has been uninstalled"
+echo -e " 🧹 ${ZSHRC} has been restored\n"
+echo -e " ${GREEN}✔ ${NAME}${NONE} has been uninstalled"

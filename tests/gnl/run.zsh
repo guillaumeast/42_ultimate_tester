@@ -14,9 +14,10 @@ PASSED=0
 FAILED=0
 TOTAL=0
 
-RED="\033[0;31m"
-GREEN="\033[0;32m"
-YELLOW="\033[0;33m"
+RED="\033[31m"
+GREEN="\033[32m"
+YELLOW="\033[33m"
+BLUE="\033[34m"
 NONE="\033[0m"
 
 main()
@@ -25,7 +26,7 @@ main()
 	check_files
 	# Test each buffer_size
 	for buffer_size in "${BUFFER_SIZE_VALUES[@]}"; do
-		echo " ⏱ Testing with BUFFER_SIZE=$buffer_size..."
+		echo " ${BLUE}⏱${NONE} Testing with ${BLUE}BUFFER_SIZE=$buffer_size${NONE}..."
 		compile $buffer_size
 
 		# Test each input_file
@@ -57,10 +58,10 @@ init()
 
 check_files()
 {
-	echo " ⏱ Checking FILES..."
+	echo " ${BLUE}⏱${NONE} Checking ${BLUE}files${NONE}..."
 	for f in "${FILES[@]}"; do
 		if [[ ! -f "${f}" ]]; then
-			echo "❌ ${RED}${f} not found${NONE}"
+			echo " ❌ ${RED}${f} not found${NONE}"
 			exit 1
 		fi
 	done
@@ -76,13 +77,13 @@ compile()
 		-o "${TARGET}"
 	if [[ $? -ne 0 ]]; then
 		local error_code= $?
-		echo "❌ ${RED}Compilation FAILED for BUFFER_SIZE=$buffer_size${NONE}"
+		echo " ❌ ${RED}Compilation FAILED for BUFFER_SIZE=$buffer_size${NONE}"
 		exit $error_code
 	elif [[ ! -f "${TARGET}" ]]; then
-		echo "❌ ${RED}${TARGET} not found${NONE}"
+		echo " ❌ ${RED}${TARGET} not found${NONE}"
 		exit 1
 	elif [[ ! -x "${TARGET}" ]]; then
-		echo "❌ ${RED}${TARGET} is not executable${NONE}"
+		echo " ❌ ${RED}${TARGET} is not executable${NONE}"
 		exit 1
 	fi
 }
@@ -94,7 +95,7 @@ check_output()
 	local output_file="$3"
 
 	if [[ ! -f "$expected_file" ]]; then
-		echo "⚠️ ${YELLOW}Missing expected file: $expected_file${NONE}"
+		echo " ⚠️ ${YELLOW}Missing expected file: $expected_file${NONE}"
 		((FAILED++))
 	elif diff -q "${expected_file}" "${output_file}" > /dev/null; then
 		((PASSED++))
@@ -102,9 +103,9 @@ check_output()
 		((FAILED++))
 		echo "------------------------------"
 		echo
-		echo "❌ ${RED}${test_name}${NONE}"
+		echo " ❌ ${RED}${test_name}${NONE}"
 		echo
-		echo "⮕ diff ${expected_file} ${output_file}"
+		echo " ⮕ diff ${expected_file} ${output_file}"
 		echo
 		diff "${expected_file}" "${output_file}"
 		echo
