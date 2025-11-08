@@ -52,7 +52,7 @@ This will:
 
 ## ⚠️ Norminette Reminder
 
-Sorry `norminette` fans --- this tester won't (yet) run it for you.\
+Sorry `norminette` fans - this tester won't (yet) run it for you.\
 You'll have to check your style manually like a real dev:
 
 ``` bash
@@ -65,7 +65,7 @@ norminette
 
 ## 🔧 Requirements
 
-Nothing fancy --- just make sure you've got these:
+Nothing fancy - just make sure you've got these:
 
 | Tool | Why |
 |------|--------|
