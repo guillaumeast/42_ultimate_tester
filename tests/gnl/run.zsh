@@ -61,7 +61,7 @@ check_files()
 	echo " ${BLUE}⏱${NONE} Checking ${BLUE}files${NONE}..."
 	for f in "${FILES[@]}"; do
 		if [[ ! -f "${f}" ]]; then
-			echo " ❌ ${RED}${f} not found${NONE}"
+			echo " ❌ ${RED}${f} not found${NONE}" >&2
 			exit 1
 		fi
 	done
@@ -95,21 +95,21 @@ check_output()
 	local output_file="$3"
 
 	if [[ ! -f "$expected_file" ]]; then
-		echo " ⚠️ ${YELLOW}Missing expected file: $expected_file${NONE}"
+		echo " ❌ ${RED}Missing expected file: $expected_file${NONE}" >&2
 		((FAILED++))
 	elif diff -q "${expected_file}" "${output_file}" > /dev/null; then
 		((PASSED++))
 	else
 		((FAILED++))
-		echo "------------------------------"
-		echo
-		echo " ❌ ${RED}${test_name}${NONE}"
-		echo
-		echo " ⮕ diff ${expected_file} ${output_file}"
-		echo
-		diff "${expected_file}" "${output_file}"
-		echo
-		echo "------------------------------"
+		echo "------------------------------" >&2
+		echo >&2
+		echo " ❌ ${RED}${test_name}${NONE}" >&2
+		echo >&2
+		echo " ⮕ diff ${expected_file} ${output_file}" >&2
+		echo >&2
+		diff "${expected_file}" "${output_file}" >&2
+		echo >&2
+		echo "------------------------------" >&2
 	fi
 	((TOTAL++))
 }
@@ -121,7 +121,7 @@ print_results()
 		echo "${GREEN}===> ✅ ${PASSED} / ${TOTAL} tests PASSED${NONE}"
 		exit 0
 	else
-		echo "${RED}===> ❌ ${FAILED} / ${TOTAL} tests FAILED${NONE}"
+		echo "${RED}===> ❌ ${FAILED} / ${TOTAL} tests FAILED${NONE}" >&2
 		exit 1
 	fi
 }

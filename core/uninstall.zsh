@@ -16,8 +16,8 @@ echo -e "\n 🧹 All downloaded files have been deleted"
 if [[ ! -f "${ZSHRC}" ]]; then
 	ZSHRC=$(find "${HOME}" -maxdepth 3 -type f -name ".zshrc" 2>/dev/null | head -n 1)
 	[[ -f "${ZSHRC}" ]] || {
-		echo " ⚠️  Unable to find .zshrc inside ${HOME}/"
-		echo " 👉 Remove ${NAME} aliases manually in your .zshrc"
+		echo " ${YELLOW}⚠ Unable to find .zshrc inside ${HOME}/${NONE}" >&2
+		echo " ⓘ Remove ${NAME} aliases manually in your .zshrc" >&2
 		exit 0
 	}
 fi

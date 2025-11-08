@@ -47,7 +47,18 @@ download()
 	echo " ${GREY}⏱${NONE} Downloading ${NAME} into ${INSTALL_DIR}..."
 
 	rm -rf "${TMP_DIR}" > /dev/null 2>&1
-	git clone --depth=1 "${REPO_URL}" "${TMP_DIR}" > /dev/null 2>&1 || fail "Unable to clone ${REPO_URL}"
+	if ! git clone --depth=1 "${REPO_URL}" "${TMP_DIR}" > /dev/null 2>&1; then
+		local error_code=$?
+		echo -e "\n 🚨 ${RED}Installation canceled: Unable to clone ${REPO_URL}${NONE}" >&2
+
+		rm -rf "${TMP_DIR}" > /dev/null 2>&1
+		echo " 🧹 All downloaded files have been deleted"
+
+		clean_zshrc
+		echo " 🧹 ${ZSHRC} has been restored"
+
+		exit $error_code
+	fi
 	rm -rf "${INSTALL_DIR}"
 	mv "${TMP_DIR}" "${INSTALL_DIR}"
 }
@@ -56,14 +67,20 @@ update_zshrc()
 {
 	if [[ ! -f "${ZSHRC}" ]]; then
 		ZSHRC=$(find "${HOME}" -maxdepth 3 -type f -name ".zshrc" 2>/dev/null | head -n 1)
-		[[ -f "${ZSHRC}" ]] || fail "Unable to find .zshrc inside ${HOME}/"
+		if [[ ! -f "${ZSHRC}" ]]; then
+			echo -e "\n ${YELLOW}⚠ Unable to find .zshrc inside ${HOME}/${NONE}" >&2
+			echo " ⓘ You should manually add an alias to run tests : /Users/gui/.42_ultimate_tester/core/run.zsh" >&2
+			echo " ⓘ You should manually add an alias to uninstall tests : /Users/gui/.42_ultimate_tester/core/uninstall.zsh" >&2
+		fi
 	fi
 
 	clean_zshrc
 
 	for alias_name in test rmtest; do
 		if grep -qE "^[[:space:]]*alias[[:space:]]+${alias_name}=" "${ZSHRC}"; then
-			fail "Alias '${alias_name}' already exists in ${ZSHRC}"
+			echo -e "\n ${YELLOW}⚠ Alias '${alias_name}' already exists in ${ZSHRC}.${NONE}" >&2
+			echo " ⓘ You should manually add an alias to run tests : /Users/gui/.42_ultimate_tester/core/run.zsh" >&2
+			echo " ⓘ You should manually add an alias to uninstall tests : /Users/gui/.42_ultimate_tester/core/uninstall.zsh" >&2
 		fi
 	done
 
@@ -87,24 +104,6 @@ print_help()
 
 	echo " 💡 Run ${YELLOW}'test'${NONE} inside a 42 project to test it"
 	echo " 💡 Run ${YELLOW}'rmtest'${NONE} anywhere to uninstall ${NAME}\n"
-}
-
-fail()
-{
-	local message="$1"
-	local error_code="${2:-1}"
-
-	echo -e "\n ❌ Installation canceled: ${RED}${message}${NONE}" >&2
-
-	rm -f "${TMP_DIR}" > /dev/null 2>&1
-	rm -rf "${INSTALL_DIR}" > /dev/null 2>&1
-
-	echo " 🧹 All downloaded files have been deleted"
-
-	clean_zshrc
-	echo " 🧹 ${ZSHRC} has been restored"
-
-	exit $error_code
 }
 
 main

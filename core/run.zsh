@@ -1,6 +1,7 @@
 #!/usr/bin/env zsh
 
 REPO_URL="https://github.com/guillaumeast/42_ultimate_tester"
+INSTALLER_URL="https://raw.githubusercontent.com/guillaumeast/42_ultimate_tester/master/install.zsh"
 
 INSTALL_DIR="${HOME}/.42_ultimate_tester"
 DISPATCHER="${INSTALL_DIR}/core/dispatch.zsh"
@@ -10,8 +11,6 @@ ORANGE="\033[38;5;214m"
 RED="\033[31m"
 YELLOW="\033[33m"
 NONE="\033[0m"
-
-quiet() { "$@" > /dev/null 2>&1; }
 
 main()
 {
@@ -38,11 +37,13 @@ update()
 	echo -e "${GREY} ⏱ Updating test cases...${NONE}"
 	(
 		cd "${INSTALL_DIR}"
-		quiet git pull \
-			|| quiet sh -c 'curl -fsSL https://raw.githubusercontent.com/guillaumeast/42_ultimate_tester/master/install.zsh | zsh' \
-			|| true
+		if ! git pull > /dev/null 2>&1 || ! curl -fsSL "${INSTALLER_URL}" | zsh > /dev/null 2>&1; then
+			echo " ${YELLOW}⚠ Update failed. Skipping.${NONE}" >&2
+			echo " ${GREY}ⓘ You can manually update by running 'curl -fsSL ${INSTALLER_URL}'${NONE}"
+		else
+			echo -e " ${GREY}✔ Updated${NONE}\n"
+		fi
 	)
-	echo -e " ${GREY}✔ Updated${NONE}\n"
 }
 
 main
