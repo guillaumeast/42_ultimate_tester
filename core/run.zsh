@@ -1,22 +1,27 @@
 #!/usr/bin/env zsh
 
+NAME="42_ultimate_tester"
 REPO_URL="https://github.com/guillaumeast/42_ultimate_tester"
 
-INSTALL_DIR="${HOME}/.42_ultimate_tester"
+INSTALL_DIR="${HOME}/.${NAME}"
 SCRIPTS_DIR="${INSTALL_DIR}/core"
 TESTS_DIR="${INSTALL_DIR}/tests"
 
 RUNNER="run.zsh"
 
 GREY="\033[38;5;240m"
-RED="\033[31m"
 ORANGE="\033[38;5;214m"
+RED="\033[31m"
+GREEN="\033[0;32m"
 YELLOW="\033[33m"
 NONE="\033[0m"
+
+quiet() { "$@" > /dev/null 2>&1; }
 
 main()
 {
 	print_ascii_art
+	update
 	dispatch
 }
 
@@ -32,6 +37,18 @@ print_ascii_art()
 	printf "|_  _| / /   | |_| | |__  | |  | | | |\\/| |/ _ \\   | | | _|    | | | _|\\__ \\  | | | _||   /  \n"
 	printf "  |_| /___|   \\___/|____| |_| |___||_|  |_/_/ \\_\\  |_| |___|   |_| |___|___/  |_| |___|_|_\\  \n"
 	printf "\n${GREY}${REPO_URL}${NONE}\n\n"
+}
+
+update()
+{
+	echo -e "🔄 ${GREY}Updating test cases...${NONE}"
+	(
+		cd "${INSTALL_DIR}"
+		quiet git pull \
+			|| quiet sh -c 'curl -fsSL https://raw.githubusercontent.com/guillaumeast/42_ultimate_tester/master/install.zsh | zsh' \
+			|| true
+	)
+	echo -e "${GREEN}✔${NONE} Updated\n"
 }
 
 dispatch()

@@ -69,8 +69,8 @@ Nothing fancy - just make sure you've got these:
 
 | Tool | Why |
 |------|--------|
-| `curl` | To fetch the `42_ultimate_tester` archive |
-| `tar` | To unpack the `42_ultimate_tester` archive |
+| `curl` | To fetch the `42_ultimate_tester` installer |
+| `git` | To download the `42_ultimate_tester` files |
 | `zsh` | Because we're not animals |
 
 > 💡 Don't worry - all of these come preinstalled on the 42 Ubuntu machines.

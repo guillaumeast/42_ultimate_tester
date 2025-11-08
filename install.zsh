@@ -1,19 +1,18 @@
 #!/usr/bin/env zsh
 
 NAME="42_ultimate_tester"
-INSTALL_DIR="${HOME}/.${NAME}"
-SCRIPTS_DIR="${INSTALL_DIR}/core"
+REPO_URL="https://github.com/guillaumeast/42_ultimate_tester"
 
-TAR="all.tar.gz"
-TAR_URL="https://raw.githubusercontent.com/guillaumeast/42_ultimate_tester/tar/${TAR}"
-TMP_TAR="/tmp/${TAR}"
+INSTALL_DIR="${HOME}/.${NAME}"
+RUNNER="${INSTALL_DIR}/core/run.zsh"
+UNINSTALLER="${INSTALL_DIR}/core/uninstall.zsh"
 
 ZSHRC="${HOME}/.zshrc"
 ZSHRC_CONTENT_START="#-----------------------42_ultimate_tester----------------------#"
 ZSHRC_CONTENT_END="#---------------------------------------------------------------#"
 ZSHRC_CONTENT="\
-	alias test=\"${SCRIPTS_DIR}/run.zsh\"\n\
-	alias rmtest=\"${SCRIPTS_DIR}/uninstall.zsh\"\n"
+alias test=\"${RUNNER}\"\n\
+alias rmtest=\"${UNINSTALLER}\""
 
 RED="\033[0;31m"
 ORANGE="\033[38;5;214m"
@@ -50,9 +49,7 @@ download()
 	rm -rf "${INSTALL_DIR}" > /dev/null 2>&1
 	mkdir -p "${INSTALL_DIR}"
 
-	curl -fsSL "${TAR_URL}" -o "${TMP_TAR}" || fail "Unable to download from ${TAR_URL} into ${TMP_TAR}"
-	tar -xzf "${TMP_TAR}" -C "${INSTALL_DIR}" || fail "Unable to extract ${TMP_TAR} into ${INSTALL_DIR}"
-	rm -f "${TMP_TAR}"
+	git clone "${REPO_URL}" "${INSTALL_DIR}"
 
 	echo "✅ ${NAME} downloaded into ${INSTALL_DIR}"
 }
