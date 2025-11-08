@@ -11,11 +11,9 @@ t_bool expect_eq_int(int got, int expected, const char *input_format, const char
         return (TRUE);
     else
     {
-        printf("------------------------------\n");
-        printf("Different %sreturn value%s\n", YELLOW, NONE);
-        printf("├── %sft_printf(\"%s\", %s) = %d%s\n", RED, input_format, input_value, got, NONE);
-        printf("└───── printf(\"%s\", %s) = %d\n", input_format, input_value, expected);
-        printf("------------------------------\n");
+        printf(" Different %sreturn value%s\n", YELLOW, NONE);
+        printf(" ├── %sft_printf(\"%s\", %s) = %d%s\n", RED, input_format, input_value, got, NONE);
+        printf(" └───── %sprintf(\"%s\", %s) = %d%s\n\n", RED, input_format, input_value, expected, NONE);
         return (FALSE);
     }
 }
@@ -26,11 +24,9 @@ t_bool expect_str_eq(const char *got, const char *expected, const char *input_fo
         return (TRUE);
     else
     {
-        printf("------------------------------\n");
-        printf("Different %soutput%s\n", YELLOW, NONE);
-        printf("├── %sft_printf(\"%s\", %s) => \"%s\"%s\n", RED, input_format, input_value, got, NONE);
-        printf("└───── printf(\"%s\", %s) => \"%s\"\n", input_format, input_value, expected);
-        printf("------------------------------\n");
+        printf(" Different %soutput%s\n", YELLOW, NONE);
+        printf(" ├── %sft_printf(\"%s\", %s) => \"%s\"%s\n", RED, input_format, input_value, got, NONE);
+        printf(" └───── %sprintf(\"%s\", %s) => \"%s\"%s\n\n", RED, input_format, input_value, expected, NONE);
         return (FALSE);
     }
 }

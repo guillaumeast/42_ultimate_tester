@@ -60,7 +60,7 @@ fail()
 	local message="$1"
 	local error_code="${2:-1}"
 
-	echo -e "\n===> ❌ ${RED}${message}${NONE}" >&2
+	echo -e "\n${RED}===> ❌ ${message}${NONE}" >&2
 	exit error_code
 }
 
