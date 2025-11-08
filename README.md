@@ -3,20 +3,18 @@
 **Think your 42 project is bulletproof? Test it!** 💥
 
 `42_ultimate_tester` is a **dependence-free**, one-command testing tool for 42 projects
-> _Built to make your life easier and your code cry (just a little)_
+> ✌️ No setup, no dependecy, no `Makefile` editing, no excuses.
 
 ---
 
 ## ⚙️ How to Install
-
-> No setup, no dependecy, no `Makefile` editing, no excuses.
 
 From anywhere, just run:
 ```bash
 curl -fsSL https://raw.githubusercontent.com/guillaumeast/42_ultimate_tester/master/install.zsh | zsh
 ```
 
-> Don't forget to restart your terminal or run `source ~/.zshrc`
+> 💡 Don't forget to restart your terminal or run `source ~/.zshrc`
 
 This will:
 1. Install `42 Ultimate Tester` globally in `~/.42_ultimate_tester/`
@@ -75,7 +73,7 @@ Nothing fancy --- just make sure you've got these:
 | `tar` | To unpack the `42_ultimate_tester` archive |
 | `zsh` | Because we're not animals |
 
-> 💡 Don't worry --- all of these come preinstalled on the 42 Ubuntu machines.
+> 💡 Don't worry - all of these come preinstalled on the 42 Ubuntu machines.
 
 ---
 
@@ -100,4 +98,3 @@ You can help expand `42_ultimate_tester` by adding new test suites!
 4. Open a pull request with a short description of what your tests cover
 
 > 💬 Bonus points if your test breaks your own code first — that’s science
-
