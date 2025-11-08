@@ -10,7 +10,7 @@ NONE="\033[0m"
 main()
 {
 	if [[ -f "get_next_line.c" ]]; then
-		echo -e "🧪 Testing ${YELLOW}GET NEXT LINE${NONE} project...\n"
+		echo -e " 🧪 Testing ${YELLOW}GET NEXT LINE${NONE} project...\n"
 		"${TESTS_DIR}/gnl/${RUNNER}"
 		exit $?
 	fi
