@@ -1,18 +1,13 @@
 #!/usr/bin/env zsh
 
-NAME="42_ultimate_tester"
 REPO_URL="https://github.com/guillaumeast/42_ultimate_tester"
 
-INSTALL_DIR="${HOME}/.${NAME}"
-SCRIPTS_DIR="${INSTALL_DIR}/core"
-TESTS_DIR="${INSTALL_DIR}/tests"
-
-RUNNER="run.zsh"
+INSTALL_DIR="${HOME}/.42_ultimate_tester"
+DISPATCHER="${INSTALL_DIR}/core/dispatch.zsh"
 
 GREY="\033[38;5;240m"
 ORANGE="\033[38;5;214m"
 RED="\033[31m"
-GREEN="\033[0;32m"
 YELLOW="\033[33m"
 NONE="\033[0m"
 
@@ -22,7 +17,7 @@ main()
 {
 	print_ascii_art
 	update
-	dispatch
+	"${DISPATCHER}"
 }
 
 print_ascii_art()
@@ -49,24 +44,6 @@ update()
 			|| true
 	)
 	echo -e " ${GREY}✔ Updated${NONE}\n"
-}
-
-dispatch()
-{
-	if [[ -f "get_next_line.c" ]]; then
-		echo -e "🧪 Testing ${YELLOW}GET NEXT LINE${NONE} project...\n"
-		"${TESTS_DIR}/gnl/${RUNNER}"
-		exit $?
-	fi
-
-	if grep -q "libftprintf\.a" Makefile 2>/dev/null; then
-		echo -e " 🧪 Testing ${YELLOW}PRINTF${NONE} project...\n"
-		"${TESTS_DIR}/printf/${RUNNER}"
-		exit $?
-	fi
-
-	echo " ❌ Error: ${RED}Unable to identify current project${NONE}" >&2
-	exit 1
 }
 
 main
