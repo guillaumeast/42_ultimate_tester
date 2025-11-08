@@ -39,12 +39,12 @@ print_ascii_art()
 	printf "${ORANGE}(_)${RED}_   _| __| |_   _| __/ __||_   _| __| _ \\  \n"
 	printf "|_  _| / /   | |_| | |__  | |  | | | |\\/| |/ _ \\   | | | _|    | | | _|\\__ \\  | | | _||   /  \n"
 	printf "  |_| /___|   \\___/|____| |_| |___||_|  |_/_/ \\_\\  |_| |___|   |_| |___|___/  |_| |___|_|_\\  \n"
-	printf "\n"
+	printf "${NONE}\n"
 }
 
 download()
 {
-	echo " ${GREY}⏱${NONE} Downloading ${NAME} into ${INSTALL_DIR}..."
+	echo " ⏱ Downloading ${NAME} into ${INSTALL_DIR}..."
 
 	rm -rf "${TMP_DIR}" > /dev/null 2>&1
 	if ! git clone --depth=1 "${REPO_URL}" "${TMP_DIR}" > /dev/null 2>&1; then
@@ -68,7 +68,7 @@ update_zshrc()
 	if [[ ! -f "${ZSHRC}" ]]; then
 		ZSHRC=$(find "${HOME}" -maxdepth 3 -type f -name ".zshrc" 2>/dev/null | head -n 1)
 		if [[ ! -f "${ZSHRC}" ]]; then
-			echo -e "\n ${YELLOW}⚠ Unable to find .zshrc inside ${HOME}/${NONE}" >&2
+			echo " ${YELLOW}⚠ Unable to find .zshrc inside ${HOME}/${NONE}" >&2
 			echo " ℹ You should manually add an alias to run tests : /Users/gui/.42_ultimate_tester/core/run.zsh" >&2
 			echo " ℹ You should manually add an alias to uninstall tests : /Users/gui/.42_ultimate_tester/core/uninstall.zsh" >&2
 		fi
@@ -78,7 +78,7 @@ update_zshrc()
 
 	for alias_name in test rmtest; do
 		if grep -qE "^[[:space:]]*alias[[:space:]]+${alias_name}=" "${ZSHRC}"; then
-			echo -e "\n ${YELLOW}⚠ Alias '${alias_name}' already exists in ${ZSHRC}.${NONE}" >&2
+			echo " ${YELLOW}⚠ Alias '${alias_name}' already exists in ${ZSHRC}.${NONE}" >&2
 			echo " ℹ You should manually add an alias to run tests : /Users/gui/.42_ultimate_tester/core/run.zsh" >&2
 			echo " ℹ You should manually add an alias to uninstall tests : /Users/gui/.42_ultimate_tester/core/uninstall.zsh" >&2
 		fi
