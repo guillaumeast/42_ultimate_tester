@@ -2,22 +2,22 @@
 
 void	test_x_low(void)
 {
-	printf(" ⏱ Testing '%%x' with basic values\n");
+	printf(" %s⏱%s Testing %s'%%x' with basic values%s\n", BLUE, NONE, BLUE, NONE);
 	run_test_unsigned("%x", 0);
 	run_test_unsigned("%x", 42);
 
-	printf(" ⏱ Testing '%%x' with padding and spacing\n");
+	printf(" %s⏱%s Testing %s'%%x' with padding and spacing%s\n", BLUE, NONE, BLUE, NONE);
 	run_test_unsigned("-%x-", 0);
 	run_test_unsigned(" %x ", 42);
 
-	printf(" ⏱ Testing '%%x' with int limits\n");
+	printf(" %s⏱%s Testing %s'%%x' with int limits%s\n", BLUE, NONE, BLUE, NONE);
 	run_test_long("%x", INT_MIN);
 	run_test_unsigned("%x", INT_MAX);
 
-	printf(" ⏱ Testing '%%x' with unsigned int limits\n");
+	printf(" %s⏱%s Testing %s'%%x' with unsigned int limits%s\n", BLUE, NONE, BLUE, NONE);
 	run_test_unsigned("%x", UINT_MAX);
 
-	printf(" ⏱ Testing '%%x' with negative values\n");
+	printf(" %s⏱%s Testing %s'%%x' with negative values%s\n", BLUE, NONE, BLUE, NONE);
 	run_test_long("%x", -1);
 	run_test_long("%x", -42);
 

@@ -2,12 +2,12 @@
 
 void	test_basic(void)
 {
-	printf(" ⏱ Testing '%%%%'\n");
+	printf(" %s⏱%s Testing %s'%%%%'%s\n", BLUE, NONE, BLUE, NONE);
 	run_test_long("%%", 0);
 	run_test_long(" %% ", 0);
 	run_test_long("-%%-", 0);
 
-	printf(" ⏱ Testing '%%_' (invalid format)\n");
+	printf(" %s⏱%s Testing %s'%%_' (invalid format)%s\n", BLUE, NONE, BLUE, NONE);
 	run_test_long("12%_45", 0);
 
 	printf("\n");

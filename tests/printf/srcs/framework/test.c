@@ -9,7 +9,7 @@ static void handle_child_status(pid_t pid)
 	if (WIFSIGNALED(status))
 	{
 		sig = WTERMSIG(status);
-		fprintf(stderr, "💥 Test crashed: signal %d (%s)\n", sig, strsignal(sig));
+		fprintf(stderr, "💥%s Test crashed: signal %d (%s)%s\n", RED, sig, strsignal(sig), NONE);
 		perror("Crash");
 		g_failed++;
 	}

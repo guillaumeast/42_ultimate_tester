@@ -38,7 +38,7 @@ t_bool expect_str_eq(const char *got, const char *expected, const char *input_fo
 void print_results(void)
 {
     if (g_failed == 0)
-        printf("===> ✅ %s%d / %d tests passed%s\n", GREEN, g_passed, g_total, NONE);
+        printf("%s===> ✅ %d / %d tests PASSED%s\n", GREEN, g_passed, g_total, NONE);
     else
-        printf("===> ❌ %s%d / %d tests failed%s\n", RED, g_failed, g_total, NONE);
+        printf("%s===> ❌ %d / %d tests FAILED%s\n", RED, g_failed, g_total, NONE);
 }

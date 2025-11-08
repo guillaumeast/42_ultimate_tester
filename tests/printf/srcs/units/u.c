@@ -2,12 +2,12 @@
 
 void	test_u(void)
 {
-	printf(" ⏱ Testing '%%u' with basic values\n");
+	printf(" %s⏱%s Testing %s'%%u' with basic values%s\n", BLUE, NONE, BLUE, NONE);
 	run_test_unsigned("%u", 0);
 	run_test_unsigned("%u", 1);
 	run_test_unsigned("%u", 42);
 
-	printf(" ⏱ Testing '%%u' with basic values\n");
+	printf(" %s⏱%s Testing %s'%%u' with basic values%s\n", BLUE, NONE, BLUE, NONE);
 	run_test_long("%u", -1);
 	run_test_long("%u", -42);
 	run_test_unsigned("%u", INT_MIN);
