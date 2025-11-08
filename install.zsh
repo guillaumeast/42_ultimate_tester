@@ -10,9 +10,7 @@ UNINSTALLER="${INSTALL_DIR}/core/uninstall.zsh"
 ZSHRC="${HOME}/.zshrc"
 ZSHRC_CONTENT_START="#-----------------------42_ultimate_tester----------------------#"
 ZSHRC_CONTENT_END="#---------------------------------------------------------------#"
-ZSHRC_CONTENT="\
-alias test=\"${RUNNER}\"\n\
-alias rmtest=\"${UNINSTALLER}\""
+ZSHRC_CONTENT="alias test=\"${RUNNER}\"\nalias rmtest=\"${UNINSTALLER}\""
 
 GREY="\033[38;5;240m"
 RED="\033[0;31m"
@@ -68,9 +66,7 @@ update_zshrc()
 		fi
 	done
 
-	echo -e "\n${ZSHRC_CONTENT_START}\n" >> "${ZSHRC}"
-	echo -e "${ZSHRC_CONTENT}" >> "${ZSHRC}"
-	echo -e "\n${ZSHRC_CONTENT_END}\n" >> "${ZSHRC}"
+	echo -e "${ZSHRC_CONTENT_START}\n${ZSHRC_CONTENT}\n${ZSHRC_CONTENT_END}" >> "${ZSHRC}"
 }
 
 clean_zshrc()
