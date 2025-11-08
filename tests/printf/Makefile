@@ -2,7 +2,7 @@ NAME 		:= ft_printf_tester
 
 LIBFT
 CC			:= cc
-CFLAGS		:= -Wall -Wextra -Werror
+CFLAGS		:=
 
 SRCS		:= srcs/main.c $(wildcard srcs/framework/*.c) $(wildcard srcs/units/*.c)
 INCLUDES

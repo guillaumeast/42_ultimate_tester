@@ -15,6 +15,7 @@ void	test_s(void)
 	run_test_string("%s", "\nNew\nLine");
 	run_test_string("%s", "\rCarriage\r 💥\033[0;31m Timeout or Crash: ft_printf(\"%%s\", \"\\rCarriage\\rReturn\\\"\033[0;0m");
 	run_test_string("%s", "abc\0def");
+	run_test_string("%s", "\033[0;34mColored\033[0;34mstring\033[0;0m");
 
 	printf(" %s⏱%s Testing %s'%%s'%s with %sNULL pointer%s\n", BLUE, NONE, BLUE, NONE, BLUE, NONE);
 	run_test_string("%s", NULL);

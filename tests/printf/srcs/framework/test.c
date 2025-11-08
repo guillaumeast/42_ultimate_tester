@@ -24,7 +24,7 @@ static void handle_child_status(pid_t pid, const char *input)
 	}
 }
 
-void	run_test_long(const char *format, long arg)
+void	run_test_no_arg(const char *format)
 {
 	pid_t		pid;
 	t_test		test;
@@ -44,27 +44,26 @@ void	run_test_long(const char *format, long arg)
 		alarm(TIMEOUT);
 		redirect_start(&fake_stdout);
 
-		test.printf.return_value = printf(format, arg);
+		test.printf.return_value = printf(format);
 		redirect_read(&fake_stdout, test.printf.output);
 		redirect_clear(&fake_stdout);
 
-		test.ft_printf.return_value = ft_printf(format, arg);
+		test.ft_printf.return_value = ft_printf(format);
 		redirect_read(&fake_stdout, test.ft_printf.output);
 		redirect_clear(&fake_stdout);
 
 		redirect_stop(&fake_stdout);
 
-		snprintf(formatted_input, FORMATTED_INPUT_SIZE, "%ld", arg);
 		return_value = TRUE;
-		if (!expect_eq_int(test.ft_printf.return_value, test.printf.return_value, format, formatted_input))
+		if (!expect_eq_int(test.ft_printf.return_value, test.printf.return_value, format, NULL))
 			return_value = FALSE;
-		if (!expect_str_eq(test.ft_printf.output, test.printf.output, format, formatted_input))
+		if (!expect_str_eq(test.ft_printf.output, test.printf.output, format, NULL))
 			return_value = FALSE;
 		exit(return_value);
 	}
 	else
 	{
-		snprintf(formatted_input, FORMATTED_INPUT_SIZE, " ft_printf(\"%s\", %ld)", format, arg);
+		snprintf(formatted_input, FORMATTED_INPUT_SIZE, " ft_printf(\"%s\")", format);
 		handle_child_status(pid, formatted_input);
 	}
 }
@@ -109,6 +108,51 @@ void	run_test_string(const char *format, const char *arg)
 	else
 	{
 		snprintf(formatted_input, FORMATTED_INPUT_SIZE, " ft_printf(\"%s\", \"%s\")", format, arg);
+		handle_child_status(pid, formatted_input);
+	}
+}
+
+void	run_test_long(const char *format, long arg)
+{
+	pid_t		pid;
+	t_test		test;
+	t_redirect	fake_stdout;
+	char		formatted_input[FORMATTED_INPUT_SIZE];
+	t_bool		return_value;
+
+    g_total++;
+	pid = fork();
+	if (pid < 0)
+	{
+		g_failed++;
+		return (perror("Fork failed"));
+	}
+	if (pid == 0)
+	{
+		alarm(TIMEOUT);
+		redirect_start(&fake_stdout);
+
+		test.printf.return_value = printf(format, arg);
+		redirect_read(&fake_stdout, test.printf.output);
+		redirect_clear(&fake_stdout);
+
+		test.ft_printf.return_value = ft_printf(format, arg);
+		redirect_read(&fake_stdout, test.ft_printf.output);
+		redirect_clear(&fake_stdout);
+
+		redirect_stop(&fake_stdout);
+
+		snprintf(formatted_input, FORMATTED_INPUT_SIZE, "%ld", arg);
+		return_value = TRUE;
+		if (!expect_eq_int(test.ft_printf.return_value, test.printf.return_value, format, formatted_input))
+			return_value = FALSE;
+		if (!expect_str_eq(test.ft_printf.output, test.printf.output, format, formatted_input))
+			return_value = FALSE;
+		exit(return_value);
+	}
+	else
+	{
+		snprintf(formatted_input, FORMATTED_INPUT_SIZE, " ft_printf(\"%s\", %ld)", format, arg);
 		handle_child_status(pid, formatted_input);
 	}
 }
