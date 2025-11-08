@@ -34,7 +34,7 @@ print_ascii_art()
 
 update()
 {
-	echo -e "${GREY} ⏱ Updating test cases...${NONE}"
+	echo -e "${GREY} ⏱ Updating...${NONE}"
 	(
 		cd "${INSTALL_DIR}"
 		if ! git pull > /dev/null 2>&1; then

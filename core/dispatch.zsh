@@ -21,7 +21,7 @@ main()
 		exit $?
 	fi
 
-	echo " ❌ Error: ${RED}Unable to identify current project${NONE}" >&2
+	echo " ❌ ${RED}Unable to identify current project${NONE}" >&2
 	exit 1
 }
 

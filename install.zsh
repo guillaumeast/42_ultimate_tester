@@ -13,11 +13,15 @@ ZSHRC_CONTENT_START="#-----------------------42_ultimate_tester-----------------
 ZSHRC_CONTENT_END="#---------------------------------------------------------------#"
 ZSHRC_CONTENT="alias test=\"${RUNNER}\"\nalias rmtest=\"${UNINSTALLER}\""
 
+TEST_CMD="${RUNNER}"
+UNINSTALL_CMD="${UNINSTALLER}"
+
 GREY="\033[38;5;240m"
 RED="\033[0;31m"
 ORANGE="\033[38;5;214m"
 GREEN="\033[0;32m"
 YELLOW="\033[0;33m"
+BLUE="\033[34m"
 NONE="\033[0m"
 
 main()
@@ -26,7 +30,6 @@ main()
 	download
 	update_zshrc
 	print_help
-	exec zsh
 }
 
 print_ascii_art()
@@ -44,7 +47,7 @@ print_ascii_art()
 
 download()
 {
-	echo " ⏱ Downloading ${NAME} into ${INSTALL_DIR}..."
+	echo " ${BLUE}⏱ Downloading...${NONE}"
 
 	rm -rf "${TMP_DIR}" > /dev/null 2>&1
 	if ! git clone --depth=1 "${REPO_URL}" "${TMP_DIR}" > /dev/null 2>&1; then
@@ -68,9 +71,11 @@ update_zshrc()
 	if [[ ! -f "${ZSHRC}" ]]; then
 		ZSHRC=$(find "${HOME}" -maxdepth 3 -type f -name ".zshrc" 2>/dev/null | head -n 1)
 		if [[ ! -f "${ZSHRC}" ]]; then
+			echo
 			echo " ${YELLOW}⚠ Unable to find .zshrc inside ${HOME}/${NONE}" >&2
 			echo " ℹ You should manually add an alias to run tests : /Users/gui/.42_ultimate_tester/core/run.zsh" >&2
 			echo " ℹ You should manually add an alias to uninstall tests : /Users/gui/.42_ultimate_tester/core/uninstall.zsh" >&2
+			echo
 			return 1
 		fi
 	fi
@@ -79,14 +84,18 @@ update_zshrc()
 
 	for alias_name in test rmtest; do
 		if grep -qE "^[[:space:]]*alias[[:space:]]+${alias_name}=" "${ZSHRC}"; then
+			echo
 			echo " ${YELLOW}⚠ Alias '${alias_name}' already exists in ${ZSHRC}.${NONE}" >&2
 			echo " ℹ You should manually add an alias to run tests : /Users/gui/.42_ultimate_tester/core/run.zsh" >&2
 			echo " ℹ You should manually add an alias to uninstall tests : /Users/gui/.42_ultimate_tester/core/uninstall.zsh" >&2
+			echo
 			return 1
 		fi
 	done
 
 	echo -e "${ZSHRC_CONTENT_START}\n${ZSHRC_CONTENT}\n${ZSHRC_CONTENT_END}" >> "${ZSHRC}"
+	TEST_CMD="test"
+	UNINSTALL_CMD="rmtest"
 }
 
 clean_zshrc()
@@ -102,10 +111,11 @@ clean_zshrc()
 
 print_help()
 {
-	echo -e " ${GREEN}✔${NONE} Downloaded\n"
+	echo -e " ${GREEN}✔ Downloaded${NONE}\n"
 
-	echo " 💡 Run ${YELLOW}'test'${NONE} inside a 42 project to test it"
-	echo " 💡 Run ${YELLOW}'rmtest'${NONE} anywhere to uninstall ${NAME}\n"
+	echo " 👉 ${YELLOW}Reload your terminal${NONE} or run ${YELLOW}source \"${ZSHRC}\"${NONE}, then:"
+	echo " 💡 Run ${YELLOW}${TEST_CMD}${NONE} inside a 42 project to test it"
+	echo " 💡 Run ${YELLOW}${UNINSTALL_CMD}${NONE} anywhere to uninstall ${NAME}\n"
 }
 
 main
