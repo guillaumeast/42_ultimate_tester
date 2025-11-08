@@ -39,7 +39,7 @@ update()
 		cd "${INSTALL_DIR}"
 		if ! git pull > /dev/null 2>&1 || ! curl -fsSL "${INSTALLER_URL}" | zsh > /dev/null 2>&1; then
 			echo " ${YELLOW}⚠ Update failed. Skipping.${NONE}" >&2
-			echo " ${GREY}ⓘ You can manually update by running 'curl -fsSL ${INSTALLER_URL}'${NONE}"
+			echo " ${GREY}ℹ You can manually update by running 'curl -fsSL ${INSTALLER_URL}'${NONE}"
 		else
 			echo -e " ${GREY}✔ Updated${NONE}\n"
 		fi

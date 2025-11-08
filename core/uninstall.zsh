@@ -17,7 +17,7 @@ if [[ ! -f "${ZSHRC}" ]]; then
 	ZSHRC=$(find "${HOME}" -maxdepth 3 -type f -name ".zshrc" 2>/dev/null | head -n 1)
 	[[ -f "${ZSHRC}" ]] || {
 		echo " ${YELLOW}⚠ Unable to find .zshrc inside ${HOME}/${NONE}" >&2
-		echo " ⓘ Remove ${NAME} aliases manually in your .zshrc" >&2
+		echo " ℹ Remove ${NAME} aliases manually in your .zshrc" >&2
 		exit 0
 	}
 fi
