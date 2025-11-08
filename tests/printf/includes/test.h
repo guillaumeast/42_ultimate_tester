@@ -8,6 +8,7 @@
 
 # include "libftprintf.h"
 # include "colors.h"
+# include "iterate.h"
 # include "redirect.h"
 # include "expect.h"
 # include "units.h"
@@ -35,10 +36,10 @@ typedef struct s_test
 	t_result	ft_printf;
 }	t_test;
 
-void	run_test_no_arg(const char *format);
-void	run_test_string(const char *format, const char *arg);
-void	run_test_long(const char *format, long arg);
-void	run_test_unsigned(const char *format, unsigned int arg);
-void	run_test_pointer(const char *format, void *arg);
+t_bool	run_test_no_arg(const char *format);
+t_bool	run_test_string(const char *format, const char *arg);
+t_bool	run_test_long(const char *format, long arg);
+t_bool	run_test_unsigned(const char *format, unsigned int arg);
+t_bool	run_test_pointer(const char *format, void *arg);
 
 #endif

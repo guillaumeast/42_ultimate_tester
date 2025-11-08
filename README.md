@@ -52,10 +52,10 @@ This will:
 
 | Project | Status | Mandatory Test Cases | Bonus Test Cases |
 |---------|--------|----------------------|------------------|
-| `get_next_line` | ✅ Ready | ~150 🧨 | 0 (Work in progress) |
-| `ft_printf` | ✅ Ready | ~100 🧨 | 0 (Work in progress) |
-| `libft` | 🧱 Work in progress | 0 (Work in progress) | 0 (Work in progress) |
-| Others | 🤷‍♂️ We'll see | n.a. | n.a. |
+| `ft_printf` | ✅ Ready | ~300 🧨 | _ |
+| `get_next_line` | ✅ Ready | ~150 🧨 | _ |
+| `libft` | 🧱 Work in progress | _ | _ |
+| Others | 🤷‍♂️ We'll see | _ | _ |
 
 ---
 

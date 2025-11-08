@@ -1,6 +1,6 @@
 #include "test.h"
 
-static void handle_child_status(pid_t pid, const char *input)
+static t_bool handle_child_status(pid_t pid, const char *input)
 {
 	int	status;
 	int	sig;
@@ -14,17 +14,18 @@ static void handle_child_status(pid_t pid, const char *input)
 		else
 			fprintf(stderr, " 💥%s Crashed: %s%s\n", RED, input, NONE);
 		g_failed++;
+		return (FALSE);
 	}
-	else if (WIFEXITED(status))
+	else if (WIFEXITED(status) && WEXITSTATUS(status) == TRUE)
 	{
-		if (WEXITSTATUS(status) == TRUE)
-			g_passed++;
-		else
-			g_failed++;
+		g_passed++;
+		return (TRUE);
 	}
+	g_failed++;
+	return (FALSE);
 }
 
-void	run_test_no_arg(const char *format)
+t_bool	run_test_no_arg(const char *format)
 {
 	pid_t		pid;
 	t_test		test;
@@ -37,7 +38,8 @@ void	run_test_no_arg(const char *format)
 	if (pid < 0)
 	{
 		g_failed++;
-		return (perror("Fork failed"));
+		perror("Fork failed");
+		return (FALSE);
 	}
 	if (pid == 0)
 	{
@@ -64,11 +66,11 @@ void	run_test_no_arg(const char *format)
 	else
 	{
 		snprintf(formatted_input, FORMATTED_INPUT_SIZE, " ft_printf(\"%s\")", format);
-		handle_child_status(pid, formatted_input);
+		return (handle_child_status(pid, formatted_input));
 	}
 }
 
-void	run_test_string(const char *format, const char *arg)
+t_bool	run_test_string(const char *format, const char *arg)
 {
 	pid_t		pid;
 	t_test		test;
@@ -81,7 +83,8 @@ void	run_test_string(const char *format, const char *arg)
 	if (pid < 0)
 	{
 		g_failed++;
-		return (perror("Fork failed"));
+		perror("Fork failed");
+		return (FALSE);
 	}
 	if (pid == 0)
 	{
@@ -108,11 +111,11 @@ void	run_test_string(const char *format, const char *arg)
 	else
 	{
 		snprintf(formatted_input, FORMATTED_INPUT_SIZE, " ft_printf(\"%s\", \"%s\")", format, arg);
-		handle_child_status(pid, formatted_input);
+		return (handle_child_status(pid, formatted_input));
 	}
 }
 
-void	run_test_long(const char *format, long arg)
+t_bool	run_test_long(const char *format, long arg)
 {
 	pid_t		pid;
 	t_test		test;
@@ -125,7 +128,8 @@ void	run_test_long(const char *format, long arg)
 	if (pid < 0)
 	{
 		g_failed++;
-		return (perror("Fork failed"));
+		perror("Fork failed");
+		return (FALSE);
 	}
 	if (pid == 0)
 	{
@@ -153,11 +157,11 @@ void	run_test_long(const char *format, long arg)
 	else
 	{
 		snprintf(formatted_input, FORMATTED_INPUT_SIZE, " ft_printf(\"%s\", %ld)", format, arg);
-		handle_child_status(pid, formatted_input);
+		return (handle_child_status(pid, formatted_input));
 	}
 }
 
-void	run_test_unsigned(const char *format, unsigned int arg)
+t_bool	run_test_unsigned(const char *format, unsigned int arg)
 {
 	pid_t		pid;
 	t_test		test;
@@ -170,7 +174,8 @@ void	run_test_unsigned(const char *format, unsigned int arg)
 	if (pid < 0)
 	{
 		g_failed++;
-		return (perror("Fork failed"));
+		perror("Fork failed");
+		return (FALSE);
 	}
 	if (pid == 0)
 	{
@@ -198,11 +203,11 @@ void	run_test_unsigned(const char *format, unsigned int arg)
 	else
 	{
 		snprintf(formatted_input, FORMATTED_INPUT_SIZE, " ft_printf(\"%s\", %u)", format, arg);
-		handle_child_status(pid, formatted_input);
+		return (handle_child_status(pid, formatted_input));
 	}
 }
 
-void	run_test_pointer(const char *format, void *arg)
+t_bool	run_test_pointer(const char *format, void *arg)
 {
 	pid_t		pid;
 	t_test		test;
@@ -215,7 +220,8 @@ void	run_test_pointer(const char *format, void *arg)
 	if (pid < 0)
 	{
 		g_failed++;
-		return (perror("Fork failed"));
+		perror("Fork failed");
+		return (FALSE);
 	}
 	if (pid == 0)
 	{
@@ -243,6 +249,6 @@ void	run_test_pointer(const char *format, void *arg)
 	else
 	{
 		snprintf(formatted_input, FORMATTED_INPUT_SIZE, " ft_printf(\"%s\", %p)", format, arg);
-		handle_child_status(pid, formatted_input);
+		return (handle_child_status(pid, formatted_input));
 	}
 }
