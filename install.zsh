@@ -27,6 +27,7 @@ main()
 	download
 	update_zshrc
 	print_help
+	exec zsh
 }
 
 print_ascii_art()
@@ -89,8 +90,6 @@ print_help()
 
 	echo " 💡 Run ${YELLOW}'test'${NONE} inside a 42 project to test it"
 	echo " 💡 Run ${YELLOW}'rmtest'${NONE} anywhere to uninstall ${NAME}\n"
-
-	exec zsh
 }
 
 fail()
