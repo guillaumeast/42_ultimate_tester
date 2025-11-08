@@ -48,7 +48,7 @@ update()
 			|| quiet sh -c 'curl -fsSL https://raw.githubusercontent.com/guillaumeast/42_ultimate_tester/master/install.zsh | zsh' \
 			|| true
 	)
-	echo -e " ${GREEN}✔${GREY} Updated${NONE}\n"
+	echo -e " ${GREY}✔ Updated${NONE}\n"
 }
 
 dispatch()

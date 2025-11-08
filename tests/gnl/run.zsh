@@ -118,10 +118,10 @@ print_results()
 {
 	echo
 	if (( FAILED == 0 )); then
-		echo "===> ✅ ${GREEN}${PASSED} / ${TOTAL} tests PASSED${NONE}"
+		echo "${GREEN}===> ✅ ${PASSED} / ${TOTAL} tests PASSED${NONE}"
 		exit 0
 	else
-		echo "===> ❌ ${RED}${FAILED} / ${TOTAL} tests FAILED${NONE}"
+		echo "${RED}===> ❌ ${FAILED} / ${TOTAL} tests FAILED${NONE}"
 		exit 1
 	fi
 }
