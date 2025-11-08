@@ -101,6 +101,7 @@ print_help()
 fail()
 {
 	local message="$1"
+	local error_code="${2:-1}"
 
 	echo -e "\n❌ Installation canceled: ${RED}${message}${NONE}" >&2
 
@@ -112,7 +113,7 @@ fail()
 	clean_zshrc
 	echo "🧹 ${ZSHRC} has been restored"
 
-	exit 1
+	exit $error_code
 }
 
 main

@@ -41,12 +41,12 @@ This will:
 
 ## 📦 Supported Projects
 
-| Project | Status |
-|---------|--------|
-| `get_next_line` | ✅ Ready to break your code |
-| `ft_printf` | 🧱 Work in progress |
-| `libft` | 🧾 Planned |
-| Others | 🤷‍♂️ We'll see |
+| Project | Mandatory Test Cases | Bonus Test Cases |
+|---------|----------------------|------------------|
+| `get_next_line` | ~150 🧨 | 📋 Planned |
+| `ft_printf` | ~100 🧨 | 📋 Planned |
+| `libft` | 🧱 Work in progress | 📋 Planned |
+| Others | 🤷‍♂️ We'll see | n.a. |
 
 ---
 

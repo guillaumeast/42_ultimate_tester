@@ -37,13 +37,13 @@ print_ascii_art()
 dispatch()
 {
 	if [[ -f "get_next_line.c" ]]; then
-		echo -e "🧪 Testing ${YELLOW}GET NEXT LINE${NONE} project..."
+		echo -e "🧪 Testing ${YELLOW}GET NEXT LINE${NONE} project...\n"
 		"${TESTS_DIR}/gnl/${RUNNER}"
 		exit $?
 	fi
 
 	if grep -q "libftprintf\.a" Makefile 2>/dev/null; then
-		echo -e "🧪 Testing ${YELLOW}PRINTF${NONE} project..."
+		echo -e "🧪 Testing ${YELLOW}PRINTF${NONE} project...\n"
 		"${TESTS_DIR}/printf/${RUNNER}"
 		exit $?
 	fi

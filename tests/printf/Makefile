@@ -1,25 +1,23 @@
 NAME 		:= ft_printf_tester
 
-LIBFT		:= ../libftprintf.a
+LIBFT
 CC			:= cc
-CFLAGS		= -Wall -Wextra -Werror $(INCLUDES)
+CFLAGS		:= -Wall -Wextra -Werror
 
 SRCS		:= srcs/main.c $(wildcard srcs/framework/*.c) $(wildcard srcs/units/*.c)
-INCLUDES	:= -Iincludes
+INCLUDES
+
 OBJ_DIR		:= obj
 OBJS		:= $(SRCS:%.c=$(OBJ_DIR)/%.o)
 
 all: $(NAME)
 
-$(LIBFT):
-	make
-
 $(NAME): $(OBJS) $(LIBFT)
-	$(CC) $(CFLAGS) $(INCLUDES) -o $(NAME) $(OBJS) $(LIBFT)
+	$(CC) $(CFLAGS) $(INCLUDES) -I./includes -o $(NAME) $(OBJS) $(LIBFT)
 
 $(OBJ_DIR)/%.o : %.c
 	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) $(INCLUDES) -I./includes -c $< -o $@
 
 clean:
 	rm -rf $(OBJ_DIR)

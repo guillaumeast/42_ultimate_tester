@@ -21,7 +21,6 @@ NONE="\033[0m"
 
 main()
 {
-	echo
 	init
 	check_files
 	# Test each buffer_size
@@ -76,14 +75,15 @@ compile()
 		-I. ${TESTS_DIR}/main.c get_next_line.c get_next_line_utils.c \
 		-o "${TARGET}"
 	if [[ $? -ne 0 ]]; then
+		local error_code= $?
 		echo "❌ ${RED}Compilation FAILED for BUFFER_SIZE=$buffer_size${NONE}"
-		exit 1
+		exit $error_code
 	elif [[ ! -f "${TARGET}" ]]; then
 		echo "❌ ${RED}${TARGET} not found${NONE}"
 		exit 1
 	elif [[ ! -x "${TARGET}" ]]; then
 		echo "❌ ${RED}${TARGET} is not executable${NONE}"
-		exit 2
+		exit 1
 	fi
 }
 

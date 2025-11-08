@@ -3,7 +3,6 @@
 void expect_init(void)
 {
     g_passed = g_failed = g_total = 0;
-    printf("\n");
 }
 
 t_bool expect_eq_int(int got, int expected, const char *input_format, const char *input_value)
