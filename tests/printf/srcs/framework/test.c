@@ -1,6 +1,6 @@
 #include "test.h"
 
-static void handle_child_status(pid_t pid)
+static void handle_child_status(pid_t pid, const char *input)
 {
 	int	status;
 	int	sig;
@@ -9,8 +9,10 @@ static void handle_child_status(pid_t pid)
 	if (WIFSIGNALED(status))
 	{
 		sig = WTERMSIG(status);
-		fprintf(stderr, "💥%s Test crashed: signal %d (%s)%s\n", RED, sig, strsignal(sig), NONE);
-		perror("Crash");
+		if (sig == SIGALRM)
+			fprintf(stderr, " 💥%s Timeout: %s%s\n", RED, input, NONE);
+		else
+			fprintf(stderr, " 💥%s Crashed: %s%s\n", RED, input, NONE);
 		g_failed++;
 	}
 	else if (WIFEXITED(status))
@@ -61,7 +63,10 @@ void	run_test_long(const char *format, long arg)
 		exit(return_value);
 	}
 	else
-		handle_child_status(pid);
+	{
+		snprintf(formatted_input, FORMATTED_INPUT_SIZE, " ft_printf(\"%s\", %ld)", format, arg);
+		handle_child_status(pid, formatted_input);
+	}
 }
 
 void	run_test_string(const char *format, const char *arg)
@@ -69,6 +74,7 @@ void	run_test_string(const char *format, const char *arg)
 	pid_t		pid;
 	t_test		test;
 	t_redirect	fake_stdout;
+	char		formatted_input[FORMATTED_INPUT_SIZE];
 	t_bool		return_value;
 
     g_total++;
@@ -101,7 +107,10 @@ void	run_test_string(const char *format, const char *arg)
 		exit(return_value);
 	}
 	else
-		handle_child_status(pid);
+	{
+		snprintf(formatted_input, FORMATTED_INPUT_SIZE, " ft_printf(\"%s\", \"%s\")", format, arg);
+		handle_child_status(pid, formatted_input);
+	}
 }
 
 void	run_test_unsigned(const char *format, unsigned int arg)
@@ -143,7 +152,10 @@ void	run_test_unsigned(const char *format, unsigned int arg)
 		exit(return_value);
 	}
 	else
-		handle_child_status(pid);
+	{
+		snprintf(formatted_input, FORMATTED_INPUT_SIZE, " ft_printf(\"%s\", %u)", format, arg);
+		handle_child_status(pid, formatted_input);
+	}
 }
 
 void	run_test_pointer(const char *format, void *arg)
@@ -185,5 +197,8 @@ void	run_test_pointer(const char *format, void *arg)
 		exit(return_value);
 	}
 	else
-		handle_child_status(pid);
+	{
+		snprintf(formatted_input, FORMATTED_INPUT_SIZE, " ft_printf(\"%s\", %p)", format, arg);
+		handle_child_status(pid, formatted_input);
+	}
 }

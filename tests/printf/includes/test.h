@@ -12,7 +12,7 @@
 # include "expect.h"
 # include "units.h"
 
-# define FORMATTED_INPUT_SIZE 64
+# define FORMATTED_INPUT_SIZE 512
 # define TIMEOUT 1
 
 extern int g_passed;
