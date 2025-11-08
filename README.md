@@ -32,8 +32,9 @@ test
 ```
 
 This will:
-1. Detect which project you're in
-2. Run the matching test suite
+1. Auto-update test cases
+2. Detect which project you're in
+3. Run the matching test suite
 
 > 💡 Perfect for testing projects lightning-fast during the 42 cursus.
 

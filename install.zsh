@@ -49,9 +49,7 @@ download()
 	rm -rf "${INSTALL_DIR}" > /dev/null 2>&1
 	mkdir -p "${INSTALL_DIR}"
 
-	git clone "${REPO_URL}" "${INSTALL_DIR}"
-
-	echo "✅ ${NAME} downloaded into ${INSTALL_DIR}"
+	git clone "${REPO_URL}" "${INSTALL_DIR}" > /dev/null 2>&1
 }
 
 update_zshrc()
@@ -72,8 +70,6 @@ update_zshrc()
 	echo -e "\n${ZSHRC_CONTENT_START}\n" >> "${ZSHRC}"
 	echo -e "${ZSHRC_CONTENT}" >> "${ZSHRC}"
 	echo -e "\n${ZSHRC_CONTENT_END}\n" >> "${ZSHRC}"
-
-	echo "✅ ${ZSHRC} updated"
 }
 
 clean_zshrc()
