@@ -14,6 +14,7 @@ ZSHRC_CONTENT="\
 alias test=\"${RUNNER}\"\n\
 alias rmtest=\"${UNINSTALLER}\""
 
+GREY="\033[38;5;240m"
 RED="\033[0;31m"
 ORANGE="\033[38;5;214m"
 GREEN="\033[0;32m"
@@ -44,7 +45,7 @@ print_ascii_art()
 
 download()
 {
-	echo "👉 Downloading ${NAME} into ${INSTALL_DIR}..."
+	echo " ${GREY}⏱${NONE} Downloading ${NAME} into ${INSTALL_DIR}..."
 
 	rm -rf "${INSTALL_DIR}" > /dev/null 2>&1
 	mkdir -p "${INSTALL_DIR}"
@@ -85,10 +86,10 @@ clean_zshrc()
 
 print_help()
 {
-	echo -e "${GREEN}✔${NONE} Downloaded\n"
+	echo -e " ${GREEN}✔${NONE} Downloaded\n"
 
-	echo "💡 Run ${YELLOW}'test'${NONE} inside a 42 project to test it"
-	echo "💡 Run ${YELLOW}'rmtest'${NONE} anywhere to uninstall ${NAME}\n"
+	echo " 💡 Run ${YELLOW}'test'${NONE} inside a 42 project to test it"
+	echo " 💡 Run ${YELLOW}'rmtest'${NONE} anywhere to uninstall ${NAME}\n"
 
 	exec zsh
 }
@@ -98,15 +99,15 @@ fail()
 	local message="$1"
 	local error_code="${2:-1}"
 
-	echo -e "\n❌ Installation canceled: ${RED}${message}${NONE}" >&2
+	echo -e "\n ❌ Installation canceled: ${RED}${message}${NONE}" >&2
 
 	rm -f "${TMP_TAR}" > /dev/null 2>&1
 	rm -rf "${INSTALL_DIR}" > /dev/null 2>&1
 
-	echo "🧹 All downloaded files have been deleted"
+	echo " 🧹 All downloaded files have been deleted"
 
 	clean_zshrc
-	echo "🧹 ${ZSHRC} has been restored"
+	echo " 🧹 ${ZSHRC} has been restored"
 
 	exit $error_code
 }

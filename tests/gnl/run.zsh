@@ -25,7 +25,7 @@ main()
 	check_files
 	# Test each buffer_size
 	for buffer_size in "${BUFFER_SIZE_VALUES[@]}"; do
-		echo "👉 Testing with BUFFER_SIZE=$buffer_size..."
+		echo " ⏱ Testing with BUFFER_SIZE=$buffer_size..."
 		compile $buffer_size
 
 		# Test each input_file
@@ -57,7 +57,7 @@ init()
 
 check_files()
 {
-	echo "👉 Checking FILES..."
+	echo " ⏱ Checking FILES..."
 	for f in "${FILES[@]}"; do
 		if [[ ! -f "${f}" ]]; then
 			echo "❌ ${RED}${f} not found${NONE}"

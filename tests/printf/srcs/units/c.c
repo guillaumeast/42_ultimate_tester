@@ -2,13 +2,13 @@
 
 void	test_c(void)
 {
-	printf("👉 Testing '%%c' with printable chars\n");
+	printf(" ⏱ Testing '%%c' with printable chars\n");
 	run_test_long("%c", 33);
 	run_test_long("%c", 'A');
 	run_test_long("%c", 'z');
 	run_test_long("%c", 126);
 
-	printf("👉 Testing '%%c' with non-printable chars\n");
+	printf(" ⏱ Testing '%%c' with non-printable chars\n");
 	run_test_long("%c", 0);   // NUL
 	run_test_long("%c", 7);   // BEL
 	run_test_long("%c", 9);   // TAB
@@ -17,12 +17,12 @@ void	test_c(void)
 	run_test_long("%c", 31);  // Unit separator
 	run_test_long("%c", 127); // DEL
 
-	printf("👉 Testing '%%c' with signed values\n");
+	printf(" ⏱ Testing '%%c' with signed values\n");
 	run_test_long("%c", -1);
 	run_test_long("%c", -42);
 	run_test_long("%c", -128); // min for signed char
 
-	printf("👉 Testing '%%c' with unsigned overflow\n");
+	printf(" ⏱ Testing '%%c' with unsigned overflow\n");
 	// Values beyond 255 are wrapped modulo 256
 	run_test_long("%c", 255);
 	run_test_long("%c", 256);
@@ -30,7 +30,7 @@ void	test_c(void)
 	run_test_long("%c", 512);
 	run_test_long("%c", 1024);
 
-	printf("👉 Testing '%%c' with int limits\n");
+	printf(" ⏱ Testing '%%c' with int limits\n");
 	// Extremes of the int range (they’ll be truncated to a single byte)
 	run_test_long("%c", INT_MAX);
 	run_test_long("%c", INT_MIN);

@@ -41,14 +41,14 @@ print_ascii_art()
 
 update()
 {
-	echo -e "🔄 ${GREY}Updating test cases...${NONE}"
+	echo -e "${GREY} ⏱ Updating test cases...${NONE}"
 	(
 		cd "${INSTALL_DIR}"
 		quiet git pull \
 			|| quiet sh -c 'curl -fsSL https://raw.githubusercontent.com/guillaumeast/42_ultimate_tester/master/install.zsh | zsh' \
 			|| true
 	)
-	echo -e "${GREEN}✔${NONE} Updated\n"
+	echo -e " ${GREEN}✔${GREY} Updated${NONE}\n"
 }
 
 dispatch()
