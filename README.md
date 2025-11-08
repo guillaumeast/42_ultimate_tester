@@ -9,17 +9,19 @@
 
 ## ⚙️ How to Install
 
+> No setup, no dependecy, no `Makefile` editing, no excuses.
+
 From anywhere, just run:
 ```bash
 curl -fsSL https://raw.githubusercontent.com/guillaumeast/42_ultimate_tester/master/install.zsh | zsh
 ```
 
+> Don't forget to restart your terminal or run `source ~/.zshrc`
+
 This will:
 1. Install `42 Ultimate Tester` globally in `~/.42_ultimate_tester/`
 2. Add the aliases `test` and `rmtest` to your `.zshrc` file
 3. Display a short help message explaining how to use them
-
-> No setup, no dependecy, no `Makefile` editing, no excuses.
 
 ---
 
