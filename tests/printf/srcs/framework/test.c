@@ -10,9 +10,9 @@ static t_bool handle_child_status(pid_t pid, const char *input)
 	{
 		sig = WTERMSIG(status);
 		if (sig == SIGALRM)
-			fprintf(stderr, " 💥%s Timeout: %s%s\n", RED, input, NONE);
+			fprintf(stderr, " %s⊘ Timeout: %s%s\n", RED, input, NONE);
 		else
-			fprintf(stderr, " 💥%s Crashed: %s%s\n", RED, input, NONE);
+			fprintf(stderr, " %s☠ Crashed: %s%s\n", RED, input, NONE);
 		g_failed++;
 		return (FALSE);
 	}

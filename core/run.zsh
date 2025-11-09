@@ -6,7 +6,7 @@ INSTALLER_URL="https://raw.githubusercontent.com/guillaumeast/42_ultimate_tester
 INSTALL_DIR="${HOME}/.42_ultimate_tester"
 DISPATCHER="${INSTALL_DIR}/core/dispatch.zsh"
 
-GREY="\033[38;5;240m"
+GREY="\033[90m"
 ORANGE="\033[38;5;214m"
 RED="\033[31m"
 YELLOW="\033[33m"
