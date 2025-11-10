@@ -5,7 +5,7 @@
 # include <stdlib.h>
 # include <string.h>
 
-# include "utils.h"
+# include "colors.h"
 
 void expect_init(void);
 t_bool expect_eq_int(int got, int expected, const char *input_format, const char *input_value);
