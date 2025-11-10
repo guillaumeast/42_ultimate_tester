@@ -21,10 +21,10 @@ void	test_init(t_set *set, t_test *test)
 	test->fake_stdout.original_fd_copy = -1;
 	test->fake_stdout.tmp_fd = -1;
 	test->fake_stdout.tmp_file = NULL;
-	test->fn1.fn = (int (*)(const char *, ...))set->fn1;
+	test->fn1.fn = (void (*)())set->fn1;
 	test->fn1.out = NULL;
 	test->fn1.ret = 0;
-	test->fn2.fn = (int (*)(const char *, ...))set->fn2;
+	test->fn2.fn = (void (*)())set->fn2;
 	test->fn2.out = NULL;
 	test->fn2.ret = 0;
 }

@@ -30,7 +30,7 @@ compile_printf()
 compile_tester()
 {
 	make fclean -C ${TEST_DIR} > /dev/null 2>&1
-	make -C ${TEST_DIR} > /dev/null || fail "Compilation failed" $?
+	make -C ${TEST_DIR} > /dev/null 2>&1 || fail "Compilation failed" $?
 }
 
 update_makefile()
