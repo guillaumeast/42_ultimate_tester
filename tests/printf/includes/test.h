@@ -6,6 +6,8 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 
+#define OUT_MAX 1024
+
 # include "libftprintf.h"
 # include "utils.h"
 # include "iterate.h"

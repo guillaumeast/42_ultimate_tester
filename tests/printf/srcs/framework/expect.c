@@ -1,4 +1,5 @@
 #include "test.h"
+#include "colors.h"
 
 void expect_init(void)
 {

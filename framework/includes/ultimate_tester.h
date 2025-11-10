@@ -28,8 +28,8 @@
 		mode, \
 		QUEUED, \
 		timeout, \
-		(void (*)())fn1, \
-		(void (*)())fn2, \
+		(int (*)(const char *, ...))fn1, \
+		(int (*)(const char *, ...))fn2, \
 		name \
 	}; \
 	static void name(void)

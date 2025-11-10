@@ -4,10 +4,7 @@
 
 Compare(Basic_values, printf, ft_printf, COMPARE_BOTH, 1)
 {
-	char	a;
-	
-	Try();
+	// TODO: Macro Proto((void) (*fn)()) => Prebuild remplace ULT_PB_PROTO_ partout par cette signature de fonction
 	Try("42");
-	Try(&a);
 	Try("%d", 42);
 }
