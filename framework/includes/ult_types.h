@@ -1,19 +1,19 @@
-#ifndef LIB_ULTIMATE_TESTER_TYPES_H
-# define LIB_ULTIMATE_TESTER_TYPES_H
+#ifndef ULT_TYPES_H
+# define ULT_TYPES_H
 
 # include <stddef.h>
 # include <stdint.h>
 # include <stdbool.h>
-# include "redirect.h"
+# include <sys/types.h>
 
-enum Set_types
+typedef enum e_set_types
 {
-	COMPARE_OUTPUTS,	// Only compare the outputs
-	COMPARE_RETURNS,	// Only compare the returned values
-	COMPARE_BOTH		// Compare both the ouptuts and the returned values
-};
+	C_OUTPUTS,
+	C_RETURNS,
+	C_BOTH
+}	t_set_type;
 
-enum Status
+typedef enum e_status
 {
 	QUEUED,
 	RUNNING,
@@ -21,11 +21,17 @@ enum Status
 	FAILED,
 	TIMED_OUT,
 	CRASHED
-};
+}	t_status;
+
+typedef struct s_string
+{
+	char	*data;
+	size_t	len;
+}	t_string;
 
 typedef struct s_try
 {
-	enum Status	status;		// default: QUEUED
+	t_status	status;		// default: QUEUED
 	char		*args;		// Args with wich tested function should be called (e.g. "arg1, arg2, "arg3", arg4")
 }	t_try;
 
@@ -39,8 +45,8 @@ typedef struct s_function
 typedef struct s_set
 {
 	const char		*name;		// User choosen name
-	enum Set_types	type;		// COMPARE_OUTPUTS / COMPARE_RETURNS / COMPARE_BOTH
-	enum Status		status;		// default: QUEUED
+	t_set_type		type;		// COMPARE_OUTPUTS / COMPARE_RETURNS / COMPARE_BOTH
+	t_status		status;		// default: QUEUED
 	size_t			timeout;	// Max duration before auto timeout (sec)
 	int 			(*fn1)(const char *, ...);	// First function to compare
 	int 			(*fn2)(const char *, ...);	// Second function to compare
@@ -52,17 +58,16 @@ typedef struct s_set
 typedef struct s_test
 {
 	t_set			*set;
-	enum Set_types	type;
-	enum Status		status;
+	t_set_type		type;
+	t_status		status;
 	size_t			timeout;
-	t_redirect		fake_stdout;
 	t_function		fn1;
 	t_function		fn2;
 }	t_test;
 
 typedef struct s_run
 {
-	enum Status	status;
+	t_status	status;
 	long		total;
 	long		passed;
 	long		failed;

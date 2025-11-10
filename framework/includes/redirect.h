@@ -1,21 +1,18 @@
 #ifndef REDIRECT_H
 # define REDIRECT_H
 
-# include <stdlib.h>
-# include <stdio.h>
-# include <unistd.h>
+# include "ult_types.h"
 
-# define BUFFER_SIZE 1024
+typedef enum e_redirect_mode
+{
+	R_STDOUT,
+	R_STDERR,
+	R_BOTH,
+	R_NULL,
+}	t_redirect_mode;
 
-typedef struct s_redirect {
-	int		original_fd_copy;
-	FILE	*tmp_file;
-	int		tmp_fd;
-}	t_redirect;
-
-void	redirect_start(t_redirect *r);
-size_t redirect_read(t_redirect *r, char **out);
-void	redirect_clear(t_redirect *r);
-void	redirect_stop(t_redirect *r);
+bool		redirect_start(t_redirect_mode mode);
+t_string	*redirect_read();
+void		redirect_stop();
 
 #endif

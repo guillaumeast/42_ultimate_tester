@@ -2,7 +2,7 @@
 # define LIB_ULTIMATE_TESTER_UTILS_H
 
 # include <string.h>
-# include "types.h"
+# include "ult_types.h"
 
 #define GREY "\033[90m"
 #define RED "\033[31m"
