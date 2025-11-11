@@ -1,11 +1,60 @@
 #include "print.h"
+#include "redirect.h"
+#include <locale.h>
+#include <stdarg.h>
+#include <stdbool.h>
 #include <stdio.h>
+#include <string.h>
+#include <unistd.h>
 
 #define TITLE_MAX_LEN 29
 #define SCORE_LEN 3
-#define fzu(nb, var)													\
+#define size_t_to_string(nb, var)										\
 	char	var[(SCORE_LEN) + 1] = {0};									\
 	snprintf(var, sizeof(var), "%*zu", (int)(SCORE_LEN), (size_t)(nb))
+
+typedef enum e_ult_fds
+{
+	ULT_STDOUT,
+	ULT_STDERR,
+}	t_ult_fd;
+
+void	ult_fprintf(t_ult_fd fd, const char *fmt, ...)
+{
+	va_list	args;
+
+	va_start(args, fmt);
+	if (fd == ULT_STDOUT)
+		dprintf(current_redirect.real_stdout_fd, fmt, args);
+	else
+		dprintf(current_redirect.real_stderr_fd, fmt, args);
+	va_end(args);
+}
+
+/*-------------- TODO SECTION (START) --------------*/
+
+// TODO: check that all streams have been unbuffered (redirect.c): real stdout/stderr and redirected stdout/stderr
+
+// TODO: use it !
+bool	use_unicode(void)
+{
+	const char *locale;
+
+	setlocale(LC_CTYPE, "");
+	locale = setlocale(LC_CTYPE, NULL);
+	return (locale && strstr(locale, "UTF-8"));
+}
+
+// TODO: update colors macro definition to be color code if !isatty() and empty strings if isatty()
+bool	use_colors(void)
+{
+	return (isatty(STDOUT_FILENO));
+}
+
+// TODO: ult_fprintf()
+
+// TODO: update all printf()/fprintf() calls to ult_fprintf() calls
+
 
 void	print_set_title(const t_set *set)
 {
@@ -30,10 +79,10 @@ void	print_set_result(const t_result *result)
 {
 	t_colors	colors;
 
-	fzu(result->passed, passed);
-	fzu(result->failed, failed);
-	fzu(result->timed, timed);
-	fzu(result->crashed, crashed);
+	size_t_to_string(result->passed, passed);
+	size_t_to_string(result->failed, failed);
+	size_t_to_string(result->timed, timed);
+	size_t_to_string(result->crashed, crashed);
 	get_colors(result, &colors);
 	printf(" %s├-------┬-------┬-------┬-------┐%s\n", BLUE, NONE);
 	printf(" %s|%s ✔ %s %s|%s ✖ %s %s|%s ⊘ %s %s|%s ☠ %s |%s\n", \
@@ -46,10 +95,10 @@ void	print_global_result(const t_result *result)
 {
 	t_colors	colors;
 
-	fzu(result->passed, passed);
-	fzu(result->failed, failed);
-	fzu(result->timed, timed);
-	fzu(result->crashed, crashed);
+	size_t_to_string(result->passed, passed);
+	size_t_to_string(result->failed, failed);
+	size_t_to_string(result->timed, timed);
+	size_t_to_string(result->crashed, crashed);
 	get_colors(result, &colors);
 	printf("\n %s┌-----------------------------------┐%s\n", colors.borders, NONE);
 	if (result->total == result->passed)
@@ -90,3 +139,5 @@ void	get_colors(const t_result *result, t_colors *colors)
 	if (result->crashed > 0)
 		colors->crashed = RED;
 }
+
+/*-------------- TODO SECTION (END) --------------*/

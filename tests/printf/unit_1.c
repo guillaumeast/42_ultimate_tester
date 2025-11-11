@@ -4,8 +4,8 @@
 #include <stdlib.h>
 
 // TODO: explore this:
-// #define my_macro(fn) typeof(fn)
-// #define func_type(fn) typeof(&fn)
+// #define macro_1(fn) typeof(fn)
+// #define macro_2(fn) typeof(&fn)
 
 Test(WithOUT_redirection, 1)
 {
