@@ -4,7 +4,7 @@ REPO_URL="https://github.com/guillaumeast/42_ultimate_tester"
 INSTALLER_URL="https://raw.githubusercontent.com/guillaumeast/42_ultimate_tester/master/install.zsh"
 
 INSTALL_DIR="${HOME}/.42_ultimate_tester"
-DISPATCHER="${INSTALL_DIR}/core/dispatch.zsh"
+DISPATCHER="${INSTALL_DIR}/launcher/dispatch.zsh"
 
 GREY="\033[90m"
 ORANGE="\033[38;5;214m"

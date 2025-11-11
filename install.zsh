@@ -5,8 +5,9 @@ REPO_URL="https://github.com/guillaumeast/42_ultimate_tester"
 
 TMP_DIR="/tmp/${NAME}"
 INSTALL_DIR="${HOME}/.${NAME}"
-RUNNER="${INSTALL_DIR}/core/run.zsh"
-UNINSTALLER="${INSTALL_DIR}/core/uninstall.zsh"
+LAUNCHER_DIR="${INSTALL_DIR}/launcher"
+RUNNER="${LAUNCHER_DIR}/run.zsh"
+UNINSTALLER="${LAUNCHER_DIR}/uninstall.zsh"
 
 ZSHRC="${HOME}/.zshrc"
 ZSHRC_CONTENT_START="#-----------------------42_ultimate_tester----------------------#"
@@ -73,8 +74,8 @@ update_zshrc()
 		if [[ ! -f "${ZSHRC}" ]]; then
 			echo
 			echo " ${YELLOW}⚠ Unable to find .zshrc inside ${HOME}/${NONE}" >&2
-			echo " ℹ You should manually add an alias to run tests : /Users/gui/.42_ultimate_tester/core/run.zsh" >&2
-			echo " ℹ You should manually add an alias to uninstall tests : /Users/gui/.42_ultimate_tester/core/uninstall.zsh" >&2
+			echo " ℹ You should manually add an alias to run tests : ${RUNNER}" >&2
+			echo " ℹ You should manually add an alias to uninstall tests : ${UNINSTALLER}" >&2
 			echo
 			return 1
 		fi
@@ -86,8 +87,8 @@ update_zshrc()
 		if grep -qE "^[[:space:]]*alias[[:space:]]+${alias_name}=" "${ZSHRC}"; then
 			echo
 			echo " ${YELLOW}⚠ Alias '${alias_name}' already exists in ${ZSHRC}.${NONE}" >&2
-			echo " ℹ You should manually add an alias to run tests : /Users/gui/.42_ultimate_tester/core/run.zsh" >&2
-			echo " ℹ You should manually add an alias to uninstall tests : /Users/gui/.42_ultimate_tester/core/uninstall.zsh" >&2
+			echo " ℹ You should manually add an alias to run tests : ${RUNNER}" >&2
+			echo " ℹ You should manually add an alias to uninstall tests : ${UNINSTALLER}" >&2
 			echo
 			return 1
 		fi

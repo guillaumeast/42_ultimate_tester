@@ -1,10 +1,10 @@
-NAME 		:= ft_printf_tester
+NAME 		:= ultimate_tester_printf
 
 LIBFT
 CC			:= cc
 CFLAGS		:=
 
-SRCS		:= srcs/main.c $(wildcard srcs/framework/*.c) $(wildcard srcs/units/*.c)
+SRCS		:= srcs/main.c $(wildcard srcs/runner/*.c) $(wildcard srcs/units/*.c)
 INCLUDES
 
 OBJ_DIR		:= obj

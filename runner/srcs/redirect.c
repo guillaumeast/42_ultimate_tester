@@ -76,6 +76,8 @@ t_string	*redirect_read()
 
 	flush_all();
 	file_len = file_get_len(r.tmp_file);
+	if (fseek(r.tmp_file, 0, SEEK_SET) != 0)
+		return (fprintf(stderr, "❗️ Unable to read redirected output\n"), NULL);
 	if (file_len < 0)
 		return (fprintf(stderr, "❗️ Unable to read redirected output: unable to get file length\n"), NULL);
 	res = NULL;

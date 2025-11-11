@@ -1,7 +1,7 @@
-#ifndef REDIRECT_H
-# define REDIRECT_H
+#ifndef ULT_REDIRECT_H
+# define ULT_REDIRECT_H
 
-# include "ult_types.h"
+# include "utils.h"
 
 typedef enum e_redirect_mode
 {
