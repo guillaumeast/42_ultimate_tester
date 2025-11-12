@@ -34,6 +34,7 @@ static void	ult_main(void)
 		exit (1);
 	}
 	print_init_format();
+	print_start();
 
     for (set = START_SET; set < STOP_SET; set++)
 		run_set(set);

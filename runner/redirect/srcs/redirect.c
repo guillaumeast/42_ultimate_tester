@@ -18,6 +18,7 @@ t_redirect g_output =
 
 bool	redirect_init(void)
 {
+	flush_all();
 	setvbuf(stdout, NULL, _IONBF, 0);
 	setvbuf(stderr, NULL, _IONBF, 0);
 	g_output.real_stdout_fd = dup(STDOUT_FILENO);
@@ -36,7 +37,7 @@ bool	redirect_start(t_redirect_mode mode)
 	if (mode != R_STDOUT && mode != R_STDERR && mode != R_BOTH)
 		return (ult_err("Unable to create redirection (invalid mode %i)", mode), false);
 
-	flush_all();	// TODO: remove because already unbuffered or keep for safety ?
+	flush_all();
 	if (!create_tmp_file())
 		return (redirect_reset("unable to create temporary file"));
 	if (!switch_file_descriptors())
@@ -47,10 +48,13 @@ bool	redirect_start(t_redirect_mode mode)
 	return (true);
 }
 
+// TODO: return char * instead of t_string (Keep It Simple)
+// TODO: refactor into smaller functions
 t_string	*redirect_read()
 {
 	ssize_t		file_len;
 	t_string	*res;
+	size_t		nread;
 
 	if (!g_output.activ)
 		return (ult_err("Unable to read redirected output (no active redirection)"), NULL);
@@ -64,7 +68,21 @@ t_string	*redirect_read()
 	if (!(res = malloc(sizeof *res)) || !(res->data = malloc(file_len + 1)))
 		return (free(res), ult_err("Unable to read redirected output (not enough memory)"), NULL);
 	clearerr(g_output.out_file);
-	res->len = fread(res->data, 1, file_len, g_output.out_file);
+	res->len = 0;
+	while (res->len < (size_t)file_len)
+	{
+		nread = fread(res->data + res->len, 1, file_len - res->len, g_output.out_file);
+		res->len += nread;
+		if (res->len == file_len)
+			break;
+		if (nread == 0)
+		{
+			if (ferror(g_output.out_file))
+				return (free(res->data), free(res), ult_err("Unable to read redirected output"), NULL);
+			break; // EOF
+		}
+	}
+	res->data[res->len] = '\0';
 	if (ferror(g_output.out_file))
 	{
 		free(res->data);
@@ -86,7 +104,7 @@ void	redirect_stop()
 bool	redirect_reset(const char *error_message)
 {
 	if (!g_output.activ)
-		return (true);
+		return (error_message ? (ult_err("No active redirection"), true) : true);
 
 	flush_all();
 	g_output.activ = false;
@@ -106,5 +124,5 @@ bool	redirect_reset(const char *error_message)
 		 	ult_err("Redirection aborted");
 	}
 	flush_all();
-	return (false);
+	return (true);
 }

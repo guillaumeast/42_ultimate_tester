@@ -24,10 +24,9 @@ typedef enum e_redirect_mode
 	R_NULL,
 }	t_redirect_mode;
 
-typedef struct s_redirect	t_redirect;
-
+// TODO: implement macro `char *get_output(t_ult_fd fd, function_call)` (redirect_start -> function_call() -> redirect_stop)
 bool		redirect_start(t_redirect_mode mode);
-t_string	*redirect_read();
+t_string	*redirect_read(void);
 void		redirect_stop(void);
 
 #endif
