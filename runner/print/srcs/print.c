@@ -3,9 +3,6 @@
 #include <inttypes.h>
 #include <stdarg.h>
 
-#define PREVIOUS_CHAR "\033[D"
-#define PREVIOUS_LINE "\033[F"
-#define CLEAR_LINE "\033[2K"
 #define TITLE_MAX_LEN 29
 #define SCORE_LEN 3
 #define size_t_to_string(nb, var)										\
@@ -14,16 +11,22 @@
 
 static inline void	get_tab_colors(const t_result *result, t_tab_colors *tab_colors);
 
+t_colors	colors;
+t_emojis	emojis;
+
 __attribute__((format(printf, 2, 3)))
 void	ult_fprintf(t_ult_fd fd, const char *fmt, ...)
 {
 	va_list	args;
+	int		target_fd;
+
+	if (fd == ULT_STDOUT)
+		target_fd = g_output.real_stdout_fd;
+	else
+	 	target_fd = g_output.real_stderr_fd;
 
 	va_start(args, fmt);
-	if (fd == ULT_STDOUT)
-		vdprintf(g_output.real_stdout_fd, fmt, args);
-	else
-		vdprintf(g_output.real_stderr_fd, fmt, args);
+	vdprintf(target_fd, fmt, args);
 	va_end(args);
 }
 
@@ -31,32 +34,46 @@ void	print_start(void)
 {
 	char	title[TITLE_MAX_LEN + 1];
 
-	snprintf(title, sizeof(title), "%s %s", EMJ_ERR, " Running tests...");
+	snprintf(title, sizeof(title), "%s %s", EMJ_TEST, " Running tests...");
 	size_t len = strlen(title);
 	memset(title + len, ' ', sizeof(title) - len - 1);
 	title[sizeof(title) - 1] = '\0';
-	ult_print(" %s┌-------------------------------┐%s\n", BLUE, NONE);
-	ult_print(" %s| %s |%s\n", BLUE, title, NONE);
-	ult_print(" %s├-------------------------------┘%s\n", BLUE, NONE);
+	_ult_print(" %s┌-------------------------------┐%s\n", BLUE, NONE);
+	_ult_print(" %s| %s   |%s\n", BLUE, title, NONE);
+	_ult_print(" %s├-------------------------------┘%s\n", BLUE, NONE);
 }
 
 // TODO: do a macro instead ?
 void	print_set_title(const t_set *set)
 {
-	ult_print(" %s|%s %s %s%s", BLUE, GREY, EMJ_ARW_RIGHT, set->name, NONE);
+	_ult_print(" %s| %s %sTesting %s%s%s...\n", BLUE, EMJ_ARW_RIGHT, NONE, BLUE, set->name, NONE);
 }
 
-// TODO: add `✔` to emojis (with fallback)
 // TODO: do a macro instead ?
 void	print_set_passed(const t_set *set)
 {
-	ult_print("%s%s", PREVIOUS_LINE, CLEAR_LINE);
-	print_set_title(set);
-	ult_print("%s %s%s\n", GREEN, "✔", NONE);
+	_ult_print(" %s|%s     %s %s PASSED%s", BLUE, GREEN, EMJ_ARW_DR, EMJ_PASS, GREY);
+	_ult_print("%s [%s%zu%s]%s\n", GREY, GREEN, set->result.passed, GREY, NONE);
 }
 
-// TODO: add `⊘` to emojis (with fallback)
-// TODO: add assert call `printf("My args")`
+void	print_set_failed(const t_set *set)
+{
+	_ult_print(" %s|%s     %s %s FAILED%s", BLUE, RED, EMJ_ARW_DR, EMJ_FAIL, GREY);
+	_ult_print("%s [%s%zu / %zu%s]%s\n", GREY, RED, set->result.passed, set->result.total, GREY, NONE);
+}
+
+// TODO: do a macro instead ?
+void	print_set_timed(void)
+{
+	ult_fprintf(ULT_STDERR, " %s|     %s⤷ %s TIMED OUT%s\n", BLUE, RED, EMJ_TIMD, NONE);
+}
+
+// TODO: do a macro instead ?
+void	print_set_crashed(void)
+{
+	ult_fprintf(ULT_STDERR, " %s|     %s⤷ %s CRASHED%s\n", BLUE, RED, EMJ_CRSH, NONE);
+}
+
 // TODO: do a macro instead ?
 void	print_assert_failed(bool eq, const char *name, intptr_t got, intptr_t exp, t_format fmt)
 {
@@ -69,27 +86,14 @@ void	print_assert_failed(bool eq, const char *name, intptr_t got, intptr_t exp, 
 	else if (fmt == F_STRING)	format = "%s";
 	else						format = "%" PRIxPTR;
 
-	ult_fprintf(ULT_STDERR, " |   %s %s %s = ", EMJ_ARW_DR, EMJ_FAIL, name);
+	ult_fprintf(ULT_STDERR, " %s|%s     %s %s %s%s %s=%s ", BLUE, RED, EMJ_ARW_DR, EMJ_FAIL, YELLOW, name, NONE, RED);
 	ult_fprintf(ULT_STDERR, format, got);
-	ult_fprintf(ULT_STDERR, eq ? " (expected " : " (expected != ");
+	if (eq)
+		ult_fprintf(ULT_STDERR, "%s (expected %s", NONE, RED);
+	else
+		ult_fprintf(ULT_STDERR, "%s (expected != %s", NONE, RED);
 	ult_fprintf(ULT_STDERR, format, exp);
-	ult_fprintf(ULT_STDERR, ")\n");
-}
-
-// TODO: add `⊘` to emojis (with fallback)
-// TODO: add assert call `printf("My args")`
-// TODO: do a macro instead ?
-void	print_assert_timed(void)
-{
-	ult_fprintf(ULT_STDERR, " %s|   ⤷ %s⊘ Timed out%s\n", BLUE, RED, NONE);
-}
-
-// TODO: add `⊘` to emojis (with fallback)
-// TODO: add assert call `printf("My args")`
-// TODO: do a macro instead ?
-void	print_assert_crashed(void)
-{
-	ult_fprintf(ULT_STDERR, " %s|   ⤷ %s☠ Crashed%s\n", BLUE, RED, NONE);
+	ult_fprintf(ULT_STDERR, "%s)\n", NONE);
 }
 
 void	print_result(const t_result *result)
@@ -106,7 +110,7 @@ void	print_result(const t_result *result)
 		fd = ULT_STDOUT;
 	else
 		fd = ULT_STDERR;
-	ult_fprintf(fd, "\n %s├-----------------------------------┐%s\n", tab_colors.borders, NONE);
+	ult_fprintf(fd, " %s├-----------------------------------┐%s\n", tab_colors.borders, NONE);
 	if (result->total == result->passed)
 		ult_fprintf(fd, " %s|          %s YOU WON! %s           |%s\n", \
 			tab_colors.borders, EMJ_SUC_START, EMJ_SUC_END, NONE);
@@ -119,10 +123,10 @@ void	print_result(const t_result *result)
 		tab_colors.failed, tab_colors.borders, tab_colors.timed, \
 		tab_colors.borders, tab_colors.crashed, tab_colors.borders, NONE);
 	ult_fprintf(fd, " %s├--------┼--------┼-------┼---------┤%s\n", tab_colors.borders, NONE);
-	ult_fprintf(fd, " %s|%s ✔  %s %s|%s ✖  %s %s|%s ⊘ %s %s|%s ☠   %s %s|%s\n", \
-		tab_colors.borders, tab_colors.passed, passed, tab_colors.borders, \
-		tab_colors.failed, failed, tab_colors.borders, tab_colors.timed, \
-		timed, tab_colors.borders, tab_colors.crashed, crashed, tab_colors.borders, NONE);
+	ult_fprintf(fd, " %s|%s %s %s %s|%s %s %s %s|%s %s%s %s|%s %s  %s %s|%s\n", \
+		tab_colors.borders, tab_colors.passed, EMJ_PASS, passed, tab_colors.borders, \
+		tab_colors.failed, EMJ_FAIL, failed, tab_colors.borders, tab_colors.timed, \
+		EMJ_TIMD, timed, tab_colors.borders, tab_colors.crashed, EMJ_CRSH, crashed, tab_colors.borders, NONE);
 	ult_fprintf(fd, " %s└--------┴--------┴-------┴---------┘%s\n", tab_colors.borders, NONE);
 }
 

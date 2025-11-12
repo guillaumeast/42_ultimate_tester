@@ -1,5 +1,4 @@
 #include "redirect_priv.h"
-#include "fd_priv.h"
 #include "file_priv.h"
 #include "print_priv.h"
 #include <stdlib.h>
@@ -36,13 +35,16 @@ bool	redirect_start(t_redirect_mode mode)
 		return (ult_err("Unable to create redirection (another one already exists)"), false);
 	if (mode != R_STDOUT && mode != R_STDERR && mode != R_BOTH)
 		return (ult_err("Unable to create redirection (invalid mode %i)", mode), false);
+	g_output.mode = mode;
 
 	flush_all();
 	if (!create_tmp_file())
 		return (redirect_reset("unable to create temporary file"));
-	if (!switch_file_descriptors())
+	if (g_output.mode != R_STDERR && dup2(g_output.out_fd, STDOUT_FILENO) == -1)
 		return (redirect_reset("unable to switch file descriptors"));
-
+	if (g_output.mode != R_STDOUT && dup2(g_output.out_fd, STDERR_FILENO) == -1)
+		return (redirect_reset("unable to switch file descriptors"));
+	
 	setvbuf(g_output.out_file, NULL, _IONBF, 0);
 	g_output.activ = true;
 	return (true);
@@ -73,7 +75,7 @@ t_string	*redirect_read()
 	{
 		nread = fread(res->data + res->len, 1, file_len - res->len, g_output.out_file);
 		res->len += nread;
-		if (res->len == file_len)
+		if (res->len == (size_t)file_len)
 			break;
 		if (nread == 0)
 		{
@@ -108,8 +110,8 @@ bool	redirect_reset(const char *error_message)
 
 	flush_all();
 	g_output.activ = false;
-	reset_file_descriptor(&g_output.real_stdout_fd, STDOUT_FILENO);
-	reset_file_descriptor(&g_output.real_stderr_fd, STDERR_FILENO);
+	dup2(g_output.real_stdout_fd, STDOUT_FILENO);
+	dup2(g_output.real_stderr_fd, STDERR_FILENO);
 	if (g_output.out_file)
 	{
 		fclose(g_output.out_file);

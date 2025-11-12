@@ -16,8 +16,11 @@ CC				:= cc
 CFLAGS			:= -Wall -Wextra -Werror
 # TODO: 		+= -O3 -march=native
 
-SRCS			:= $(wildcard srcs/*c) $(PROJ_SRCS) $(TESTS_SRCS)
-INCLUDES		:= -Iincludes $(PROJ_INCLUDES) $(TESTS_INCLUDES)
+FUT_SRCS		:= main/main.c $(wildcard print/srcs/*c) $(wildcard redirect/srcs/*c) $(wildcard run/srcs/*c)
+FUT_INCLUDES	:= -I. -Iprint/includes -Iredirect/includes -Irun/includes
+
+SRCS			:= $(FUT_SRCS) $(PROJ_SRCS) $(TESTS_SRCS)
+INCLUDES		:= $(FUT_INCLUDES) $(PROJ_INCLUDES) $(TESTS_INCLUDES)
 LIBS			:= $(PROJ_LIBS)
 
 OBJ_DIR			:= obj

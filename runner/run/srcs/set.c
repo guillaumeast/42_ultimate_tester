@@ -8,6 +8,8 @@ static inline void	run_child(t_set *set);
 static void			handle_timeout(int sig);
 static void			handle_sigint(int sig);
 
+t_result						g_result;
+t_set							*g_current_set;
 static pid_t					current_child_pid = -1;
 static volatile sig_atomic_t	timeout_triggered = false;
 
@@ -25,6 +27,7 @@ void	run_set(t_set *set)
 		exit(EXIT_FAILURE);
 	}
 
+	g_current_set = set;
 	print_set_title(set);
 	set->status = RUNNING;
 
@@ -64,16 +67,32 @@ static inline void	run_parent(t_set *set, pid_t pid)
 		continue;
 	alarm(0);
 
-	if (timeout_triggered)
+	if (timeout_triggered || (WIFSIGNALED(status) && WTERMSIG(status) == SIGALRM))
+	{
+		g_current_set->result.timed++;
+		g_current_set->result.total++;
 		g_result.timed++;
+		print_set_timed();
+	}
 	else if (WIFEXITED(status) && WEXITSTATUS(status) == EXIT_SUCCESS)
+	{
+		g_current_set->result.passed++;
+		g_current_set->result.total++;
 		g_result.passed++;
+	}
 	else if (WIFEXITED(status) && WEXITSTATUS(status) == EXIT_FAILURE)
+	{
+		g_current_set->result.failed++;
+		g_current_set->result.total++;
 		g_result.failed++;
-	else if (WIFSIGNALED(status) && WTERMSIG(status) == SIGALRM)
-		g_result.timed++;
+	}
 	else if (WIFSIGNALED(status))
+	{
+		g_current_set->result.crashed++;
+		g_current_set->result.total++;
 		g_result.crashed++;
+		print_set_crashed();
+	}
 
 	g_result.total++;
 
@@ -85,7 +104,16 @@ static inline void	run_parent(t_set *set, pid_t pid)
 static inline void	run_child(t_set *set)
 {
 	set->func();
-	exit(EXIT_SUCCESS);
+	if (g_current_set->result.passed == g_current_set->result.total)
+	{
+		print_set_passed(set);
+		exit(EXIT_SUCCESS);
+	}
+	else
+	{
+		print_set_failed(set);
+		exit(EXIT_FAILURE);
+	}
 }
 
 static void	handle_timeout(int sig)

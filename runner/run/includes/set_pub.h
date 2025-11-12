@@ -18,12 +18,22 @@ typedef enum e_status
 	DONE,
 }	t_status;
 
+typedef struct s_result
+{
+	size_t		total;
+	size_t		passed;
+	size_t		failed;
+	size_t		timed;
+	size_t		crashed;
+}	t_result;
+
 typedef struct s_set
 {
 	char		*name;
 	size_t		timeout;
 	t_status	status;
 	t_test_fn	func;
+	t_result	result;
 }	t_set;
 
 // Usage: Test(const char *name, size_t timeout)
@@ -35,6 +45,7 @@ typedef struct s_set
 		timeout,							\
 		QUEUED,								\
 		name,								\
+		{0, 0, 0, 0, 0}						\
 	};										\
 	static void name(void)
 

@@ -54,16 +54,20 @@ extern t_emojis	emojis;
 # define EMJ_FAIL_END	(emojis.fail_title_end)
 
 void	print_start(void);
-void	print_set_title(const t_set *set);
-void	print_set_passed(const t_set *set);
-void	print_set_timed(void);
-void	print_set_crashed(void);
-void	print_assert_failed(bool eq, const char *name, intptr_t got, intptr_t exp, t_format fmt);
 void	print_result(const t_result *result);
 
-#define ult_err(fmt, ...) \
-	ult_fprintf(ULT_STDERR, "%s %s Error: " fmt "%s\n", RED, EMJ_ERR, ##__VA_ARGS__, NONE)
-#define print_set_start(set)  do { print_set_title(set); ultprint("\n"); } while (0)
+// TODO: param t_assert *assert instead of this big list
+void	print_assert_failed(bool eq, const char *name, intptr_t got, intptr_t exp, t_format fmt);
+
+void	print_set_title(const t_set *set);
+void	print_set_passed(const t_set *set);
+void	print_set_failed(const t_set *set);
+void	print_set_timed(void);
+void	print_set_crashed(void);
+
+# define ult_err(fmt, ...) ult_fprintf(ULT_STDERR, "%s %s Error: " fmt "%s\n", RED, EMJ_ERR, ##__VA_ARGS__, NONE)
+# define _ult_print(fmt, ...) ult_fprintf(ULT_STDOUT, fmt "%s", ##__VA_ARGS__, NONE)
+# define _ult_print_err(fmt, ...) ult_fprintf(ULT_STDERR, fmt "%s", ##__VA_ARGS__, NONE)
 
 static inline void	print_init_format()
 {
@@ -84,11 +88,11 @@ static inline void	print_init_format()
 	isutf8 = locale && strstr(locale, "UTF-8");
 	emojis.arrow_down_right =		isutf8 ? "⤷" : ">";
 	emojis.arrow_right =			isutf8 ? "➜" : ">";
-	emojis.passed =					isutf8 ? "✔" : "[PASS]";
-	emojis.failed =					isutf8 ? "✖" : "[FAIL]";
-	emojis.timed =					isutf8 ? "⏱" : "[TIMD]";
-	emojis.crashed =				isutf8 ? "💥" : "[CRSH]";
-	emojis.error =					isutf8 ? "❗️" : "[!ERR]";
+	emojis.passed =					isutf8 ? "✔ " : "v";
+	emojis.failed =					isutf8 ? "✖ " : "x";
+	emojis.timed =					isutf8 ? "⏱ " : "t";
+	emojis.crashed =				isutf8 ? "💥" : "c";
+	emojis.error =					isutf8 ? "❗️" : "e";
 	emojis.test =					isutf8 ? "🧪" : " ";
 	emojis.success_title_start =	isutf8 ? "🎉" : " ";
 	emojis.success_title_end =		isutf8 ? "🚀" : " ";

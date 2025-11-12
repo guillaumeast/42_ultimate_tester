@@ -8,16 +8,8 @@
 # include "set_pub.h"
 # include <stddef.h>
 
-typedef struct s_result
-{
-	size_t		total;
-	size_t		passed;
-	size_t		failed;
-	size_t		timed;
-	size_t		crashed;
-}	t_result;
-
 extern t_result	g_result;
+extern t_set	*g_current_set;
 
 void	run_set(t_set *set);
 
