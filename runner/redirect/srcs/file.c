@@ -1,17 +1,13 @@
-#include "file.h"
-#include "redirect.h"
+#include "file_priv.h"
+#include "redirect_priv.h"
 #include <unistd.h>
-
-extern t_redirect	current_redirect;
 
 bool	create_tmp_file(void)
 {
-	if (!(current_redirect.out_file = tmpfile()))
+	if (!(g_output.out_file = tmpfile()))
 		return (false);
-	current_redirect.out_fd = fileno(current_redirect.out_file);
-	if (current_redirect.out_fd == -1)
-		return (false);
-	return (true);
+	g_output.out_fd = fileno(g_output.out_file);
+	return (g_output.out_fd != -1);
 }
 
 ssize_t file_get_len(FILE *f)
@@ -47,11 +43,11 @@ bool	file_reset(FILE *f)
 	return (true);
 }
 
+// Delete because all I/0 are already unbuffered ?
 void	flush_all()
 {
 	fflush(stdout);
 	fflush(stderr);
-	if (current_redirect.activ)
-		fflush(current_redirect.out_file);
-	// TODO: flush logs_out and logs_err too
+	if (g_output.activ)
+		fflush(g_output.out_file);
 }

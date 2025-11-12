@@ -1,22 +1,19 @@
-#include "assert.h"
-#include "set.h"
-#include "file.h"
-#include <stdio.h>
+#include "assert_pub.h"
+#include "set_priv.h"
+#include "file_priv.h"
 #include <inttypes.h>
 #include <string.h>
 
 static inline bool	ult_check(intptr_t got, intptr_t exp, t_format fmt);
 static inline void	log_fail(bool eq, const char *name, intptr_t got, intptr_t exp, t_format fmt);
 
-extern t_result	current_set_result;
-
 void	ult_assert_run(bool eq, const char *name, intptr_t got, intptr_t exp, t_format fmt)
 {
 	if (ult_check(got, exp, fmt) == eq)
-		current_set_result.passed++;
+		g_result.passed++;
 	else
 	{
-	 	current_set_result.failed++;
+	 	g_result.failed++;
 		log_fail(eq, name, got, exp, fmt);
 	}
 }

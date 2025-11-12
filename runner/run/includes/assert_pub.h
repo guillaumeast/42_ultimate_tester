@@ -1,5 +1,5 @@
-#ifndef ULT_ASSERT_H
-# define ULT_ASSERT_H
+#ifndef ULT_ASSERT_PUB_H
+# define ULT_ASSERT_PUB_H
 
 # include <stdbool.h>
 # include <stdint.h>
@@ -14,7 +14,7 @@ typedef enum e_format {
 
 void	ult_assert_run(bool eq, const char *name, intptr_t got, intptr_t exp, t_format fmt);
 
-#define ult_assert(should_be_equal, name, got, expected) \
+#define _ult_assert(should_be_equal, name, got, expected) \
 	ult_assert_run(should_be_equal, name, (intptr_t)(got), (intptr_t)(expected), \
 		_Generic((expected), \
 			char: F_CHAR, \
@@ -31,7 +31,7 @@ void	ult_assert_run(bool eq, const char *name, intptr_t got, intptr_t exp, t_for
 			char *: F_STRING, \
 			const char *: F_STRING, \
 			default: F_HEX))
-#define assert_eq(name, got, expected) ult_assert(true, name, got, expected)
-#define assert_neq(name, got, expected) ult_assert(false, name, got, expected)
+#define expect_eq(name, got, expected) _ult_assert(true, name, got, expected)
+#define expect_neq(name, got, expected) _ult_assert(false, name, got, expected)
 
 #endif

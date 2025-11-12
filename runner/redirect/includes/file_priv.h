@@ -1,5 +1,5 @@
-#ifndef ULT_STREAM_H
-# define ULT_STREAM_H
+#ifndef ULT_FILE_PRIV_H
+# define ULT_FILE_PRIV_H
 
 #include <stdbool.h>
 #include <stdio.h>

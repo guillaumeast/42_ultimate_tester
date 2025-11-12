@@ -1,5 +1,6 @@
-#include "print.h"
-#include "set.h"
+#include "print_priv.h"
+#include "redirect_priv.h"
+#include "set_priv.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -16,8 +17,6 @@
     # define STOP_SET   &__stop_ult_tester
 #endif
 
-t_result	global_result;
-
 __attribute__((constructor))
 static void	ult_main(void)
 {
@@ -26,14 +25,21 @@ static void	ult_main(void)
 	if (START_SET >= STOP_SET)
 	{
 		fprintf(stderr, "No tests to run\n");
-		exit (1);
+		exit (0);
 	}
 
-	// immediatly disable all stdout + stderr buffers (call redirect_init() ?)
+	if (!redirect_init())
+	{
+		fprintf(stderr, "Error: Unable to initialize output redirection: please report this issue.");
+		exit (1);
+	}
+	print_init_format();
+
     for (set = START_SET; set < STOP_SET; set++)
 		run_set(set);
-	// TODO: force `redirect_stop()` if user didn't do it
-	print_global_result(&global_result);
+	redirect_stop();
+
+	print_result(&g_result);
 	exit (0);
 }
 

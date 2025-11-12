@@ -1,11 +1,6 @@
-#include "print.h"
-#include "redirect.h"
-#include <locale.h>
+#include "print_priv.h"
+#include "redirect_priv.h"
 #include <stdarg.h>
-#include <stdbool.h>
-#include <stdio.h>
-#include <string.h>
-#include <unistd.h>
 
 #define TITLE_MAX_LEN 29
 #define SCORE_LEN 3
@@ -13,48 +8,24 @@
 	char	var[(SCORE_LEN) + 1] = {0};									\
 	snprintf(var, sizeof(var), "%*zu", (int)(SCORE_LEN), (size_t)(nb))
 
-typedef enum e_ult_fds
-{
-	ULT_STDOUT,
-	ULT_STDERR,
-}	t_ult_fd;
+static inline void	get_tab_colors(const t_result *result, t_tab_colors *tab_colors);
 
+/*-------------- TODO SECTION (START) --------------*/
+
+// TODO: update all printf()/fprintf() calls to ult_fprintf() calls
+
+// Make it visible to user
 void	ult_fprintf(t_ult_fd fd, const char *fmt, ...)
 {
 	va_list	args;
 
 	va_start(args, fmt);
 	if (fd == ULT_STDOUT)
-		dprintf(current_redirect.real_stdout_fd, fmt, args);
+		vdprintf(g_output.real_stdout_fd, fmt, args);
 	else
-		dprintf(current_redirect.real_stderr_fd, fmt, args);
+		vdprintf(g_output.real_stderr_fd, fmt, args);
 	va_end(args);
 }
-
-/*-------------- TODO SECTION (START) --------------*/
-
-// TODO: check that all streams have been unbuffered (redirect.c): real stdout/stderr and redirected stdout/stderr
-
-// TODO: use it !
-bool	use_unicode(void)
-{
-	const char *locale;
-
-	setlocale(LC_CTYPE, "");
-	locale = setlocale(LC_CTYPE, NULL);
-	return (locale && strstr(locale, "UTF-8"));
-}
-
-// TODO: update colors macro definition to be color code if !isatty() and empty strings if isatty()
-bool	use_colors(void)
-{
-	return (isatty(STDOUT_FILENO));
-}
-
-// TODO: ult_fprintf()
-
-// TODO: update all printf()/fprintf() calls to ult_fprintf() calls
-
 
 void	print_set_title(const t_set *set)
 {
@@ -75,69 +46,57 @@ void	print_set_title(const t_set *set)
 	printf(" %s├-------------------------------┘%s\n", BLUE, NONE);
 }
 
-void	print_set_result(const t_result *result)
+void	print_result(const t_result *result)
 {
-	t_colors	colors;
+	t_tab_colors	tab_colors;
 
 	size_t_to_string(result->passed, passed);
 	size_t_to_string(result->failed, failed);
 	size_t_to_string(result->timed, timed);
 	size_t_to_string(result->crashed, crashed);
-	get_colors(result, &colors);
-	printf(" %s├-------┬-------┬-------┬-------┐%s\n", BLUE, NONE);
-	printf(" %s|%s ✔ %s %s|%s ✖ %s %s|%s ⊘ %s %s|%s ☠ %s |%s\n", \
-			BLUE, colors.passed, passed, BLUE, colors.failed, failed, \
-			BLUE, colors.timed, timed, BLUE, colors.crashed, crashed, NONE);
-	printf(" %s└-------┴-------┴-------┴-------┘%s\n", BLUE, NONE);
-}
-
-void	print_global_result(const t_result *result)
-{
-	t_colors	colors;
-
-	size_t_to_string(result->passed, passed);
-	size_t_to_string(result->failed, failed);
-	size_t_to_string(result->timed, timed);
-	size_t_to_string(result->crashed, crashed);
-	get_colors(result, &colors);
-	printf("\n %s┌-----------------------------------┐%s\n", colors.borders, NONE);
+	get_tab_colors(result, &tab_colors);
+	printf("\n %s┌-----------------------------------┐%s\n", tab_colors.borders, NONE);
 	if (result->total == result->passed)
-		printf(" %s|          🎉 YOU WON! 🚀           |%s\n", colors.borders, NONE);
+		printf(" %s|          %s YOU WON! %s           |%s\n", \
+			tab_colors.borders, EMJ_SUC_START, EMJ_SUC_END, NONE);
 	else
-		printf(" %s|          💥 TRY AGAIN 😈          |%s\n", colors.borders, NONE);
-	printf(" %s├--------┬--------┬-------┬---------┤%s\n", colors.borders, NONE);
+		printf(" %s|          %s TRY AGAIN %s          |%s\n", \
+			tab_colors.borders, EMJ_FAIL_START, EMJ_FAIL_END, NONE);
+	printf(" %s├--------┬--------┬-------┬---------┤%s\n", tab_colors.borders, NONE);
 	printf(" %s|%s PASSED %s|%s FAILED %s|%s TIMED %s|%s CRASHED %s|%s\n", \
-		colors.borders, colors.passed, colors.borders, colors.failed, \
-		colors.borders, colors.timed, colors.borders, colors.crashed, colors.borders, NONE);
-	printf(" %s├--------┼--------┼-------┼---------┤%s\n", colors.borders, NONE);
+		tab_colors.borders, tab_colors.passed, tab_colors.borders, \
+		tab_colors.failed, tab_colors.borders, tab_colors.timed, \
+		tab_colors.borders, tab_colors.crashed, tab_colors.borders, NONE);
+	printf(" %s├--------┼--------┼-------┼---------┤%s\n", tab_colors.borders, NONE);
 	printf(" %s|%s ✔  %s %s|%s ✖  %s %s|%s ⊘ %s %s|%s ☠   %s %s|%s\n", \
-		colors.borders, colors.passed, passed, colors.borders, colors.failed, failed, \
-		colors.borders, colors.timed, timed, colors.borders, colors.crashed, crashed, colors.borders, NONE);
-	printf(" %s└--------┴--------┴-------┴---------┘%s\n", colors.borders, NONE);
+		tab_colors.borders, tab_colors.passed, passed, tab_colors.borders, \
+		tab_colors.failed, failed, tab_colors.borders, tab_colors.timed, \
+		timed, tab_colors.borders, tab_colors.crashed, crashed, tab_colors.borders, NONE);
+	printf(" %s└--------┴--------┴-------┴---------┘%s\n", tab_colors.borders, NONE);
 }
 
-void	get_colors(const t_result *result, t_colors *colors)
+static inline void	get_tab_colors(const t_result *result, t_tab_colors *tab_colors)
 {
-	if (!result || !colors)
+	if (!result || !tab_colors)
 		return ;
-	colors->borders = GREY;
-	colors->passed = GREY;
-	colors->failed = GREY;
-	colors->timed = GREY;
-	colors->crashed = GREY;
+	tab_colors->borders = GREY;
+	tab_colors->passed = GREY;
+	tab_colors->failed = GREY;
+	tab_colors->timed = GREY;
+	tab_colors->crashed = GREY;
 	if (result->total == result->passed)
 	{
-		colors->borders = GREEN;
-		colors->passed = GREEN;
+		tab_colors->borders = GREEN;
+		tab_colors->passed = GREEN;
 	}
 	else
-		colors->borders = RED;
+		tab_colors->borders = RED;
 	if (result->failed > 0)
-		colors->failed = RED;
+		tab_colors->failed = RED;
 	if (result->timed > 0)
-		colors->timed = RED;
+		tab_colors->timed = RED;
 	if (result->crashed > 0)
-		colors->crashed = RED;
+		tab_colors->crashed = RED;
 }
 
 /*-------------- TODO SECTION (END) --------------*/
