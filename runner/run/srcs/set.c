@@ -1,89 +1,64 @@
 #include "print_priv.h"
+#include "timeout_priv.h"
 #include <errno.h>
 #include <signal.h>
 #include <stdlib.h>
 
-static inline void	run_parent(t_set *set, pid_t pid);
-static inline void	run_child(t_set *set);
-static void			handle_timeout(int sig);
-static void			handle_sigint(int sig);
+static inline t_error	init_parent(t_set *set, pid_t child_pid);
+static inline t_error	init_child(t_set *set);
+static inline void	run_parent(pid_t child_pid, void *set);
+static inline void	run_set_child(void *set);
 
-t_result						g_result;
-t_set							*g_current_set;
-static int						result_pipe[2] = { -1, -1 };
-static pid_t					current_child_pid = -1;
-static volatile sig_atomic_t	timeout_triggered = false;
+t_result				g_result;
+static int				sync_pipe[2] = { -1, -1 };
+static int				result_pipe[2] = { -1, -1 };
+volatile sig_atomic_t	set_timeout_triggered = false;
 
-void	run_set(t_set *set)
+t_error	run_set(t_set *set)
 {
-	struct sigaction	old_action;
-	struct sigaction	new_action;
+	pid_t	child_pid;
 
-	new_action.sa_handler = handle_sigint;
-	sigemptyset(&new_action.sa_mask);
-	new_action.sa_flags = 0;
-	if (sigaction(SIGINT, &new_action, &old_action) == -1)
-	{
-		ult_err("sigaction failed to add SIGINT handler. Please report this issue.");
-		exit(EXIT_FAILURE);
-	}
-
-	g_current_set = set;
 	print_set_title(set);
 	set->status = RUNNING;
 
-	if (pipe(result_pipe) == -1)
-	{
-		ult_err("pipe failed. Please report this issue.");
-		exit(EXIT_FAILURE);
-	}
+	if (pipe(result_pipe) == -1 || pipe(sync_pipe) == -1)
+		return (PIPE_ERR);
 
-	current_child_pid = fork();
-	if (current_child_pid < 0)
+	child_pid = fork();
+	if (child_pid < 0)
+		return (FORK_ERR);
+
+	if (child_pid > 0)
 	{
-		ult_err("Fork failed. Please report this issue.");
-		exit(EXIT_FAILURE);
-	}
-	else if (current_child_pid == 0)
-	{
-		close(result_pipe[0]);
-		run_child(set);
+		init_parent(set, child_pid);
+		run_parent(set, child_pid);
 	}
 	else
 	{
-		close(result_pipe[1]);
-		run_parent(set, current_child_pid);
+		init_child(set);
+		run_set_child(set);
 	}
 
-	set->status = DONE;
+	// TODO: compute result.total & result.status
+	// process_result(&set->result, &set->status);
+	return (NO_ERR);
 }
 
-// TODO: refactor
-static inline void	run_parent(t_set *set, pid_t pid)
+
+
+static inline void	run_parent(pid_t child_pid, void *set)
 {
-	int					status;
-	struct sigaction	old_action;
-	struct sigaction	new_action;
+	t_error	error;
+	int		status;
 
-	timeout_triggered = false;
-	new_action.sa_handler = handle_timeout;
-	sigemptyset(&new_action.sa_mask);
-	new_action.sa_flags = 0;
-	if (sigaction(SIGALRM, &new_action, &old_action) == -1)
-	{
-		perror("sigaction failed to add SIGALRM handler. Please report this issue.");
-		exit(EXIT_FAILURE);
-	}
-	alarm(set->timeout);
-
-	while (waitpid(pid, &status, 0) == -1 && errno == EINTR)
+	while (waitpid(child_pid, &status, 0) == -1 && errno == EINTR)
 		continue;
-	alarm(0);
+	error = cancel_timeout();
 
 	read(result_pipe[0], &g_current_set->result, sizeof(t_result));
 	close(result_pipe[0]);
 
-	if (timeout_triggered || (WIFSIGNALED(status) && WTERMSIG(status) == SIGALRM))
+	if (set_timeout_triggered || (WIFSIGNALED(status) && WTERMSIG(status) == SIGALRM))
 	{
 		g_current_set->result.timed++;
 		g_current_set->result.total++;
@@ -111,12 +86,13 @@ static inline void	run_parent(t_set *set, pid_t pid)
 	}
 
 	if (sigaction(SIGALRM, &old_action, NULL) == -1)
-		perror("sigaction failed to restore SIGALARM. Please report this issue.");
+		ult_err_priv("sigaction failed to restore SIGALARM. Please report this issue.");
 	current_child_pid = -1;
 }
 
-static inline void	run_child(t_set *set)
+static inline void	run_set_child(void *set)
 {
+	close(result_pipe[0]);
 	set->func();
 	(void)!write(result_pipe[1], &g_current_set->result, sizeof(t_result));
 	close(result_pipe[1]);
@@ -132,16 +108,26 @@ static inline void	run_child(t_set *set)
 	}
 }
 
-static void	handle_timeout(int sig)
+/* TODO: put the above functions into separate common file (result.c ?) */
+
+void	sum_results(t_result *dst, const t_result *src)
 {
-	(void)sig;
-	timeout_triggered = true;
-    kill(current_child_pid, SIGKILL);
+	dst->passed += src->passed;
+	dst->failed += src->failed;
+	dst->timed += src->timed;
+	dst->crashed += src->crashed;
+	dst->total += src->total;
 }
 
-static void	handle_sigint(int sig)
+t_status	get_status(t_result *result)
 {
-	(void)sig;
-	ult_err("Interrupted by user (Ctrl+C)");
-	exit(130);
+	if (result->passed == result->total)
+		return (PASSED);
+	if (result->failed > 0)
+		return (FAILED);
+	if (result->timed > 0)
+		return (TIMED);
+	if (result->crashed > 0)
+		return (CRASHED);
+	return (DONE);
 }

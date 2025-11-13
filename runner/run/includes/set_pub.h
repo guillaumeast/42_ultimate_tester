@@ -15,6 +15,10 @@ typedef enum e_status
 {
 	QUEUED,
 	RUNNING,
+	PASSED,
+	FAILED,
+	TIMED,
+	CRASHED,
 	DONE,
 }	t_status;
 

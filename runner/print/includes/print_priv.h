@@ -22,39 +22,6 @@ typedef struct s_tab_colors
 	char	*crashed;
 }	t_tab_colors;
 
-typedef struct s_emojis
-{
-	char	*arrow_down_right;
-	char	*arrow_right;
-	char	*passed;
-	char	*failed;
-	char	*timed;
-	char	*crashed_y;
-	char	*crashed_n;
-	char	*error;
-	char	*test;
-	char	*success_title_start;
-	char	*success_title_end;
-	char	*fail_title_start;
-	char	*fail_title_end;
-}	t_emojis;
-
-extern t_emojis	emojis;
-
-# define EMJ_ARW_DR		(emojis.arrow_down_right)
-# define EMJ_ARW_RIGHT	(emojis.arrow_right)
-# define EMJ_PASS		(emojis.passed)
-# define EMJ_FAIL		(emojis.failed)
-# define EMJ_TIMD		(emojis.timed)
-# define EMJ_CRSH_Y		(emojis.crashed_y)
-# define EMJ_CRSH_N		(emojis.crashed_n)
-# define EMJ_ERR		(emojis.error)
-# define EMJ_TEST		(emojis.test)
-# define EMJ_SUC_START	(emojis.success_title_start)
-# define EMJ_SUC_END	(emojis.success_title_end)
-# define EMJ_FAIL_START	(emojis.fail_title_start)
-# define EMJ_FAIL_END	(emojis.fail_title_end)
-
 void	print_start(void);
 void	print_result(const t_result *result);
 
@@ -67,11 +34,10 @@ void	print_set_failed(const t_set *set);
 void	print_set_timed(void);
 void	print_set_crashed(void);
 
-# define ult_err(fmt, ...) ult_fprintf(ULT_STDERR, "%s %s Error: " fmt "%s\n", RED, EMJ_ERR, ##__VA_ARGS__, NONE)
 # define _ult_print(fmt, ...) ult_fprintf(ULT_STDOUT, fmt "%s", ##__VA_ARGS__, NONE)
 # define _ult_print_err(fmt, ...) ult_fprintf(ULT_STDERR, fmt "%s", ##__VA_ARGS__, NONE)
 
-static inline void	print_init_format()
+static inline void	init_print_format()
 {
 	bool		istty;
 	bool		isutf8;

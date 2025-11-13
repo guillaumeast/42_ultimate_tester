@@ -17,31 +17,44 @@
     # define STOP_SET   &__stop_ult_tester
 #endif
 
+static inline void	init_context();
+
 __attribute__((constructor))
 static void	ult_main(void)
 {
 	t_set	*set;
 
-	if (START_SET >= STOP_SET)
-	{
-		fprintf(stderr, "No tests to run\n");
-		exit (0);
-	}
-
-	if (!redirect_init())
-	{
-		fprintf(stderr, "Error: Unable to initialize output redirection: please report this issue.");
-		exit (1);
-	}
-	print_init_format();
+	init_context();
 	print_start();
 
     for (set = START_SET; set < STOP_SET; set++)
-		run_set(set);
-	redirect_stop();
+	{
+		if (!run_set(set))
+		{
+			ult_err_priv("Internal error. Please try again or report the issue.");
+			exit(EXIT_FAILURE);
+		}
+	}
 
+	redirect_stop();
 	print_result(&g_result);
-	exit (0);
+
+	exit(EXIT_SUCCESS);
+}
+
+static inline void	init_context()
+{
+	if (!init_redirection())
+	{
+		fprintf(stderr, "Internal error. Please try again or report the issue.");
+		exit (EXIT_FAILURE);
+	}
+	init_print_format();
+	if (START_SET >= STOP_SET)
+	{
+		ult_err_priv("No tests to run\n");
+		exit(EXIT_SUCCESS);
+	}
 }
 
 __attribute__((weak))
