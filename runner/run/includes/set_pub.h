@@ -37,16 +37,16 @@ typedef struct s_set
 }	t_set;
 
 // Usage: Test(const char *name, size_t timeout)
-# define Test(name, timeout) 				\
-	static void name(void); 				\
-	static t_set ULT_SECTION t_##name =		\
-	{										\
-		#name,								\
-		timeout,							\
-		QUEUED,								\
-		name,								\
-		{0, 0, 0, 0, 0}						\
-	};										\
+# define Test(name, timeout) 							\
+	static void name(void); 							\
+	static t_set ULT_SECTION _##name##__##__COUNTER__ =	\
+	{													\
+		#name,											\
+		timeout,										\
+		QUEUED,											\
+		name,											\
+		{0, 0, 0, 0, 0}									\
+	};													\
 	static void name(void)
 
 #endif

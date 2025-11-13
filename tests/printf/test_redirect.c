@@ -1,11 +1,6 @@
 #include "ft_ultimate_tester.h"
 #include "libftprintf.h"
-#include <stdio.h>
 #include <stdlib.h>
-
-// TODO: explore this:
-// #define macro_1(fn) typeof(fn)
-// #define macro_2(fn) typeof(&fn)
 
 Test(Redirect_stdout, 0)
 {

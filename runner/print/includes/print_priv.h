@@ -29,7 +29,8 @@ typedef struct s_emojis
 	char	*passed;
 	char	*failed;
 	char	*timed;
-	char	*crashed;
+	char	*crashed_y;
+	char	*crashed_n;
 	char	*error;
 	char	*test;
 	char	*success_title_start;
@@ -45,7 +46,8 @@ extern t_emojis	emojis;
 # define EMJ_PASS		(emojis.passed)
 # define EMJ_FAIL		(emojis.failed)
 # define EMJ_TIMD		(emojis.timed)
-# define EMJ_CRSH		(emojis.crashed)
+# define EMJ_CRSH_Y		(emojis.crashed_y)
+# define EMJ_CRSH_N		(emojis.crashed_n)
 # define EMJ_ERR		(emojis.error)
 # define EMJ_TEST		(emojis.test)
 # define EMJ_SUC_START	(emojis.success_title_start)
@@ -91,7 +93,8 @@ static inline void	print_init_format()
 	emojis.passed =					isutf8 ? "✔ " : "v";
 	emojis.failed =					isutf8 ? "✖ " : "x";
 	emojis.timed =					isutf8 ? "⏱ " : "t";
-	emojis.crashed =				isutf8 ? "💥" : "c";
+	emojis.crashed_y =				isutf8 ? "💥" : "c";
+	emojis.crashed_n =				isutf8 ? "☠ " : "c";
 	emojis.error =					isutf8 ? "❗️" : "e";
 	emojis.test =					isutf8 ? "🧪" : " ";
 	emojis.success_title_start =	isutf8 ? "🎉" : " ";

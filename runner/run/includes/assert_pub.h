@@ -31,7 +31,7 @@ void	ult_assert_run(bool eq, const char *name, intptr_t got, intptr_t exp, t_for
 			char *: F_STRING, \
 			const char *: F_STRING, \
 			default: F_HEX))
-#define expect_eq(name, got, expected) _ult_assert(true, name, got, expected)
-#define expect_neq(name, got, expected) _ult_assert(false, name, got, expected)
+#define assert_eq(name, got, expected) _ult_assert(true, name, got, expected)
+#define assert_neq(name, got, expected) _ult_assert(false, name, got, expected)
 
 #endif

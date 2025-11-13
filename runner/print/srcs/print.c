@@ -71,7 +71,7 @@ void	print_set_timed(void)
 // TODO: do a macro instead ?
 void	print_set_crashed(void)
 {
-	ult_fprintf(ULT_STDERR, " %s|     %s⤷ %s CRASHED%s\n", BLUE, RED, EMJ_CRSH, NONE);
+	ult_fprintf(ULT_STDERR, " %s|     %s⤷ %s CRASHED%s\n", BLUE, RED, EMJ_CRSH_Y, NONE);
 }
 
 // TODO: do a macro instead ?
@@ -100,11 +100,16 @@ void	print_result(const t_result *result)
 {
 	t_tab_colors	tab_colors;
 	t_ult_fd		fd;
+	char			*emj_crash;
 
 	size_t_to_string(result->passed, passed);
 	size_t_to_string(result->failed, failed);
 	size_t_to_string(result->timed, timed);
 	size_t_to_string(result->crashed, crashed);
+	if (result->crashed > 0)
+		emj_crash = EMJ_CRSH_Y;
+	else
+		emj_crash = EMJ_CRSH_N;
 	get_tab_colors(result, &tab_colors);
 	if (result->passed == result->total)
 		fd = ULT_STDOUT;
@@ -126,7 +131,7 @@ void	print_result(const t_result *result)
 	ult_fprintf(fd, " %s|%s %s %s %s|%s %s %s %s|%s %s%s %s|%s %s  %s %s|%s\n", \
 		tab_colors.borders, tab_colors.passed, EMJ_PASS, passed, tab_colors.borders, \
 		tab_colors.failed, EMJ_FAIL, failed, tab_colors.borders, tab_colors.timed, \
-		EMJ_TIMD, timed, tab_colors.borders, tab_colors.crashed, EMJ_CRSH, crashed, tab_colors.borders, NONE);
+		EMJ_TIMD, timed, tab_colors.borders, tab_colors.crashed, emj_crash, crashed, tab_colors.borders, NONE);
 	ult_fprintf(fd, " %s└--------┴--------┴-------┴---------┘%s\n", tab_colors.borders, NONE);
 }
 
