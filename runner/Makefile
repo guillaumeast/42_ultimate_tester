@@ -16,8 +16,18 @@ CC				:= cc
 CFLAGS			:= -Wall -Wextra -Werror
 # TODO: 		+= -O3 -march=native
 
-FUT_SRCS		:= main/main.c $(wildcard print/srcs/*c) $(wildcard redirect/srcs/*c) $(wildcard run/srcs/*c)
-FUT_INCLUDES	:= -I. -Iprint/includes -Iredirect/includes -Irun/includes
+FUT_SRCS		:= \
+	$(wildcard assert/*.c) \
+	$(wildcard compare/*.c)	\
+	$(wildcard error/*.c) \
+	$(wildcard file/*.c) \
+	$(wildcard fork/*.c) \
+	$(wildcard main/*.c) \
+	$(wildcard print/*.c) \
+	$(wildcard redirect/*.c) \
+	$(wildcard set/*.c) \
+	$(wildcard timeout/*.c)
+FUT_INCLUDES	:= -I. -Iassert -Icompare -Ierror -Ifile -Ifork -Iprint -Iredirect -Iset -Itimeout
 
 SRCS			:= $(FUT_SRCS) $(PROJ_SRCS) $(TESTS_SRCS)
 INCLUDES		:= $(FUT_INCLUDES) $(PROJ_INCLUDES) $(TESTS_INCLUDES)

@@ -3,7 +3,7 @@
 
 #define __FUT_H_INSIDE__
 # include "set_pub.h"
-# include "comp_pub.h"
+# include "compare_pub.h"
 # include "assert_pub.h"
 # include "redirect_pub.h"
 # include "print_pub.h"

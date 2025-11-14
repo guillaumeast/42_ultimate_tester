@@ -15,6 +15,6 @@ typedef struct s_redirect
 
 extern t_redirect	g_output;
 
-bool	init_redirection(void);
+bool	redirect_init(void);
 
 #endif

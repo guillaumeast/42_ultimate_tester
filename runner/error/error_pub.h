@@ -12,7 +12,7 @@ typedef enum e_error
 	ALRM_CANCEL,
 }	t_error;
 
-# define ult_err_priv(error_code) \
+# define ult_print_err_priv(error_code) \
 	ult_fprintf(ULT_STDERR, \
 		"%s %s Internal error: " #error_code ". Please try again or report the issue. %s\n", \
 		RED, EMJ_ERR, NONE)

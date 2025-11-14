@@ -10,9 +10,9 @@
 # include <stdbool.h>
 # include <stddef.h>
 
+extern t_set	g_set;
 extern t_result	g_result;
-extern t_set	*g_current_set;
 
-t_error	run_set(t_set *set);
+t_error	set_run(t_set *set);
 
 #endif

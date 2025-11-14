@@ -22,6 +22,7 @@ static inline void	init_context();
 __attribute__((constructor))
 static void	ult_main(void)
 {
+	t_error	error;
 	t_set	*set;
 
 	init_context();
@@ -29,11 +30,11 @@ static void	ult_main(void)
 
     for (set = START_SET; set < STOP_SET; set++)
 	{
-		if (!run_set(set))
-		{
-			ult_err_priv("Internal error. Please try again or report the issue.");
-			exit(EXIT_FAILURE);
-		}
+		error = set_run(set);
+		if (error == NO_ERR)
+			continue;
+		ult_print_err_priv("Internal error. Please try again or report the issue.");
+		exit(EXIT_FAILURE);
 	}
 
 	redirect_stop();
@@ -44,7 +45,7 @@ static void	ult_main(void)
 
 static inline void	init_context()
 {
-	if (!init_redirection())
+	if (!redirect_init())
 	{
 		fprintf(stderr, "Internal error. Please try again or report the issue.");
 		exit (EXIT_FAILURE);
@@ -52,7 +53,7 @@ static inline void	init_context()
 	init_print_format();
 	if (START_SET >= STOP_SET)
 	{
-		ult_err_priv("No tests to run\n");
+		ult_print_err_priv("No tests to run\n");
 		exit(EXIT_SUCCESS);
 	}
 }

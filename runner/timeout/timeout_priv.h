@@ -10,8 +10,8 @@
 # include <stdbool.h>
 # include <sys/types.h>
 
-t_error	setup_timeout(pid_t target_pid, unsigned int time);
-t_error	cancel_timeout(void);
+t_error	timeout_init(pid_t target_pid, unsigned int time);
+t_error	timeout_cancel(void);
 
 volatile sig_atomic_t	g_timeout_triggered;
 
