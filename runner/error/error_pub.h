@@ -3,18 +3,32 @@
 
 # include "print_pub.h"
 
+static const char *names[] =
+{
+	"NO_ERROR",
+	"SECTION_CORRUPTED",
+	"RESULT_PIPE_CREATION_FAILED",
+	"SYNC_PIPE_CREATION_FAILED",
+	"SYNC_PIPE_READ_FAILED",
+	"FORK_FAILED",
+	"ALARM_SET_FAILED",
+	"ALARM_CANCEL_FAILED",
+	"REDIRECT_START_FAILED"
+};
+
 typedef enum e_error
 {
-	NO_ERR,
-	PIPE_ERR,
-	FORK_ERR,
-	ALRM_SET,
-	ALRM_CANCEL,
+	NO_ERROR,
+	SECTION_CORRUPTED,
+	RESULT_PIPE_CREATION_FAILED,
+	SYNC_PIPE_CREATION_FAILED,
+	SYNC_PIPE_READ_FAILED,
+	FORK_FAILED,
+	ALARM_SET_FAILED,
+	ALARM_CANCEL_FAILED,
+	REDIRECT_START_FAILED
 }	t_error;
 
-# define ult_print_err_priv(error_code) \
-	ult_fprintf(ULT_STDERR, \
-		"%s %s Internal error: " #error_code ". Please try again or report the issue. %s\n", \
-		RED, EMJ_ERR, NONE)
+void	ult_print_err_priv(t_error err);
 
 #endif

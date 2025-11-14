@@ -21,27 +21,28 @@ t_error	set_run(t_set *set)
 	set->status = RUNNING;
 
 	error = fork_init(&context, set->timeout);
-	if (error != NO_ERR)
+	if (error != NO_ERROR)
 		return error;
 
 	if (context.child_pid > 0)
 	{
 		error = fork_init_parent(&context);
-		if (error != NO_ERR)
+		if (error != NO_ERROR)
 			return error;
 		set_run_parent(&context, set);
 	}
 	else
 	{
 		error = fork_init_child(&context);
-		if (error != NO_ERR)
+		if (error != NO_ERROR)
 			return error;
 		set_run_child(&context, set);
 	}
 
 	// TODO: compute result.total & result.status
 	// process_result(&set->result, &set->status);
-	return (NO_ERR);
+	fork_clear(&context);
+	return (NO_ERROR);
 }
 
 static inline void	set_run_parent(t_context *context, t_set *set)
@@ -51,10 +52,8 @@ static inline void	set_run_parent(t_context *context, t_set *set)
 	(void)set;	// TODO
 	while (waitpid(context->child_pid, &status, 0) == -1 && errno == EINTR)
 		continue;
-	(void)timeout_cancel();
-
+	
 	read(context->result_pipe[0], &set->result, sizeof(t_result));
-	fork_clear(context);
 
 	if (g_timeout_triggered || (WIFSIGNALED(status) && WTERMSIG(status) == SIGALRM))
 	{
@@ -82,6 +81,7 @@ static inline void	set_run_parent(t_context *context, t_set *set)
 		g_result.total += set->result.total;
 		print_set_crashed();
 	}
+	fork_clear(context);
 }
 
 static inline void	set_run_child(t_context *context, t_set *set)

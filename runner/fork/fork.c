@@ -11,20 +11,20 @@ t_error	fork_init(t_context *context, size_t timeout)
 	context->sync_pipe[1] = -1;
 
 	if (pipe(context->result_pipe) == -1)
-		return (PIPE_ERR);
+		return (RESULT_PIPE_CREATION_FAILED);
 	if (pipe(context->sync_pipe) == -1)
 	{
 		fork_clear(context);
-		return (PIPE_ERR);
+		return (SYNC_PIPE_CREATION_FAILED);
 	}
 
 	context->timeout = timeout;
 
 	context->child_pid = fork();
 	if (context->child_pid < 0)
-		return (FORK_ERR);
+		return (FORK_FAILED);
 
-	return (NO_ERR);
+	return (NO_ERROR);
 }
 
 t_error	fork_init_parent(t_context *context)
@@ -36,7 +36,7 @@ t_error	fork_init_parent(t_context *context)
 	close(context->sync_pipe[0]);
 
 	error = timeout_init(context->child_pid, context->timeout);
-	if (error != NO_ERR)
+	if (error != NO_ERROR)
 	{
 		kill(context->child_pid, SIGKILL);
 		return (error);
@@ -45,7 +45,7 @@ t_error	fork_init_parent(t_context *context)
 	ready = 1;
 	write(context->sync_pipe[1], &ready, sizeof ready);
 	close(context->sync_pipe[1]);
-	return (NO_ERR);
+	return (NO_ERROR);
 }
 
 t_error	fork_init_child(t_context *context)
@@ -56,10 +56,10 @@ t_error	fork_init_child(t_context *context)
 	close(context->sync_pipe[1]);
 
 	if (read(context->sync_pipe[0], &ready, sizeof ready) != sizeof ready)
-		return (PIPE_ERR);
+		return (SYNC_PIPE_READ_FAILED);
 
 	close(context->sync_pipe[0]);
-	return (NO_ERR);
+	return (NO_ERROR);
 }
 
 void	fork_clear(t_context *context)

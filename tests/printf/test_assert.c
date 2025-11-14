@@ -207,12 +207,8 @@ Test(time_out, 1)
 
 Test(crash, 0)
 {
-	char	oops;
-	int 	i		= 0;
-	char 	segv[]	= "";
+	volatile int *oops;
 
-	(void)oops;
-	(void)i;
-	while(true)
-		oops = segv[i++];
+	oops = NULL;
+	*oops = 42;
 }

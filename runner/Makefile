@@ -13,8 +13,7 @@ TESTS_INCLUDES	:=
 
 NAME			:= ultimate_tester_$(PROJ_NAME)
 CC				:= cc
-CFLAGS			:= -Wall -Wextra -Werror
-# TODO: 		+= -O3 -march=native
+CFLAGS			:= -Wall -Wextra -Werror -g3
 
 FUT_SRCS		:= \
 	$(wildcard assert/*.c) \

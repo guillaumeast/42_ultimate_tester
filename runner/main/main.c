@@ -31,9 +31,9 @@ static void	ult_main(void)
     for (set = START_SET; set < STOP_SET; set++)
 	{
 		error = set_run(set);
-		if (error == NO_ERR)
+		if (error == NO_ERROR)
 			continue;
-		ult_print_err_priv("Internal error. Please try again or report the issue.");
+		ult_print_err_priv(error);
 		exit(EXIT_FAILURE);
 	}
 
@@ -53,7 +53,7 @@ static inline void	init_context()
 	init_print_format();
 	if (START_SET >= STOP_SET)
 	{
-		ult_print_err_priv("No tests to run\n");
+		ult_print_err_priv(99);
 		exit(EXIT_SUCCESS);
 	}
 }

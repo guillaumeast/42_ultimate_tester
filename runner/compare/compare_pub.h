@@ -41,7 +41,7 @@ void	comp_child_priv(t_context *context, t_compare *data);
 
 # define cmp_try(call)																		\
 	error = (call);																			\
-	if (error != NO_ERR)																	\
+	if (error != NO_ERROR)																	\
 	{																						\
 		if (cxt.child_pid > 0)																\
 			kill(cxt.child_pid, SIGKILL);													\
@@ -74,7 +74,7 @@ void	comp_child_priv(t_context *context, t_compare *data);
 		if (cxt.child_pid == 0)																\
 		{																					\
 			error = comp_init_child_priv(&cxt, &cmp);										\
-			if (error != NO_ERR)															\
+			if (error != NO_ERROR)															\
 			{																				\
 				ult_print_err_priv(error);													\
 				exit(EXIT_FAILURE);															\
