@@ -2,7 +2,6 @@
 #include "assert_pub.h"
 #include "print_priv.h"
 #include "set_priv.h"
-#include "file_priv.h"
 #undef __FUT_INSIDE__
 
 #include <inttypes.h>

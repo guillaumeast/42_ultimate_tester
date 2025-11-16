@@ -20,7 +20,7 @@ typedef struct s_emojis
 }	t_emojis;
 
 static t_emojis	g_emojis;
-static bool		g_emojis_initialized = false;
+static bool		s_emojis_initialized = false;
 
 static inline void	emojis_init(void);
 
@@ -28,7 +28,7 @@ static inline void	emojis_init(void);
 #define X_EMOJI(emoji_name)						\
     const char *print_emoji_##emoji_name(void)		\
 	{												\
-        if (!g_emojis_initialized) emojis_init();	\
+        if (!s_emojis_initialized) emojis_init();	\
         return g_emojis.emoji_name;					\
     }
 #include "emojis.x"

@@ -3,7 +3,7 @@
 
 #ifndef __FUT_INSIDE__
 /*
-**  Internal header for the FUT modules.
+**  Private header for the FUT modules.
 **  Not available outside its compilation unit.
 */
 #else
@@ -17,10 +17,10 @@ typedef enum e_error
 # undef X_ERROR
 }	t_error;
 
-bool	error_log(t_error error);
+void	error_log(t_error error);
 void	error_reset_trace(void);
 void	error_print_trace(void);
-void	exit_if(bool condition);
+void	exit_if(bool condition, t_error error);
 
 #endif /* __FUT_INSIDE__ */
 

@@ -5,6 +5,7 @@
 #undef __FUT_PRINT_INSIDE__
 #undef __FUT_INSIDE__
 
+#include <stdio.h>
 #include <stdarg.h>
 
 static inline void	ult_fprintf(t_ult_fd fd, const char *fmt, va_list args);

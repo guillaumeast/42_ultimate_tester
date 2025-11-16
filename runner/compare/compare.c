@@ -6,7 +6,7 @@
 #include <errno.h>
 #include <unistd.h>
 
-t_error	comp_init_priv(t_context *cxt, size_t to, t_compare *cmp, t_comp_mode md, char *f1, char *f2, char *a1, char *a2)
+void	comp_init_priv(t_context *cxt, size_t to, t_compare *cmp, t_comp_mode md, char *f1, char *f2, char *a1, char *a2)
 {
 	cmp->status = QUEUED;
 	cmp->mode = md;
@@ -22,7 +22,7 @@ t_error	comp_init_priv(t_context *cxt, size_t to, t_compare *cmp, t_comp_mode md
 	return (fork_init(cxt, to));
 }
 
-t_error	comp_parent_priv(t_context *context, t_compare *data)
+void	comp_parent_priv(t_context *context, t_compare *data)
 {
 	int			status;
 	t_error		error;
@@ -49,7 +49,7 @@ t_error	comp_parent_priv(t_context *context, t_compare *data)
 	return (error);
 }
 
-t_error	comp_init_child_priv(t_context *context, t_compare *data)
+void	comp_init_child_priv(t_context *context, t_compare *data)
 {
 	t_error	error;
 

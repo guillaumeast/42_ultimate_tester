@@ -1,5 +1,7 @@
 #define __FUT_INSIDE__
+#define __FUT_IPC_INSIDE__
 #include "timeout_priv.h"
+#undef __FUT_IPC_INSIDE__
 #include "error_priv.h"
 #undef __FUT_INSIDE__
 
@@ -10,44 +12,37 @@ static volatile sig_atomic_t	s_target_pid = -1;
 
 static void	timeout_handler(int sig);
 
-bool	timeout_init(pid_t target_pid, unsigned int time)
+void	timeout_init(pid_t target_pid, unsigned int time)
 {
 	struct sigaction	new_action = {0};
 
 	if (time == 0)
-		return (true);
+		return ;
 
 	g_timeout_triggered = false;
 	s_target_pid = (sig_atomic_t)target_pid;
 
-	if (sigemptyset(&new_action.sa_mask) == -1)
-		return (error_log(ALARM_SET_FAILED));
+	exit_if(sigemptyset(&new_action.sa_mask) == -1, ALARM_SET_FAILED);
 	new_action.sa_flags = SA_RESETHAND;
 	new_action.sa_handler = timeout_handler;
-
-	if (sigaction(SIGALRM, &new_action, NULL) == -1)
-		return (error_log(ALARM_SET_FAILED));
+	exit_if(sigaction(SIGALRM, &new_action, NULL) == -1, ALARM_SET_FAILED);
 
 	(void)alarm(time);
-	return (true);
 }
 
-bool	timeout_cancel(void)
+void	timeout_cancel(void)
 {
 	struct sigaction action = {0};
 
 	g_timeout_triggered = false;
 	if (s_target_pid == -1)
-		return (true);
+		return ;
 
 	action.sa_handler = SIG_DFL;
-	if (sigaction(SIGALRM, &action, NULL) == -1)
-		return (error_log(ALARM_CANCEL_FAILED));
+	exit_if(sigaction(SIGALRM, &action, NULL) == -1, ALARM_CANCEL_FAILED);
 	(void)alarm(0);
 
 	s_target_pid = -1;
-
-	return (true);
 }
 
 static void	timeout_handler(int sig)

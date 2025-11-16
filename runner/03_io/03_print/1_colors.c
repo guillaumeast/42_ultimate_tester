@@ -12,7 +12,7 @@ typedef struct s_colors
 }	t_colors;
 
 static t_colors	g_colors;
-static bool		g_colors_initialized = false;
+static bool		s_colors_initialized = false;
 
 static inline void	colors_init(void);
 
@@ -20,7 +20,7 @@ static inline void	colors_init(void);
 #define X_COLOR(color_name)							\
     const char *print_color_##color_name(void)		\
 	{												\
-        if (!g_colors_initialized) colors_init();	\
+        if (!s_colors_initialized) colors_init();	\
         return g_colors.color_name;					\
     }
 #include "colors.x"
@@ -37,5 +37,5 @@ static inline void	colors_init(void)
 	g_colors.yellow =	istty ? "\033[33m" : "";
 	g_colors.blue =		istty ? "\033[34m" : "";
 	g_colors.none =		istty ? "\033[00m" : "";
-	g_colors_initialized = true;
+	s_colors_initialized = true;
 }

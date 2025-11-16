@@ -14,19 +14,17 @@ static const char *error_names[] =
 # undef X_ERROR
 };
 
-static	t_error	g_error_trace[MAX_ERR_COUNT];
-static	size_t	g_error_count = 0;
+static	t_error	s_error_trace[MAX_ERR_COUNT];
+static	size_t	s_error_count = 0;
 
-bool	error_log(t_error error)
+void	error_log(t_error error)
 {
 	if (error == NO_ERROR)
-		return (true);
+		return ;
 
-	g_error_trace[g_error_count] = error;
-	g_error_count++;
-	exit_if(g_error_count == MAX_ERR_COUNT);
-
-	return (false);
+	s_error_trace[s_error_count] = error;
+	s_error_count++;
+	exit_if(s_error_count == MAX_ERR_COUNT, TOO_MANY_ERRORS);
 }
 
 void	error_reset_trace(void)
@@ -34,9 +32,9 @@ void	error_reset_trace(void)
 	size_t	i;
 
 	i = 0;
-	while (i < g_error_count)
-		g_error_trace[i++] = NO_ERROR;
-	g_error_count = 0;
+	while (i < s_error_count)
+		s_error_trace[i++] = NO_ERROR;
+	s_error_count = 0;
 }
 
 void	error_print_trace(void)
@@ -44,30 +42,26 @@ void	error_print_trace(void)
 	int		i;
 	t_error	error;
 
-	if (g_error_count == 0)
+	if (s_error_count == 0)
 		return ;
 
-	i = g_error_count;
+	i = s_error_count;
 	while(--i >= 0)
 	{
-		error = g_error_trace[i];
+		error = s_error_trace[i];
 		print_stderr("%s %s %s%s\n", RED, EMJ_ARW_DR, error_names[error], NONE);
 	}
 }
 
-void	exit_if(bool condition)
+void	exit_if(bool condition, t_error error)
 {
-	int	exit_code;
-
 	if (!condition)
-		return;
+		return ;
 
-	print_stderr("%s %s Internal error:%s\n", RED, EMJ_ERR, NONE);
+	error_log(error);
+	print_stderr("%s %s Error:%s\n", RED, EMJ_ERR, NONE);
 	error_print_trace();
 	print_stderr(" %s Please try again or report the issue\n", EMJ_ARW_RIGHT);
 
-	exit_code = g_error_count > 0 \
-		? 100 + g_error_trace[g_error_count - 1] \
-		: 1;
-	exit(exit_code);
+	exit(100 + error);
 }

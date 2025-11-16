@@ -1,6 +1,7 @@
 #ifndef ULT_SET_PUB_H
 #define ULT_SET_PUB_H
 
+#include "result_priv.h" // TODO: make public ?
 #include <stddef.h>
 
 #if defined(__APPLE__)

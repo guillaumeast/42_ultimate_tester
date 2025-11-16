@@ -3,17 +3,23 @@
 
 #ifndef __FUT_INSIDE__
 /*
-**  Internal header for the FUT modules.
+**  Private header for the FUT modules.
 **  Not available outside its compilation unit.
 */
 #else
 
 #include "redirect_pub.h"
+#include <stdio.h>
+
+typedef enum e_ult_fds
+{
+	ULT_STDOUT,
+	ULT_STDERR,
+}	t_ult_fd;
 
 typedef struct s_redirect
 {
 	bool			activ;
-	t_redirect_mode mode;
 	int				real_stdout_fd;
 	int				real_stderr_fd;
 	FILE			*out_file;
@@ -21,8 +27,6 @@ typedef struct s_redirect
 }	t_redirect;
 
 extern t_redirect	g_output;
-
-t_error	redirect_init(void);
 
 #endif /* __FUT_INSIDE__ */
 

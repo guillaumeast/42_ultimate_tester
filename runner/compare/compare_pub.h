@@ -2,10 +2,7 @@
 #define ULT_COMP_PUB_H
 
 #include "fork_pub.h"
-#include "error_priv.h"
-#include "set_pub.h"
 #include <stdlib.h>
-#include <signal.h>
 
 typedef enum e_comp_mode
 {
@@ -28,15 +25,14 @@ typedef struct s_function
 
 typedef struct s_compare
 {
-	t_status	status;
 	t_comp_mode	mode;
 	t_function	fn1;
 	t_function	fn2;
 }	t_compare;
 
-t_error	comp_init_priv(t_context *cxt, size_t to, t_compare *cmp, t_comp_mode md, char *f1, char *f2, char *a1, char *a2);
-t_error	comp_parent_priv(t_context *context, t_compare *data);
-t_error	comp_init_child_priv(t_context *context, t_compare *data);
+void	comp_init_priv(t_context *cxt, size_t to, t_compare *cmp, t_comp_mode md, char *f1, char *f2, char *a1, char *a2);
+void	comp_parent_priv(t_context *context, t_compare *data);
+void	comp_init_child_priv(t_context *context, t_compare *data);
 void	comp_child_priv(t_context *context, t_compare *data);
 
 #define cmp_try(call)																		\

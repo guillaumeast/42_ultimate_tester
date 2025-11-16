@@ -3,7 +3,7 @@
 
 #ifndef __FUT_INSIDE__
 /*
-**  Internal header for the FUT modules.
+**  Private header for the FUT modules.
 **  Not available outside its compilation unit.
 */
 #else
