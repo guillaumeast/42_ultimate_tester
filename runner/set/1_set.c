@@ -1,9 +1,15 @@
+#define __FUT_INSIDE__
+#define __FUT_SET_INSIDE__
+#include "set_internal.h"
+#undef __FUT_SET_INSIDE__
+#include "redirect_pub.h"
 #include "fork_priv.h"
-#include "print_priv.h"
 #include "timeout_priv.h"
+#undef __FUT_INSIDE__
+
 #include <errno.h>
-#include <signal.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 static inline void		set_run_parent(t_context *context, t_set *set);
 static inline void		set_run_child(t_context *context, t_set *set);
@@ -42,6 +48,7 @@ t_error	set_run(t_set *set)
 	// TODO: compute result.total & result.status
 	// process_result(&set->result, &set->status);
 	fork_clear(&context);
+	redirect_stop();
 	return (NO_ERROR);
 }
 
@@ -49,7 +56,6 @@ static inline void	set_run_parent(t_context *context, t_set *set)
 {
 	int		status;
 
-	(void)set;	// TODO
 	while (waitpid(context->child_pid, &status, 0) == -1 && errno == EINTR)
 		continue;
 	
@@ -61,7 +67,6 @@ static inline void	set_run_parent(t_context *context, t_set *set)
 		set->result.total++;
 		g_result.timed += set->result.timed;
 		g_result.total += set->result.total;
-		print_set_timed();
 	}
 	else if (WIFEXITED(status) && WEXITSTATUS(status) == EXIT_SUCCESS)
 	{
@@ -79,8 +84,8 @@ static inline void	set_run_parent(t_context *context, t_set *set)
 		set->result.total++;
 		g_result.crashed += set->result.crashed;
 		g_result.total += set->result.total;
-		print_set_crashed();
 	}
+	print_set_result(set);
 	fork_clear(context);
 }
 
@@ -91,15 +96,9 @@ static inline void	set_run_child(t_context *context, t_set *set)
 	(void)!write(context->result_pipe[1], &set->result, sizeof(t_result));
 
 	if (set->result.passed == set->result.total)
-	{
-		print_set_passed(set);	// TODO: let the parent print
 		exit(EXIT_SUCCESS);
-	}
 	else
-	{
-		print_set_failed(set);	// TODO: let the parent print
 		exit(EXIT_FAILURE);
-	}
 }
 
 /* TODO: put the above functions into separate common file (result.c ?) */

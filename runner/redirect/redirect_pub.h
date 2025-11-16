@@ -1,8 +1,9 @@
 #ifndef ULT_REDIRECT_PUB_H
-# define ULT_REDIRECT_PUB_H
+#define ULT_REDIRECT_PUB_H
 
-# include <stdbool.h>
-# include <stdio.h>
+#include "error_priv.h"
+#include <stdbool.h>
+#include <stdio.h>
 
 typedef struct s_string
 {
@@ -25,8 +26,9 @@ typedef enum e_redirect_mode
 }	t_redirect_mode;
 
 // TODO: implement macro `char *get_output(t_ult_fd fd, function_call)` (redirect_start -> function_call() -> redirect_stop)
-bool		redirect_start(t_redirect_mode mode);
+t_error		redirect_start(t_redirect_mode mode);
+// TODO: return (char* + t_error) instead of t_string
 t_string	*redirect_read(void);
-void		redirect_stop(void);
+t_error		redirect_stop(void);
 
 #endif

@@ -1,7 +1,14 @@
 #ifndef ULT_REDIRECT_PRIV_H
-# define ULT_REDIRECT_PRIV_H
+#define ULT_REDIRECT_PRIV_H
 
-# include "redirect_pub.h"
+#ifndef __FUT_INSIDE__
+/*
+**  Internal header for the FUT modules.
+**  Not available outside its compilation unit.
+*/
+#else
+
+#include "redirect_pub.h"
 
 typedef struct s_redirect
 {
@@ -15,6 +22,8 @@ typedef struct s_redirect
 
 extern t_redirect	g_output;
 
-bool	redirect_init(void);
+t_error	redirect_init(void);
 
-#endif
+#endif /* __FUT_INSIDE__ */
+
+#endif /* ULT_REDIRECT_PRIV_H */

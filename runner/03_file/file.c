@@ -1,11 +1,15 @@
+#define __FUT_INSIDE__
 #include "file_priv.h"
+#include "error_priv.h"
 #include "redirect_priv.h"
+#undef __FUT_INSIDE__
+
 #include <unistd.h>
 
 bool	create_tmp_file(void)
 {
 	if (!(g_output.out_file = tmpfile()))
-		return (false);
+		return (error_log(FILE_CREATION_FAILED));
 	g_output.out_fd = fileno(g_output.out_file);
 	return (g_output.out_fd != -1);
 }
@@ -17,14 +21,25 @@ ssize_t file_get_len(FILE *f)
 
 	pos = ftell(f);
 	if (pos < 0)
+	{
+		error_log(FILE_LEN_FAILED);
 		return (-1);
+	}
 	if (fseek(f, 0, SEEK_END) != 0)
+	{
+		error_log(FILE_LEN_FAILED);
 		return (-1);
-	len = ftell(f);
-	if (len < 0)
+	}
+	if ((len = ftell(f)) < 0)
+	{
+		error_log(FILE_LEN_FAILED);
 		return (-1);
+	}
 	if (fseek(f, pos, SEEK_SET) != 0)
+	{
+		error_log(FILE_LEN_FAILED);
 		return (-1);
+	}
 	return (len);
 }
 
@@ -34,16 +49,15 @@ bool	file_reset(FILE *f)
 
 	fd = fileno(f);
 	if (fd == -1)
-		return (false);
+		return (error_log(FILE_RESET_FAILED));
 	if (ftruncate(fd, 0) != 0)
-		return (false);
+		return (error_log(FILE_RESET_FAILED));
 	if (fseek(f, 0, SEEK_SET) != 0)
-		return (false);
+		return (error_log(FILE_RESET_FAILED));
 	clearerr(f);
 	return (true);
 }
 
-// Delete because all I/0 are already unbuffered ?
 void	flush_all()
 {
 	fflush(stdout);

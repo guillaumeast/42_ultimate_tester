@@ -1,8 +1,8 @@
 #ifndef ULT_ASSERT_PUB_H
-# define ULT_ASSERT_PUB_H
+#define ULT_ASSERT_PUB_H
 
-# include <stdbool.h>
-# include <stdint.h>
+#include <stdbool.h>
+#include <stdint.h>
 
 typedef enum e_format {
 	F_SIGNED,
@@ -13,10 +13,10 @@ typedef enum e_format {
 }	t_format;
 
 void	assert_run(bool eq, const char *name, intptr_t got, intptr_t exp, t_format fmt);
+void	print_assert_failed(bool eq, const char *name, intptr_t got, intptr_t exp, t_format fmt);
 
 #define _ult_assert(should_be_equal, name, got, expected) \
-	assert_run(should_be_equal, name, (intptr_t)(got), (intptr_t)(expected), \
-		_Generic((expected), \
+	assert_run(should_be_equal, name, (intptr_t)(got), (intptr_t)(expected), _Generic((expected), \
 			char: F_CHAR, \
 			signed char: F_SIGNED, \
 			short: F_SIGNED, \

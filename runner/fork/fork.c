@@ -1,6 +1,9 @@
-# include "fork_priv.h"
-# include "timeout_priv.h"
-# include <unistd.h>
+#define __FUT_INSIDE__
+#include "fork_priv.h"
+#include "timeout_priv.h"
+#undef __FUT_INSIDE__
+
+#include <unistd.h>
 
 t_error	fork_init(t_context *context, size_t timeout)
 {

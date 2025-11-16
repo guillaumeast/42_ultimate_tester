@@ -1,11 +1,11 @@
 #ifndef ULT_COMP_PUB_H
-# define ULT_COMP_PUB_H
+#define ULT_COMP_PUB_H
 
-# include "fork_pub.h"
-# include "error_pub.h"
-# include "set_pub.h"
-# include <stdlib.h>
-# include <signal.h>
+#include "fork_pub.h"
+#include "error_priv.h"
+#include "set_pub.h"
+#include <stdlib.h>
+#include <signal.h>
 
 typedef enum e_comp_mode
 {
@@ -23,7 +23,7 @@ typedef struct s_function
 	char		*name;
 	char		*args;
 	intptr_t	ret;
-	t_string	*out;
+	char		*out;
 }	t_function;
 
 typedef struct s_compare
@@ -39,7 +39,7 @@ t_error	comp_parent_priv(t_context *context, t_compare *data);
 t_error	comp_init_child_priv(t_context *context, t_compare *data);
 void	comp_child_priv(t_context *context, t_compare *data);
 
-# define cmp_try(call)																		\
+#define cmp_try(call)																		\
 	error = (call);																			\
 	if (error != NO_ERROR)																	\
 	{																						\
@@ -49,7 +49,7 @@ void	comp_child_priv(t_context *context, t_compare *data);
 		break;																				\
 	}
 
-# define get_values_priv(fn_id, fn_name, fn_args)											\
+#define get_values_priv(fn_id, fn_name, fn_args)											\
 	if (cmp.mode != COMP_OUT && cmp.mode != COMP_ERR && cmp.mode != COMP_BOTH)				\
 		cmp.fn##fn_id.ret = (intptr_t)fn_name fn_args;										\
 	if (cmp.mode != COMP_RET)																\
@@ -61,7 +61,7 @@ void	comp_child_priv(t_context *context, t_compare *data);
 ** ⚠️ The argument(s) must always be enclosed in parentheses.
 ** Otherwise, the macro expansion will be invalid C syntax.
 */
-# define compare2(mode, timeout, fn1_name, fn2_name, fn1_args, fn2_args)					\
+#define compare2(mode, timeout, fn1_name, fn2_name, fn1_args, fn2_args)					\
 	do																						\
 	{																						\
 		t_error		error;																	\
@@ -91,7 +91,7 @@ void	comp_child_priv(t_context *context, t_compare *data);
 ** ⚠️ The argument(s) must always be enclosed in parentheses.
 ** Otherwise, the macro expansion will be invalid C syntax.
 */
-# define compare(mode, timeout, fn1_name, fn2_name, fn_args)	\
+#define compare(mode, timeout, fn1_name, fn2_name, fn_args)	\
 	compare2(mode, timeout, fn1_name, fn2_name, fn_args, fn_args)
 
 #endif

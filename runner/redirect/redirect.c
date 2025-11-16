@@ -1,35 +1,38 @@
+#define __FUT_INSIDE__
 #include "redirect_priv.h"
 #include "file_priv.h"
 #include "print_priv.h"
-#include <stdlib.h>
+#undef __FUT_INSIDE__
 
-bool	redirect_reset(const char *error_message);
+#include <stdlib.h>
+#include <unistd.h>
 
 t_redirect g_output =
 {
-	.real_stdout_fd = -1,
-	.real_stderr_fd = -1,
+	.real_stdout_fd = STDOUT_FILENO,
+	.real_stderr_fd = STDERR_FILENO,
 	.activ = false,
 	.mode = -1,
 	.out_fd = -1,
 	.out_file = NULL,
 };
 
-bool	redirect_init(void)
+t_error	redirect_init(void)
 {
 	flush_all();
 	setvbuf(stdout, NULL, _IONBF, 0);
 	setvbuf(stderr, NULL, _IONBF, 0);
 	g_output.real_stdout_fd = dup(STDOUT_FILENO);
 	if (g_output.real_stdout_fd == -1)
-		return (false);
+		return (REDIRECT_INIT_FAILED);
 	g_output.real_stderr_fd = dup(STDERR_FILENO);
 	if (g_output.real_stderr_fd == -1)
-		return (false);
-	return (true);
+		return (REDIRECT_INIT_FAILED);
+	return (NO_ERROR);
 }
 
-bool	redirect_start(t_redirect_mode mode)
+// TODO: don't fail if redirect already exists, juste store previous one and create a new one
+t_error	redirect_start(t_redirect_mode mode)
 {
 	if (g_output.activ)
 		return (ult_print_err("Unable to create redirection (another one already exists)"), false);
@@ -96,35 +99,29 @@ t_string	*redirect_read()
 	return (res);
 }
 
-// Public
-void	redirect_stop()
+t_error	redirect_stop(void)
 {
-	redirect_reset(NULL);
-}
+	t_error	error;
 
-// Private
-bool	redirect_reset(const char *error_message)
-{
+	error = NO_ERROR;
 	if (!g_output.activ)
-		return (error_message ? (ult_print_err("No active redirection"), true) : true);
+		return (error);
+
+	g_output.activ = false;
+	g_output.out_fd = -1;
 
 	flush_all();
-	g_output.activ = false;
-	dup2(g_output.real_stdout_fd, STDOUT_FILENO);
-	dup2(g_output.real_stderr_fd, STDERR_FILENO);
+	if (dup2(g_output.real_stdout_fd, STDOUT_FILENO) == -1)
+		error = REDIRECT_RESET_FAILED;
+	if (dup2(g_output.real_stderr_fd, STDERR_FILENO) == -1)
+		error = REDIRECT_RESET_FAILED;
 	if (g_output.out_file)
 	{
-		fclose(g_output.out_file);
+		if (fclose(g_output.out_file) != 0)
+			error = REDIRECT_RESET_FAILED;
 		g_output.out_file = NULL;
 	}
-	g_output.out_fd = -1;
-	if (error_message)
-	{
-		if (error_message[0])
-	 		ult_print_err("Redirection aborted (%s)", error_message);
-		else
-		 	ult_print_err("Redirection aborted");
-	}
 	flush_all();
-	return (true);
+	
+	return (error);
 }

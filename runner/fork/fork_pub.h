@@ -1,7 +1,7 @@
 #ifndef ULT_FORK_PUB_H
-# define ULT_FORK_PUB_H
+#define ULT_FORK_PUB_H
 
-# include <sys/types.h>
+#include <sys/types.h>
 
 typedef struct s_fork_context
 {

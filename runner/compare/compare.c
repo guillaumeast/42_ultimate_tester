@@ -1,5 +1,8 @@
+#define __FUT_INSIDE__
 #include "compare_pub.h"
 #include "fork_priv.h"
+#undef __FUT_INSIDE__
+
 #include <errno.h>
 #include <unistd.h>
 
