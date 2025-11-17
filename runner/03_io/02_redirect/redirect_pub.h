@@ -11,9 +11,17 @@ typedef enum e_redirect_mode
 	R_BOTH
 }	t_redirect_mode;
 
-// TODO: implement macro `char *get_output(t_redirect_mode mode, function_call)` (redirect_start -> function_call() -> redirect_stop)
 void	redirect_start(t_redirect_mode mode);
 char	*redirect_read(void);
 void	redirect_stop(void);
+
+#define get_output(mode, expr, out_var_name)	\
+	do											\
+	{											\
+		redirect_start(mode);					\
+		expr;									\
+		char *out_var = redirect_read();		\
+		redirect_stop();						\
+	} while (0)
 
 #endif

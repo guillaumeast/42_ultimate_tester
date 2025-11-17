@@ -44,7 +44,8 @@ char	*redirect_read()
 	ssize_t	file_len;
 	char	*res;
 
-	exit_if(!g_output.activ, REDIRECT_NO_ACTIV_REDIRECTION);
+	if (!g_output.activ)
+		return (NULL);
 
 	flush_all();
 	file_len = file_get_len(g_output.out_file);

@@ -1,6 +1,6 @@
 #include <stdio.h>
 #define __FUT_INSIDE__
-#include "global_priv.h"
+#include "report_priv.h"
 #include "set_priv.h"
 #undef __FUT_INSIDE__
 
@@ -25,7 +25,7 @@ static void	ult_main(void)
 	
 	print_start();
 	for (set = START_SET; set < STOP_SET; set++)
-		exit_if(!set_run(set));
+		set_run(set);
 	print_result(&g_result);
 
 	exit(EXIT_SUCCESS);

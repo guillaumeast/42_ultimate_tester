@@ -11,4 +11,7 @@ typedef struct s_fork_context
 	int				result_pipe[2];
 }	t_context;
 
+void	fork_init(t_context *context, size_t timeout);
+void	fork_clear(void);
+
 #endif
