@@ -26,7 +26,7 @@ t_error	set_run(t_set *set)
 	print_set_title(set);
 	set->status = RUNNING;
 
-	error = fork_init(&context, set->timeout);
+	error = _fut_fork_init(&context, set->timeout);
 	if (error != NO_ERROR)
 		return error;
 
@@ -47,7 +47,7 @@ t_error	set_run(t_set *set)
 
 	// TODO: compute result.total & result.status
 	// process_result(&set->result, &set->status);
-	fork_clear(&context);
+	_fut_fork_clear(&context);
 	redirect_stop();
 	return (NO_ERROR);
 }
@@ -86,7 +86,7 @@ static inline void	set_run_parent(t_context *context, t_set *set)
 		g_result.total += set->result.total;
 	}
 	print_set_result(set);
-	fork_clear(context);
+	_fut_fork_clear(context);
 }
 
 static inline void	set_run_child(t_context *context, t_set *set)

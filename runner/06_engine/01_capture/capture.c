@@ -10,7 +10,7 @@
 
 static inline void	read_result(t_context *ctx, t_capture *capture);
 
-void	capture_parent(t_context *ctx, t_capture *capture)
+void	_fut_capture_parent(t_context *ctx, t_capture *capture)
 {
 	int		status;
 
@@ -24,23 +24,27 @@ void	capture_parent(t_context *ctx, t_capture *capture)
 	else
 	{
 		capture->crashed = true;
-		capture->signal = WTERMSIG(status);
+		if (WIFSIGNALED(status))
+			capture->signal = WTERMSIG(status);
 	}
 
-	fork_clear();
+	_fut_fork_clear();
 }
 
-void	capture_child(t_context *ctx, t_capture_res *res)
+void	_fut_capture_child(t_context *ctx, t_capture_res *res)
 {
 	size_t	len;
 
 	write(ctx->result_pipe[1], &res->ret, sizeof res->ret);
 
-	len = strlen(res->out);
+	if (res->out)
+		len = strlen(res->out);
+	else
+	 	len = 0;
 	write(ctx->result_pipe[1], &len, sizeof len);
 	write(ctx->result_pipe[1], res->out, len);
 
-	fork_clear();
+	_fut_fork_clear();
 	exit (EXIT_SUCCESS);
 }
 

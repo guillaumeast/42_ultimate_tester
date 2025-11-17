@@ -14,10 +14,10 @@ static inline void	fork_init_child(t_context *context);
 
 static __thread t_context	*s_current_context;
 
-void	fork_init(t_context *context, size_t timeout)
+void	_fut_fork_init(t_context *context, size_t timeout)
 {
 	s_current_context = context;
-	atexit(fork_clear);
+	atexit(_fut_fork_clear);
 
 	context->child_pid = -1;
 	context->result_pipe[0] = -1;
@@ -37,7 +37,7 @@ void	fork_init(t_context *context, size_t timeout)
 	 	fork_init_child(context);
 }
 
-void	fork_clear(void)
+void	_fut_fork_clear(void)
 {
 	if (!s_current_context)
 		return ;

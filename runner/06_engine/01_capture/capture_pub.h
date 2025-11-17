@@ -43,32 +43,30 @@ static const t_redirect_mode g_capture_to_redirect[] = {
     [GET_RET_BOTH]  = R_BOTH
 };
 
-#define capture(mode, expr, res_pointer)					\
-	do {													\
-		if (mode != GET_RET)								\
-			redirect_start(g_capture_to_redirect[mode]);	\
-		res_pointer->ret = (intptr_t)expr;					\
-		res_pointer->out = NULL;							\
-		if (mode != GET_RET)								\
-		{													\
-			res_pointer->out = redirect_read();				\
-			redirect_stop();								\
-		}													\
-	} while (0)
+void	_fut_capture_parent(t_context *ctx, t_capture *capture);
+void	_fut_capture_child(t_context *ctx, t_capture_res *res);
 
-#define capture_safe(mode, timeout, expr, capture_pointer)	\
-	do {													\
-		t_context	ctx;									\
-															\
-		fork_init(&ctx, timeout);							\
-		if (ctx.child_pid > 0)								\
-			capture_parent(&ctx, capture_pointer);			\
-		else												\
-		{													\
-			t_capture_res capture_res = {0};				\
-			capture(mode, expr, &capture_res);				\
-			capture_child(&ctx, &capture_res);				\
-		}													\
+#define capture(mode, timeout, expr, capture_pointer)		\
+	do {														\
+		t_context	ctx;										\
+																\
+		_fut_fork_init(&ctx, timeout);							\
+		if (ctx.child_pid > 0)									\
+			_fut_capture_parent(&ctx, capture_pointer);			\
+		else													\
+		{														\
+			t_capture_res capture_res = {0};					\
+			if (mode != GET_RET)								\
+				redirect_start(g_capture_to_redirect[mode]);	\
+			capture_res.ret = (intptr_t)expr;					\
+			capture_res.out = NULL;								\
+			if (mode != GET_RET)								\
+			{													\
+				capture_res.out = redirect_read();				\
+				redirect_stop();								\
+			}													\
+			_fut_capture_child(&ctx, &capture_res);				\
+		}														\
 	} while (0)
 
 #endif

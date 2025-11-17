@@ -7,9 +7,17 @@
 #include <inttypes.h>
 #include <string.h>
 
-static inline bool	assert_check(intptr_t got, intptr_t exp, t_format fmt);
+static inline bool	assert_check(t_capture *got, t_capture *exp, t_format fmt);
+static inline void	print_assert_failed(bool eq, const char *name, intptr_t got, intptr_t exp, t_format fmt);
 
-void	assert_run(bool eq, const char *name, intptr_t got, intptr_t exp, t_format fmt)
+/*
+**	TODO:
+**	1. Check & build t_result
+**	2. Print logs (only if != PASSED)
+**	3. Send t_result to parent (where to find t_context now ? 👀)
+*/
+
+void	_fut_assert_run(bool eq, const char *got_name, const char *exp_name, t_capture *got, t_capture *exp, t_format fmt)
 {
 	if (assert_check(got, exp, fmt) == eq)
 		g_set.result.passed++;
@@ -21,7 +29,9 @@ void	assert_run(bool eq, const char *name, intptr_t got, intptr_t exp, t_format 
 	g_set.result.total++;
 }
 
-static inline bool	assert_check(intptr_t got, intptr_t exp, t_format format)
+// TODO: compare structs with memcmp (sizeof struct) !! marche uniquement si pas de pointeurs dans la struct !!
+// TODO: format = pointer => memcmp sizeof t_compare.ret ??
+static inline bool	assert_check(t_capture *got, t_capture *exp, t_format format)
 {
 	if (format != F_STRING)
 	 	return (got == exp);
@@ -30,7 +40,7 @@ static inline bool	assert_check(intptr_t got, intptr_t exp, t_format format)
 	return (strcmp((const char *)got, (const char *)exp) == 0);
 }
 
-void	print_assert_failed(bool eq, const char *name, intptr_t got, intptr_t exp, t_format fmt)
+static inline void	print_assert_failed(bool eq, const char *name, intptr_t got, intptr_t exp, t_format fmt)
 {
 	const char	*format;
 
@@ -50,5 +60,3 @@ void	print_assert_failed(bool eq, const char *name, intptr_t got, intptr_t exp, 
 	print_stderr(format, exp);
 	print_stderr("%s)\n", NONE);
 }
-
-// TODO: compare structs with memcopy (sizeof struct) !! marche uniquement si pas de pointeurs dans la struct
