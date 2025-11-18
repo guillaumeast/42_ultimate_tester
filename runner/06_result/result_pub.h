@@ -1,25 +1,8 @@
 #ifndef ULT_RESULT_PRIV_H
 #define ULT_RESULT_PRIV_H
 
-#ifndef __FUT_INSIDE__
-/*
-**  Private header for the FUT modules.
-**  Not available outside its compilation unit.
-*/
-#else
-
+#include "status_pub.h"
 #include <stddef.h>
-
-typedef enum e_status
-{
-	QUEUED,
-	RUNNING,
-	PASSED,
-	FAILED,
-	TIMED,
-	CRASHED,
-	DONE,
-}	t_status;
 
 typedef struct s_result
 {
@@ -32,7 +15,5 @@ typedef struct s_result
 }	t_result;
 
 void	result_compute(t_result *res);
-
-#endif /* __FUT_INSIDE__ */
 
 #endif /* ULT_RESULT_PRIV_H */

@@ -1,20 +1,20 @@
 #define __FUT_INSIDE__
+#define __FUT_ENGINE_INSIDE__
 #define __FUT_SET_INSIDE__
-#include "set_internal.h"
+#include "set_int_set.h"
 #undef __FUT_SET_INSIDE__
+#undef __FUT_ENGINE_INSIDE__
 #include "redirect_pub.h"
-#include "fork_priv.h"
-#include "timeout_priv.h"
+#include "fork_pub.h"
 #undef __FUT_INSIDE__
 
 #include <errno.h>
 #include <stdlib.h>
 #include <unistd.h>
 
-static inline void		set_run_parent(t_context *context, t_set *set);
-static inline void		set_run_child(t_context *context, t_set *set);
+static inline void	set_run_parent(t_context *context, t_set *set);
+static inline void	set_run_child(t_context *context, t_set *set);
 
-t_set							g_set;	// TODO: implement set* in assert.c
 t_result						g_result;
 extern volatile sig_atomic_t	g_timeout_triggered;
 

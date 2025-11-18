@@ -42,10 +42,10 @@
 #define EMJ_TIMD		print_emoji_timed()
 #define EMJ_CRSH_Y		print_emoji_crashed_y()
 #define EMJ_CRSH_N		print_emoji_crashed_n()
-#define EMJ_ERR		print_emoji_error()
+#define EMJ_ERR			print_emoji_error()
 #define EMJ_TEST		print_emoji_test()
 #define EMJ_SUC_START	print_emoji_success_title_start()
-#define EMJ_SUC_END	print_emoji_success_title_end()
+#define EMJ_SUC_END		print_emoji_success_title_end()
 #define EMJ_FAIL_START	print_emoji_fail_title_start()
 #define EMJ_FAIL_END	print_emoji_fail_title_end()
 

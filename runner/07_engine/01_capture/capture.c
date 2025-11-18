@@ -18,14 +18,17 @@ void	_fut_capture_parent(t_context *ctx, t_capture *capture)
 	waitpid(ctx->child_pid, &status, 0);
 	
 	if (g_timeout_triggered)
-		capture->timed = true;
+		capture->status.type = TIMED;
 	else if (WIFEXITED(status) && WEXITSTATUS(status) == EXIT_SUCCESS)
+	{
 		read_result(ctx, capture);
+		capture->status.type = DONE;
+	}
 	else
 	{
-		capture->crashed = true;
+		capture->status.type = CRASHED;
 		if (WIFSIGNALED(status))
-			capture->signal = WTERMSIG(status);
+			capture->status.sig = WTERMSIG(status);
 	}
 
 	_fut_fork_clear();
@@ -59,6 +62,4 @@ static inline void	read_result(t_context *ctx, t_capture *capture)
 	exit_if(!capture->out, CAPTURE_NOT_ENOUGH_MEMORY);
 	read(ctx->result_pipe[0], capture->out, len);
 	capture->out[len] = '\0';
-
-	capture->ok = true;
 }

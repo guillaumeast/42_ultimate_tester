@@ -1,7 +1,11 @@
 #define __FUT_INSIDE__
-#define __FUT_PRINT_INSIDE__
+#define __FUT_ENGINE_INSIDE__
+#define __FUT_SET_INSIDE__
+#include "set_int_set.h"
+#undef __FUT_SET_INSIDE__
+#undef __FUT_ENGINE_INSIDE__
 #include "print_priv.h"
-#undef __FUT_PRINT_INSIDE__
+#include "result_pub.h"
 #undef __FUT_INSIDE__
 
 #include <stdio.h>

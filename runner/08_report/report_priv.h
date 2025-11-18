@@ -8,7 +8,7 @@
 */
 #else
 
-#include "result_priv.h"
+#include "result_pub.h"
 
 void	print_start(void);
 void	print_result(const t_result *result);

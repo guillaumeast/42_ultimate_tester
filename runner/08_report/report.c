@@ -2,7 +2,7 @@
 #define __FUT_RESULT_INSIDE__
 #include "print_priv.h"
 #undef __FUT_RESULT_INSIDE__
-#include "result_priv.h"
+#include "result_pub.h"
 #undef __FUT_INSIDE__
 
 #include <stdio.h>

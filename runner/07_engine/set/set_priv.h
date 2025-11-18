@@ -13,7 +13,6 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-extern t_set	g_set;
 extern t_result	g_result;
 
 t_error	set_run(t_set *set);
