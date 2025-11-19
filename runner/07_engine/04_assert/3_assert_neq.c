@@ -49,35 +49,35 @@ static inline t_status	check_status(t_assert *assert)
 	t_status	status = {0};
 
 	status.type = PASSED;
-	if (assert->got->status.type != DONE || assert->exp->status.type != DONE)
+	if (assert->got_capt->status.type != DONE || assert->exp_capt->status.type != DONE)
 	{
-		if (assert->got->status.type == CRASHED)
+		if (assert->got_capt->status.type == CRASHED)
 		{
 			status.type = CRASHED;
-			status.sig = assert->got->status.sig;
+			status.sig = assert->got_capt->status.sig;
 			print_stderr("%s    %s %s CRASHED%s: ", RED, EMJ_ARW_DR, EMJ_CRSH_Y, NONE);
-			print_status_fail(assert->got_name, &assert->got->status);
+			print_status_fail(assert->got_name, &assert->got_capt->status);
 		}
-		else if (assert->got->status.type == TIMED)
+		else if (assert->got_capt->status.type == TIMED)
 		{
 			status.type = TIMED;
-			status.timeout = assert->got->status.timeout;
+			status.timeout = assert->got_capt->status.timeout;
 			print_stderr("%s    %s %s TIMED%s:   ", RED, EMJ_ARW_DR, EMJ_TIMD, NONE);
-			print_status_fail(assert->got_name, &assert->got->status);
+			print_status_fail(assert->got_name, &assert->got_capt->status);
 		}
-		else if (assert->exp->status.type == CRASHED)
+		else if (assert->exp_capt->status.type == CRASHED)
 		{
 			status.type = CRASHED;
-			status.sig = assert->exp->status.sig;
+			status.sig = assert->exp_capt->status.sig;
 			print_stderr("%s    %s %s CRASHED%s: ", RED, EMJ_ARW_DR, EMJ_CRSH_Y, NONE);
-			print_status_fail(assert->exp_name, &assert->exp->status);
+			print_status_fail(assert->exp_name, &assert->exp_capt->status);
 		}
-		else if (assert->exp->status.type == TIMED)
+		else if (assert->exp_capt->status.type == TIMED)
 		{
 			status.type = TIMED;
-			status.timeout = assert->exp->status.timeout;
+			status.timeout = assert->exp_capt->status.timeout;
 			print_stderr("%s    %s %s TIMED%s:   ", RED, EMJ_ARW_DR, EMJ_TIMD, NONE);
-			print_status_fail(assert->exp_name, &assert->exp->status);
+			print_status_fail(assert->exp_name, &assert->exp_capt->status);
 		}
 	}
 	return (status);
@@ -90,7 +90,7 @@ static inline t_status	check_ret(t_assert *assert)
 	status.type = PASSED;
 	if (assert->format == F_STRING)
 	{
-		if (compare_strings((char *)assert->got->ret, (char *)assert->exp->ret))
+		if (compare_strings((char *)assert->got_capt->ret, (char *)assert->exp_capt->ret))
 		{
 			status.type = FAILED;
 			print_ret_fail(assert);
@@ -98,13 +98,13 @@ static inline t_status	check_ret(t_assert *assert)
 	}
 	else if (assert->format == F_STRUCT)
 	{
-		if (compare_structs((void *)assert->got->ret, (void *)assert->exp->ret, assert->ret_size))
+		if (compare_structs((void *)assert->got_capt->ret, (void *)assert->exp_capt->ret, assert->ret_size))
 		{
 			status.type = FAILED;
 			print_ret_fail(assert);
 		}
 	}
-	else if (compare_intptr_t(assert->got->ret, assert->exp->ret))
+	else if (compare_intptr_t(assert->got_capt->ret, assert->exp_capt->ret))
 	{
 		status.type = FAILED;
 		print_ret_fail(assert);
@@ -116,7 +116,7 @@ static inline t_status	check_out(t_assert *assert)
 {
 	t_status	status = {0};
 
-	if (!compare_strings(assert->got->out, assert->exp->out))
+	if (!compare_strings(assert->got_capt->out, assert->exp_capt->out))
 		status.type = PASSED;
 	else
 	{
@@ -124,7 +124,7 @@ static inline t_status	check_out(t_assert *assert)
 		print_stderr("%s    %s %s FAILED%s:  ", RED, EMJ_ARW_DR, EMJ_FAIL, NONE);
 		print_stderr("[%s%s%s] and [%s%s%s] ", RED, assert->got_name, NONE, RED, assert->exp_name, NONE);
 		print_stderr("%soutputed%s the same value ", YELLOW, NONE);
-		print_stderr("[%s%s%s]\n", RED, assert->exp->out, NONE);
+		print_stderr("[%s%s%s]\n", RED, assert->exp_capt->out, NONE);
 	}
 	return (status);
 }
@@ -146,13 +146,13 @@ static inline void	print_ret_fail(t_assert *assert)
 	if (assert->format == F_STRUCT)
 		print_stderr("[%ssame struct content%s]\n", RED, NONE);
 	else if (assert->format == F_STRING)
-		print_stderr("[%s%s%s]\n", RED, (char *)assert->exp->ret, NONE);
+		print_stderr("[%s%s%s]\n", RED, (char *)assert->exp_capt->ret, NONE);
 	else if (assert->format == F_CHAR)
-		print_stderr("[%s%c%s]\n", RED, (char)assert->exp->ret, NONE);
+		print_stderr("[%s%c%s]\n", RED, (char)assert->exp_capt->ret, NONE);
 	else if (assert->format == F_SIGNED)
-		print_stderr("[%s%" PRIdPTR "%s]\n", RED, (intptr_t)assert->exp->ret, NONE);
+		print_stderr("[%s%" PRIdPTR "%s]\n", RED, (intptr_t)assert->exp_capt->ret, NONE);
 	else if (assert->format == F_UNSIGNED)
-		print_stderr("[%s%" PRIuPTR "%s]\n", RED, (uintptr_t)assert->exp->ret, NONE);
+		print_stderr("[%s%" PRIuPTR "%s]\n", RED, (uintptr_t)assert->exp_capt->ret, NONE);
 	else
-		print_stderr("[%s%" PRIxPTR "%s]\n", RED, (uintptr_t)assert->exp->ret, NONE);
+		print_stderr("[%s%" PRIxPTR "%s]\n", RED, (uintptr_t)assert->exp_capt->ret, NONE);
 }

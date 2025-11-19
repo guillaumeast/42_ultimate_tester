@@ -16,17 +16,36 @@ CC				:= cc
 CFLAGS			:= -Wall -Wextra -Werror -g3
 
 FUT_SRCS		:= \
-	$(wildcard assert/*.c) \
-	$(wildcard compare/*.c)	\
-	$(wildcard error/*.c) \
-	$(wildcard file/*.c) \
-	$(wildcard fork/*.c) \
-	$(wildcard main/*.c) \
-	$(wildcard print/*.c) \
-	$(wildcard redirect/*.c) \
-	$(wildcard set/*.c) \
-	$(wildcard timeout/*.c)
-FUT_INCLUDES	:= -I. -Iassert -Icompare -Ierror -Ifile -Ifork -Iprint -Iredirect -Iset -Itimeout
+	$(wildcard 01_main/*.c) \
+	$(wildcard 02_error/*.c)	\
+	$(wildcard 03_io/01_file/*.c) \
+	$(wildcard 03_io/02_redirect/*.c) \
+	$(wildcard 03_io/03_print/*.c) \
+	$(wildcard 04_ipc/01_timeout/*.c) \
+	$(wildcard 04_ipc/02_fork/*.c) \
+	$(wildcard 05_status/*.c) \
+	$(wildcard 06_result/*.c) \
+	$(wildcard 07_engine/01_set/*.c) \
+	$(wildcard 07_engine/02_capture/*.c) \
+	$(wildcard 07_engine/03_compare/*.c) \
+	$(wildcard 07_engine/04_assert/*.c) \
+	$(wildcard 08_report/*.c)
+FUT_INCLUDES	:= \
+	-I. \
+	-I01_main \
+	-I02_error \
+	-I03_io/01_file \
+	-I03_io/02_redirect \
+	-I03_io/03_print/includes \
+	-I04_ipc/01_timeout \
+	-I04_ipc/02_fork \
+	-I05_status \
+	-I06_result \
+	-I07_engine/01_set \
+	-I07_engine/02_capture \
+	-I07_engine/03_compare \
+	-I07_engine/04_assert \
+	-I08_report
 
 SRCS			:= $(FUT_SRCS) $(PROJ_SRCS) $(TESTS_SRCS)
 INCLUDES		:= $(FUT_INCLUDES) $(PROJ_INCLUDES) $(TESTS_INCLUDES)

@@ -44,13 +44,13 @@ typedef struct s_capture_res
 void	_fut_capture_parent(t_context *ctx, t_capture *capture);
 void	_fut_capture_child(t_context *ctx, t_capture_res *res);
 
-#define capture(mode, timeout, expr, capture_pointer)			\
+#define capture(mode, time_out, expr, capture_pointer)			\
 	do {														\
 		t_context	ctx;										\
 																\
 		*capture_pointer = {0};									\
-		capture_pointer->status.timeout = timeout				\
-		_fut_fork_init(&ctx, timeout);							\
+		capture_pointer->status.timeout = time_out				\
+		_fut_fork_init(&ctx, time_out);							\
 		if (ctx.child_pid > 0)									\
 			_fut_capture_parent(&ctx, capture_pointer);			\
 		else													\

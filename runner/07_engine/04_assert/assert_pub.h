@@ -20,29 +20,30 @@ typedef struct s_assert
 	bool			eq;
 	const char		*got_name;
 	const char		*exp_name;
-	t_capture		*got;
-	t_capture		*exp;
+	t_capture		*got_capt;
+	t_capture		*exp_capt;
 	t_format		format;
 	size_t			ret_size;
 }	t_assert;
 
 void	_fut_assert_run(t_assert *data);
 
-#define _fut_assert(should_be_equal, mode, timeout, got, expected)					\
+#define _fut_assert(should_be_equal, mode, time_out, got_expr, exp_expr)			\
 	do {																			\
 	t_capture _fut_capt_got = {0};													\
-	capture(mode, timeout, got, &_fut_capt_got);									\
+	capture(mode, time_out, got_expr, &_fut_capt_got);								\
 																					\
 	t_capture _fut_capt_exp = {0};													\
-	capture(mode, timeout, exp, &_fut_capt_exp);									\
+	capture(mode, time_out, exp_expr, &_fut_capt_exp);								\
 																					\
 	t_assert _fut_assert = {0};														\
 	_fut_assert.eq = should_be_equal;												\
-	_fut_assert.got_name = #got;													\
-	_fut_assert.exp_name = #expected;												\
-	_fut_assert.got = &_fut_capt_got;												\
-	_fut_assert.exp = &_fut_capt_exp;												\
-	_fut_assert.format = _Generic((exp), 											\
+	_fut_assert.got_name = #got_expr;												\
+	_fut_assert.exp_name = #exp_expr;												\
+	_fut_assert.got_capt = &_fut_capt_got;											\
+	_fut_assert.exp_capt = &_fut_capt_exp;											\
+	_fut_assert.ret_size = sizeof(exp_expr); 										\
+	_fut_assert.format = _Generic((exp_expr), 										\
 			char: F_CHAR, 															\
 			signed char: F_SIGNED, 													\
 			short: F_SIGNED, 														\
@@ -57,16 +58,15 @@ void	_fut_assert_run(t_assert *data);
 			char *: F_STRING,														\
 			const char *: F_STRING,													\
 			default: F_STRUCT);														\
-	_fut_assert.ret_size = sizeof(exp); 											\
 																					\
 	_fut_assert_run(&_fut_assert);													\
 	} while (0)
 
-#define assert_eq(mode, timeout, got, expected)		\
-	_fut_assert(true, mode, timeout, got, expected)
-#define assert_neq(mode, timeout, got, expected)	\
-	_fut_assert(false, mode, timeout, got, expected)
-#define compare(mode, timeout, fn1_name, fn2_name, fn_args)	\
-	assert_eq(mode, timeout, fn1_name fn_args, fn2_name fn_args)
+#define assert_eq(mode, time_out, got_expr, exp_expr)		\
+	_fut_assert(true, mode, time_out, got_expr, exp_expr)
+#define assert_neq(mode, time_out, got_expr, exp_expr)	\
+	_fut_assert(false, mode, time_out, got_expr, exp_expr)
+#define compare(mode, time_out, fn1_name, fn2_name, fn_args)	\
+	assert_eq(mode, time_out, fn1_name fn_args, fn2_name fn_args)
 
 #endif

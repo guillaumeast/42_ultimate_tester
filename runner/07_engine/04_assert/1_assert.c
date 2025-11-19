@@ -6,11 +6,6 @@
 #undef __FUT_ASSERT_INSIDE__
 #undef __FUT_INSIDE__
 
-/*
-**	TODO:
-**	1. Check & build t_result
-**	2. Print logs (only if != PASSED)
-*/
 void	_fut_assert_run(t_assert *assert)
 {
 	t_status	status = {0};
