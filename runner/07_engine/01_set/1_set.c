@@ -53,7 +53,7 @@ static inline void	run_parent(t_set *set)
 		print_stderr("%s%sTIMED %s(set exceeded %zus)%s\n", \
 			RED, EMJ_TIMD, YELLOW, set->timeout, NONE);
 	}
-	else if (WIFSIGNALED(status))
+	else if (WIFSIGNALED(status))	// TODO: plutôt if sig != EXIT_SUCCESS ?
 	{
 		set->result.crashed++;
 		set->result.status.sig = WTERMSIG(status);
