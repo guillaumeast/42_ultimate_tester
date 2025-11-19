@@ -1,6 +1,6 @@
 #define __FUT_INSIDE__
 #define __FUT_IPC_INSIDE__
-#include "fork_pub.h"
+#include "fork_priv.h"
 #include "error_priv.h"
 #include "timeout_ipc.h"
 #undef __FUT_IPC_INSIDE__
@@ -8,17 +8,13 @@
 
 #include <stdlib.h>
 #include <unistd.h>
+#include <signal.h>
 
 static inline void	fork_init_parent(t_context *context);
 static inline void	fork_init_child(t_context *context);
 
-static __thread t_context	*s_current_context;
-
 void	_fut_fork_init(t_context *context, size_t timeout)
 {
-	s_current_context = context;
-	atexit(_fut_fork_clear);
-
 	context->child_pid = -1;
 	context->result_pipe[0] = -1;
 	context->result_pipe[1] = -1;
@@ -37,37 +33,36 @@ void	_fut_fork_init(t_context *context, size_t timeout)
 	 	fork_init_child(context);
 }
 
-void	_fut_fork_clear(void)
+void	fork_cleanup(t_context *context)
 {
-	if (!s_current_context)
+	if (!context)
 		return ;
 	
-	if (s_current_context->result_pipe[0] != -1)
-		close(s_current_context->result_pipe[0]);
-	if (s_current_context->result_pipe[1] != -1)
-		close(s_current_context->result_pipe[1]);
-	if (s_current_context->sync_pipe[0] != -1)
-		close(s_current_context->sync_pipe[0]);
-	if (s_current_context->sync_pipe[1] != -1)
-		close(s_current_context->sync_pipe[1]);
+	if (context->result_pipe[0] != -1)
+		close(context->result_pipe[0]);
+	if (context->result_pipe[1] != -1)
+		close(context->result_pipe[1]);
+	if (context->sync_pipe[0] != -1)
+		close(context->sync_pipe[0]);
+	if (context->sync_pipe[1] != -1)
+		close(context->sync_pipe[1]);
 
-	s_current_context->result_pipe[0] = -1;
-	s_current_context->result_pipe[1] = -1;
-	s_current_context->sync_pipe[0] = -1;
-	s_current_context->sync_pipe[1] = -1;
+	context->result_pipe[0] = -1;
+	context->result_pipe[1] = -1;
+	context->sync_pipe[0] = -1;
+	context->sync_pipe[1] = -1;
 	
 	timeout_cancel();
-	s_current_context->timeout = 0;
+	context->timeout = 0;
 
-	if (s_current_context->child_pid > 0)
-		kill(s_current_context->child_pid, SIGKILL);
-	if (s_current_context->child_pid != -1)
-		s_current_context->child_pid = -1;
+	if (context->child_pid > 0)
+		kill(context->child_pid, SIGKILL);
+	if (context->child_pid != -1)
+		context->child_pid = -1;
 }
 
 static inline void	fork_init_parent(t_context *context)
 {
-	t_error	error;
 	bool	ready;
 
 	close(context->result_pipe[1]);

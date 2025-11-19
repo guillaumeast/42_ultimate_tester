@@ -15,8 +15,6 @@ bool	compare_status(t_status *s1, t_status *s2)
 
 bool	compare_strings(char *s1, char *s2)
 {
-	int		strcmp_res;
-
 	if (!s1 || !s2)
 		return (!s1 && !s2);
 

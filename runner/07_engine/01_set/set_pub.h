@@ -28,7 +28,7 @@ typedef struct s_set
 		#name,											\
 		timeout,										\
 		name,											\
-		{QUEUED, 0, 0, 0, 0, 0}							\
+		{ {QUEUED, 0, 0}, 0, 0, 0, 0, 0 }				\
 	};													\
 	static void name(void)
 

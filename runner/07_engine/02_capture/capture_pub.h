@@ -7,6 +7,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <string.h>
 
 typedef enum e_capture_mode
 {
@@ -44,21 +45,21 @@ typedef struct s_capture_res
 void	_fut_capture_parent(t_context *ctx, t_capture *capture);
 void	_fut_capture_child(t_context *ctx, t_capture_res *res);
 
-#define capture(mode, time_out, expr, capture_pointer)			\
+#define capture(mode, time_out, expr, capture_var_name)			\
 	do {														\
 		t_context	ctx;										\
 																\
-		*capture_pointer = {0};									\
-		capture_pointer->status.timeout = time_out				\
+		memset(&capture_var_name, 0, sizeof(capture_var_name));	\
+		capture_var_name.status.timeout = time_out;				\
 		_fut_fork_init(&ctx, time_out);							\
 		if (ctx.child_pid > 0)									\
-			_fut_capture_parent(&ctx, capture_pointer);			\
+			_fut_capture_parent(&ctx, &capture_var_name);		\
 		else													\
 		{														\
 			t_capture_res capture_res = {0};					\
 			if (mode != GET_RET)								\
 				redirect_start(g_capture_to_redirect[mode]);	\
-			capture_res.ret = (intptr_t)expr;					\
+			capture_res.ret = (intptr_t)(expr);					\
 			if (mode != GET_RET)								\
 			{													\
 				capture_res.out = redirect_read();				\

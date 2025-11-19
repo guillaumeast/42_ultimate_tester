@@ -14,7 +14,6 @@
 void	redirect_init(void);
 void	redirect_save(void);
 void	redirect_restore(void);
-void	redirect_cleanup(void);
 
 #endif /* __FUT_REDIRECT_INSIDE__ */
 

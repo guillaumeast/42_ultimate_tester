@@ -31,7 +31,7 @@ size_t file_get_len(FILE *file)
 
 void	file_nread(char *buffer, FILE *file, size_t n)
 {
-	ssize_t	res_len;
+	size_t	res_len;
 	size_t	nread;
 
 	res_len = 0;

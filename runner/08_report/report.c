@@ -10,9 +10,9 @@
 
 #define START_TITLE_MAX_LEN 29
 #define RES_TITLE_BUFF_SIZE 256
-#define SEPARATOR_LEN (1 + (COLOR_LEN * 2))
+#define SEPARATOR_BUFF_SIZE 16
+#define SCORE_BUFF_SIZE 64
 #define SCORE_DIGITS 3
-#define SCORE_LEN (SCORE_DIGITS + (COLOR_LEN * 2))
 
 typedef struct s_res_colors
 {
@@ -26,11 +26,11 @@ typedef struct s_res_colors
 typedef struct s_res_content
 {
 	char	title[RES_TITLE_BUFF_SIZE];
-	char	separator[SEPARATOR_LEN + 1];
-	char	passed[SCORE_LEN + 1];
-	char	failed[SCORE_LEN + 1];
-	char	timed[SCORE_LEN + 1];
-	char	crashed[SCORE_LEN + 1];
+	char	separator[SEPARATOR_BUFF_SIZE];
+	char	passed[SCORE_BUFF_SIZE];
+	char	failed[SCORE_BUFF_SIZE];
+	char	timed[SCORE_BUFF_SIZE];
+	char	crashed[SCORE_BUFF_SIZE];
 }	t_res_content;
 
 static inline void	get_colors(const t_result *res, t_res_colors *colors);
@@ -45,9 +45,9 @@ void	print_start(void)
 	memset(title + len, ' ', sizeof(title) - len - 1);
 	title[sizeof(title) - 1] = '\0';
 
-	print_stdout(" %s┌-------------------------------┐%s\n", BLUE, NONE);
-	print_stdout(" %s| %s   |%s\n", BLUE, title, NONE);
-	print_stdout(" %s├-------------------------------┘%s\n", BLUE, NONE);
+	printf(" %s┌-------------------------------┐%s\n", BLUE, NONE);
+	printf(" %s| %s   |%s\n", BLUE, title, NONE);
+	printf(" %s├-------------------------------┘%s\n", BLUE, NONE);
 }
 
 void	print_result(const t_result *result)
@@ -58,15 +58,15 @@ void	print_result(const t_result *result)
 	get_colors(result, &colors);
 	get_content(result, &colors, &content);
 
-	print_stdout(" %s├-----------------------------------┐%s\n", colors.borders, NONE);
-	print_stdout("%s\n", content.title);
-	print_stdout(" %s├--------┬--------┬-------┬---------┤%s\n", colors.borders, NONE);
-	print_stdout(" %s %sPASSED %s %sFAILED %s %sTIMED %s %sCRASHED %s\n", \
+	printf(" %s├-----------------------------------┐%s\n", colors.borders, NONE);
+	printf("%s\n", content.title);
+	printf(" %s├--------┬--------┬-------┬---------┤%s\n", colors.borders, NONE);
+	printf(" %s %sPASSED %s %sFAILED %s %sTIMED %s %sCRASHED %s\n", \
 		content.separator, colors.passed, content.separator, colors.failed, \
 		content.separator, colors.timed, content.separator, colors.crashed, content.separator);
-	print_stdout(" %s├--------┼--------┼-------┼---------┤%s\n", colors.borders, NONE);
-	print_stdout(" %s %s %s %s\n", content.passed, content.failed, content.timed, content.crashed);
-	print_stdout(" %s└--------┴--------┴-------┴---------┘%s\n", colors.borders, NONE);
+	printf(" %s├--------┼--------┼-------┼---------┤%s\n", colors.borders, NONE);
+	printf(" %s %s %s %s\n", content.passed, content.failed, content.timed, content.crashed);
+	printf(" %s└--------┴--------┴-------┴---------┘%s\n", colors.borders, NONE);
 }
 
 static inline void	get_colors(const t_result *res, t_res_colors *col)
@@ -83,21 +83,21 @@ static inline void	get_content(const t_result *res, t_res_colors *colors, t_res_
 	const char	*emj_crash;
 
 	if (res->passed == res->total)
-		sprintf(cont->title, " %s|          %s YOU WON! %s           |%s\n", \
+		sprintf(cont->title, " %s|          %s YOU WON! %s           |%s", \
 			colors->borders, EMJ_SUC_START, EMJ_SUC_END, NONE);
 	else
-		sprintf(cont->title, " %s|          %s TRY AGAIN %s          |%s\n", \
+		sprintf(cont->title, " %s|          %s TRY AGAIN %s          |%s", \
 			colors->borders, EMJ_FAIL_START, EMJ_FAIL_END, NONE);
 
 	emj_crash = res->crashed > 0 ? EMJ_CRSH_Y : EMJ_CRSH_N;
 	sprintf(cont->separator, "%s%c%s", colors->borders, '|', NONE);
 
-	sprintf(cont->passed, "%s %s%s %*zu%s ", cont->separator, \
+	sprintf(cont->passed, "%s %s%s %*zu%s", cont->separator, \
 		colors->passed, EMJ_PASS, SCORE_DIGITS, res->passed, NONE);
 	sprintf(cont->failed, "%s %s%s %*zu%s", cont->separator, \
 		colors->failed, EMJ_FAIL, SCORE_DIGITS, res->failed, NONE);
-	sprintf(cont->timed, "%s %s%s %*zu%s", cont->separator, \
+	sprintf(cont->timed, "%s %s%s%*zu%s", cont->separator, \
 		colors->timed, EMJ_TIMD, SCORE_DIGITS, res->timed, NONE);
-	sprintf(cont->crashed, "%s %s%s %*zu %s", cont->separator, \
+	sprintf(cont->crashed, "%s %s%s  %*zu %s", cont->separator, \
 		colors->crashed, emj_crash, SCORE_DIGITS, res->crashed, cont->separator);
 }

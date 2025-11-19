@@ -20,6 +20,8 @@ typedef struct s_saved_redirect
 	int		stderr_fd;
 }	t_saved_redirect;
 
+void	redirect_cleanup(void);
+
 static bool				s_redirect_initialized = false;
 static size_t			s_redirect_stack_count = 0;
 static t_saved_redirect	s_redirect_stack[REDIRECT_STACK_SIZE];

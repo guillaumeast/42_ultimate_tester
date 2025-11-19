@@ -2,10 +2,17 @@
 #include "libftprintf.h"
 #include <stdlib.h>
 
+#include <inttypes.h>
+
 Test(eq_pass, 0)
 {
-	assert_eq(GET_RET, 1, printf("%c", 'a'), ft_printf("%c", 'a'));
+	t_capture	my_cap;
+
+	capture(GET_RET_OUT, 1, (printf("%i", 42)), my_cap);
+	print_stdout("RET = %" PRIdPTR "\n", (intptr_t)my_cap.ret);
+	print_stdout("OUT = %s\n", my_cap.out);
 }
+// assert_eq(GET_RET, 1, (printf("%c", 'a')), (ft_printf("%c", 'a')));
 
 	// assert_eq("assert_eq(expl char)", (char)'a', (char)'a');
 	// assert_eq("assert_eq(expl signed char)", (signed char)'a', (signed char)'a');

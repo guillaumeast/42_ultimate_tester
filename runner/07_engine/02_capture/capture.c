@@ -1,6 +1,7 @@
 #define __FUT_INSIDE__
 #include "capture_pub.h"
 #include "error_priv.h"
+#include "fork_priv.h"
 #include "timeout_priv.h"
 #undef __FUT_INSIDE__
 
@@ -31,7 +32,7 @@ void	_fut_capture_parent(t_context *ctx, t_capture *capture)
 			capture->status.sig = WTERMSIG(status);
 	}
 
-	_fut_fork_clear();
+	fork_cleanup(ctx);
 }
 
 void	_fut_capture_child(t_context *ctx, t_capture_res *res)
@@ -47,7 +48,7 @@ void	_fut_capture_child(t_context *ctx, t_capture_res *res)
 	write(ctx->result_pipe[1], &len, sizeof len);
 	write(ctx->result_pipe[1], res->out, len);
 
-	_fut_fork_clear();
+	fork_cleanup(ctx);
 	exit (EXIT_SUCCESS);
 }
 

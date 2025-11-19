@@ -31,10 +31,10 @@ void	_fut_assert_run(t_assert *data);
 #define _fut_assert(should_be_equal, mode, time_out, got_expr, exp_expr)			\
 	do {																			\
 	t_capture _fut_capt_got = {0};													\
-	capture(mode, time_out, got_expr, &_fut_capt_got);								\
+	capture(mode, time_out, (got_expr), &_fut_capt_got);							\
 																					\
 	t_capture _fut_capt_exp = {0};													\
-	capture(mode, time_out, exp_expr, &_fut_capt_exp);								\
+	capture(mode, time_out, (exp_expr), &_fut_capt_exp);							\
 																					\
 	t_assert _fut_assert = {0};														\
 	_fut_assert.eq = should_be_equal;												\
