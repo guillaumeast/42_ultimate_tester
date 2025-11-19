@@ -8,7 +8,6 @@
 */
 #else
 
-#include "timeout_ipc.h"
 #include <signal.h>
 #include <stdbool.h>
 

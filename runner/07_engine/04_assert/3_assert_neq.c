@@ -28,11 +28,11 @@ t_status	check_assert_neq(t_assert *assert)
 		return (status_res);
 
 	ret_res.type = PASSED;
-	if (assert->mode != GET_OUT && assert->mode != GET_ERR && assert->mode != GET_BOTH)
+	if (assert->mode != OUT && assert->mode != ERR && assert->mode != BOTH)
 		ret_res = check_ret(assert);
 
 	out_res.type = PASSED;
-	if (assert->mode != GET_RET)
+	if (assert->mode != RET)
 		out_res = check_out(assert);
 
 	if (ret_res.type == PASSED && out_res.type == PASSED)
@@ -90,7 +90,7 @@ static inline t_status	check_ret(t_assert *assert)
 	status.type = PASSED;
 	if (assert->format == F_STRING)
 	{
-		if (compare_strings((char *)assert->got_capt->ret, (char *)assert->exp_capt->ret))
+		if (compare_strings((const char *)assert->got_capt->ret, (const char *)assert->exp_capt->ret))
 		{
 			status.type = FAILED;
 			print_ret_fail(assert);
@@ -98,7 +98,7 @@ static inline t_status	check_ret(t_assert *assert)
 	}
 	else if (assert->format == F_STRUCT)
 	{
-		if (compare_structs((void *)assert->got_capt->ret, (void *)assert->exp_capt->ret, assert->ret_size))
+		if (compare_structs((const void *)assert->got_capt->ret, (const void *)assert->exp_capt->ret, assert->ret_size))
 		{
 			status.type = FAILED;
 			print_ret_fail(assert);
@@ -122,7 +122,7 @@ static inline t_status	check_out(t_assert *assert)
 	{
 		status.type = FAILED;
 		print_stderr("%s  %s %sFAILED  %s%s%s %s ", RED, EMJ_ARW_DR, EMJ_FAIL, GREY, EMJ_ARW_RIGHT, RED, assert->got_name);
-		print_raw_err("%soutputed%s %s%s ", YELLOW, RED, assert->got_capt->out, GREY);
+		print_raw_err("%soutputed%s '%s%s%s' ", YELLOW, GREY, RED, assert->got_capt->out, GREY);
 		print_raw_err("instead of %sanything else%s\n", RED, NONE);
 	}
 	return (status);
@@ -133,7 +133,7 @@ static inline void	print_status_fail(const char *expr_name, t_status *status)
 	char status_buffer[STATUS_BUFFER_SIZE];
 	
 	status_format(status, status_buffer, STATUS_BUFFER_SIZE);
-	print_raw_err("%s%s%s has %s%s%s\n", RED, expr_name, GREY, RED, status_buffer, NONE);
+	print_raw_err("%s%s%s has %s%s%s\n", RED, expr_name, GREY, YELLOW, status_buffer, NONE);
 }
 
 static inline void	print_ret_fail(t_assert *assert)
@@ -145,7 +145,7 @@ static inline void	print_ret_fail(t_assert *assert)
 		return ;
 	}
 	else if (assert->format == F_STRING)
-		print_raw_err("%sreturned%s %s%s ", YELLOW, RED, (char *)assert->got_capt->ret, GREY);
+		print_raw_err("%sreturned%s '%s%s%s' ", YELLOW, GREY, RED, (char *)assert->got_capt->ret, GREY);
 	else if (assert->format == F_CHAR)
 		print_raw_err("%sreturned%s %s%c%s ", YELLOW, NONE, RED, (char)assert->got_capt->ret, GREY);
 	else if (assert->format == F_SIGNED)

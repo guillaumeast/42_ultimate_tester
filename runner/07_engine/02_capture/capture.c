@@ -15,7 +15,6 @@ void	_fut_capture_parent(t_context *ctx, t_capture *capture)
 {
 	int		status;
 
-	memset(capture, 0, sizeof(*capture));
 	waitpid(ctx->child_pid, &status, 0);
 	
 	if (g_timeout_triggered)

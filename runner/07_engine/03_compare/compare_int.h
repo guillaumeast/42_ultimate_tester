@@ -13,10 +13,10 @@
 #include <stddef.h>
 #include <stdint.h>
 
-bool	compare_status(t_status *s1, t_status *s2);
-bool	compare_strings(char *s1, char *s2);
+bool	compare_status(const t_status *s1, const t_status *s2);
+bool	compare_strings(const char *s1, const char *s2);
 bool	compare_intptr_t(intptr_t i1, intptr_t i2);
-bool	compare_structs(void *s1, void *s2, size_t struct_size);
+bool	compare_structs(const void *s1, const void *s2, size_t struct_size);
 
 #endif /* __FUT_ENGINE_INSIDE__ */
 

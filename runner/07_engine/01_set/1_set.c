@@ -1,9 +1,10 @@
+#include "print_pub.h"
 #define __FUT_INSIDE__
 #define __FUT_ENGINE_INSIDE__
 #define __FUT_SET_INSIDE__
 #include "set_int_set.h"
 #include "timeout_priv.h"
-#include "redirect_pub.h"
+#include "print_priv.h"
 #include "fork_priv.h"
 #undef __FUT_SET_INSIDE__
 #undef __FUT_ENGINE_INSIDE__
@@ -48,11 +49,18 @@ static inline void	run_parent(t_set *set)
 	{
 		set->result.timed++;
 		set->result.status.timeout = set->timeout;
+
+		print_stderr("%s%sTIMED %s(set exceeded %zus)%s\n", \
+			RED, EMJ_TIMD, YELLOW, set->timeout, NONE);
 	}
 	else if (WIFSIGNALED(status))
 	{
 		set->result.crashed++;
 		set->result.status.sig = WTERMSIG(status);
+
+		print_stderr("%s%sCRASHED %s(set crashed: %s)%s\n", \
+			RED, EMJ_CRSH_Y, YELLOW, \
+			status_sig(&set->result.status), NONE);
 	}
 
 	result_compute(&set->result);

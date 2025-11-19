@@ -14,25 +14,137 @@ int	add(int a, int b)
 	return (a + b);
 }
 
-Test(eq_pass, 0)
+void just_timeout_bro(void)
 {
-	assert_eq(GET_RET_BOTH, 1, add(1,2), 4);
-	assert_eq(GET_RET_BOTH, 1, my_void_func(), my_void_func());
-	assert_eq(GET_RET_BOTH, 1, printf("%i", 42), printf("%i", -42));
+	int	i = 0;
 
+	(void)i;
+	while (true)
+		i++;
 }
+
+void just_crash_bro(void)
+{
+	volatile int *oops;
+
+	oops = NULL;
+	*oops = 42;
+}
+
+// Test(nonvoid_and_constant, 0)
+// {
+// 	assert_eq(RET, 1, add(1,2), 3);			// TRUE
+// 	assert_neq(RET, 1, add(1,2), 3);			// FALSE
+// 	assert_eq(RET, 1, add(1,2), 4);			// FALSE
+// 	assert_neq(RET, 1, add(1,2), 4);			// TRUE
+
+// 	assert_eq(OUT, 1, add(1,2), 3);			// TRUE
+// 	assert_neq(OUT, 1, add(1,2), 3);			// FALSE
+// 	assert_eq(OUT, 1, add(1,2), 4);			// TRUE
+// 	assert_neq(OUT, 1, add(1,2), 4);			// FALSE
+
+// 	assert_eq(RET_BOTH, 1, add(1,2), 3);		// TRUE
+// 	assert_neq(RET_BOTH, 1, add(1,2), 3);	// FALSE
+// 	assert_eq(RET_BOTH, 1, add(1,2), 4);		// FALSE
+// 	assert_neq(RET_BOTH, 1, add(1,2), 4);	// FALSE
+
+// 	// TRUE = 5 | FALSE = 7
+// }
+// Test(nonvoid_and_var, 0)
+// {
+// 	int exp = 3;
+
+// 	assert_eq(RET, 1, add(1,2), exp);			// TRUE
+// 	assert_neq(RET, 1, add(1,2), exp);			// FALSE
+// 	assert_eq(OUT, 1, add(1,2), exp);			// TRUE
+// 	assert_neq(OUT, 1, add(1,2), exp);			// FALSE
+// 	assert_eq(RET_BOTH, 1, add(1,2), exp);		// TRUE
+// 	assert_neq(RET_BOTH, 1, add(1,2), exp);		// FALSE
+
+// 	exp = 4;
+// 	assert_eq(RET, 1, add(1,2), exp);			// FALSE
+// 	assert_neq(RET, 1, add(1,2), exp);			// TRUE
+// 	assert_eq(OUT, 1, add(1,2), exp);			// TRUE
+// 	assert_neq(OUT, 1, add(1,2), exp);			// FALSE
+// 	assert_eq(RET_BOTH, 1, add(1,2), exp);		// FALSE
+// 	assert_neq(RET_BOTH, 1, add(1,2), exp);		// FALSE
+
+// 	// TRUE = 5 | FALSE = 7
+// }
+
+// Test(nonvoid_and_unref, 0)
+// {
+// 	int exp = 3;
+// 	int *exp_p = &exp;
+
+// 	assert_eq(RET, 1, add(1,2), *exp_p);			// TRUE
+// 	assert_neq(RET, 1, add(1,2), *exp_p);		// FALSE
+// 	assert_eq(OUT, 1, add(1,2), *exp_p);			// TRUE
+// 	assert_neq(OUT, 1, add(1,2), *exp_p);		// FALSE
+// 	assert_eq(RET_BOTH, 1, add(1,2), *exp_p);	// TRUE
+// 	assert_neq(RET_BOTH, 1, add(1,2), *exp_p);	// FALSE
+
+// 	exp = 4;
+// 	assert_eq(RET, 1, add(1,2), *exp_p);			// FALSE
+// 	assert_neq(RET, 1, add(1,2), *exp_p);		// TRUE
+// 	assert_eq(OUT, 1, add(1,2), *exp_p);			// TRUE
+// 	assert_neq(OUT, 1, add(1,2), *exp_p);		// FALSE
+// 	assert_eq(RET_BOTH, 1, add(1,2), *exp_p);	// FALSE
+// 	assert_neq(RET_BOTH, 1, add(1,2), *exp_p);	// FALSE
+
+// 	// TRUE = 5 | FALSE = 7
+// }
+
+Test(test_time_out_after_asserts, 10)
+{
+	assert_eq(RET, 1, 1, just_timeout_bro());
+	assert_eq(RET, 1, just_timeout_bro(), 1);
+	assert_neq(RET, 1, just_timeout_bro(), just_timeout_bro());
+}
+
+Test(test_time_out_during_asserts, 4)
+{
+	assert_eq(RET, 2, 1, just_timeout_bro());
+	assert_eq(RET, 2, just_timeout_bro(), 1);
+	assert_neq(RET, 2, just_timeout_bro(), just_timeout_bro());
+}
+
+Test(test_time_out_before_asserts, 1)
+{
+	assert_eq(RET, 2, 1, just_timeout_bro());
+	assert_eq(RET, 2, just_timeout_bro(), 1);
+	assert_neq(RET, 2, just_timeout_bro(), just_timeout_bro());
+}
+
+// Test(assert_crash, 0)
+// {
+// 	assert_eq(RET, 2, 1, just_crash_bro());
+// 	assert_eq(RET, 2, just_crash_bro(), 1);
+// 	assert_neq(RET, 2, just_crash_bro(), just_crash_bro());
+// }
+
+// Test(test_crash, 0)
+// {
+// 	just_crash_bro();
+// }
+
+/* ---------- TODO ---------- */
+
+	// assert_eq(RET_BOTH, 1, my_void_func(), my_void_func());
+	// assert_eq(RET_BOTH, 1, printf("%i", 42), printf("%i", -42));
+
 	// TODO: test with struct as return value
 	// TODO: test with struct pointer as return value
 	// TODO: handle basic values without warnings
 	// TODO: handle `void (*fn)(void)`
-	// assert_eq(GET_RET_BOTH, 1, my_broken_function(), 4);
+	// assert_eq(RET_BOTH, 1, my_broken_function(), 4);
 	// TODO: pass var values as expected
 	// TODO: test compare
-	// compare(GET_RET_BOTH, 1, printf, ft_printf, ("Hello world"));
+	// compare(RET_BOTH, 1, printf, ft_printf, ("Hello world"));
 	// TODO: all int, all char...
 	// TODO: memleaks / fdleaks...
 
-// assert_eq(GET_RET, 1, (printf("%c", 'a')), (ft_printf("%c", 'a')));
+// assert_eq(RET, 1, (printf("%c", 'a')), (ft_printf("%c", 'a')));
 
 	// assert_eq("assert_eq(expl char)", (char)'a', (char)'a');
 	// assert_eq("assert_eq(expl signed char)", (signed char)'a', (signed char)'a');
@@ -225,19 +337,4 @@ Test(eq_pass, 0)
 // 	assert_neq("assert_eq(expl unsigned char *)", (unsigned char *)"42", (unsigned char *)"1");
 // }
 
-// Test(time_out, 1)
-// {
-// 	int	i = 0;
 
-// 	(void)i;
-// 	while (true)
-// 		i++;
-// }
-
-// Test(crash, 0)
-// {
-// 	volatile int *oops;
-
-// 	oops = NULL;
-// 	*oops = 42;
-// }

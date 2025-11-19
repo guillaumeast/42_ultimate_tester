@@ -65,7 +65,7 @@ static inline const char	*status_sig(t_status *status)
 static inline void	status_format(t_status *status, char *buffer, size_t buffer_size)
 {
 	if (status->type == TIMED)
-		(void)snprintf(buffer, buffer_size, "%s (%zu)", status_names[status->type], status->timeout);
+		(void)snprintf(buffer, buffer_size, "%s (%zus)", status_names[status->type], status->timeout);
 	else if (status->type == CRASHED)
 		(void)snprintf(buffer, buffer_size, "%s (%s)", status_names[status->type], status_sig(status));
 	else

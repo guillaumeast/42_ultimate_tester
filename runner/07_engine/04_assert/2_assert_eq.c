@@ -26,11 +26,11 @@ t_status	check_assert_eq(t_assert *assert)
 		return (status_res);
 
 	ret_res.type = PASSED;
-	if (assert->mode != GET_OUT && assert->mode != GET_ERR && assert->mode != GET_BOTH)
+	if (assert->mode != OUT && assert->mode != ERR && assert->mode != BOTH)
 		ret_res = check_ret(assert);
 
 	out_res.type = PASSED;
-	if (assert->mode != GET_RET)
+	if (assert->mode != RET)
 		out_res = check_out(assert);
 
 	if (ret_res.type == PASSED && out_res.type == PASSED)
@@ -87,7 +87,7 @@ static inline t_status	check_ret(t_assert *assert)
 	status.type = PASSED;
 	if (assert->format == F_STRING)
 	{
-		if (!compare_strings((char *)assert->got_capt->ret, (char *)assert->exp_capt->ret))
+		if (!compare_strings((const char *)assert->got_capt->ret, (const char *)assert->exp_capt->ret))
 		{
 			status.type = FAILED;
 			print_ret_fail(assert);
@@ -95,7 +95,7 @@ static inline t_status	check_ret(t_assert *assert)
 	}
 	else if (assert->format == F_STRUCT)
 	{
-		if (!compare_structs((void *)assert->got_capt->ret, (void *)assert->exp_capt->ret, assert->ret_size))
+		if (!compare_structs((const void *)assert->got_capt->ret, (const void *)assert->exp_capt->ret, assert->ret_size))
 		{
 			status.type = FAILED;
 			print_ret_fail(assert);
@@ -119,7 +119,7 @@ static inline t_status	check_out(t_assert *assert)
 	{
 		status.type = FAILED;
 		print_stderr("%s  %s %sFAILED  %s%s%s %s ", RED, EMJ_ARW_DR, EMJ_FAIL, GREY, EMJ_ARW_RIGHT, RED, assert->got_name);
-		print_raw_err("%soutputed%s %s%s ", YELLOW, RED, assert->got_capt->out, GREY);
+		print_raw_err("%soutputed%s '%s%s%s' ", YELLOW, GREY, RED, assert->got_capt->out, GREY);
 		print_raw_err("instead of %s%s%s\n", RED, assert->exp_capt->out, NONE);
 	}
 	return (status);
@@ -130,7 +130,7 @@ static inline void	print_status_fail(t_assert *assert)
 	char status_buffer[STATUS_BUFFER_SIZE];
 
 	status_format(&assert->got_capt->status, status_buffer, STATUS_BUFFER_SIZE);
-	print_raw_err("%s%s%s has %s%s%s ", RED, assert->got_name, GREY, RED, status_buffer, NONE);
+	print_raw_err("%s%s%s is %s%s%s ", RED, assert->got_name, GREY, YELLOW, status_buffer, NONE);
 
 	status_format(&assert->exp_capt->status, status_buffer, STATUS_BUFFER_SIZE);
 	print_raw_err("%sinstead of %s%s%s\n", GREY, RED, status_buffer, NONE);
@@ -143,8 +143,8 @@ static inline void	print_ret_fail(t_assert *assert)
 		print_raw_err("%sreturned%s %sunexpected struct content%s\n", YELLOW, GREY, RED, NONE);
 	else if (assert->format == F_STRING)
 	{
-		print_raw_err("%sreturned%s %s%s ", YELLOW, RED, (char *)assert->got_capt->ret, GREY);
-		print_raw_err("instead of %s%s%s\n", RED, (char *)assert->exp_capt->ret, NONE);
+		print_raw_err("%sreturned%s '%s%s%s' ", YELLOW, GREY, RED, (char *)assert->got_capt->ret, GREY);
+		print_raw_err("instead of '%s%s%s'%s\n", RED, (char *)assert->exp_capt->ret, GREY, NONE);
 	}
 	else if (assert->format == F_CHAR)
 	{

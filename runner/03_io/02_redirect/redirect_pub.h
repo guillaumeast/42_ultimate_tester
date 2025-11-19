@@ -20,7 +20,7 @@ void	redirect_stop(void);
 	{											\
 		redirect_start(mode);					\
 		expr;									\
-		char *out_var = redirect_read();		\
+		out_var_name = redirect_read();			\
 		redirect_stop();						\
 	} while (0)
 

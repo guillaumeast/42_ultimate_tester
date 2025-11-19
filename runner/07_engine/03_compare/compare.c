@@ -5,7 +5,7 @@
 #include <stdbool.h>
 #include <string.h>
 
-bool	compare_status(t_status *s1, t_status *s2)
+bool	compare_status(const t_status *s1, const t_status *s2)
 {
 	if (s1->type == CRASHED && s2->type == CRASHED)
 		return (s1->sig == s2->sig);
@@ -13,7 +13,7 @@ bool	compare_status(t_status *s1, t_status *s2)
 	 	return (s1->type == s2->type);
 }
 
-bool	compare_strings(char *s1, char *s2)
+bool	compare_strings(const char *s1, const char *s2)
 {
 	if (!s1 || !s2)
 		return (!s1 && !s2);
@@ -26,7 +26,7 @@ bool	compare_intptr_t(intptr_t i1, intptr_t i2)
 	return (i1 == i2);
 }
 
-bool	compare_structs(void *s1, void *s2, size_t struct_size)
+bool	compare_structs(const void *s1, const void *s2, size_t struct_size)
 {
 	if (!s1 || !s2)
 		return (!s1 && !s2);

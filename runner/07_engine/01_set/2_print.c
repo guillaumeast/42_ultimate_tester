@@ -56,7 +56,12 @@ void	set_print_result(const t_set *set)
 
 static inline void	get_colors(const t_result *res, t_set_colors *colors)
 {
-	if (res->passed == res->total)
+	if (res->total == 0)
+	{
+		colors->start = GREY;
+		colors->emoji = "- ";
+	}
+	else if (res->passed == res->total)
 	{
 		colors->start = GREEN;
 		colors->emoji = EMJ_PASS;
