@@ -95,26 +95,52 @@ void just_crash_bro(void)
 // 	// TRUE = 5 | FALSE = 7
 // }
 
-Test(test_time_out_after_asserts, 10)
+// Test(test_time_out_after_asserts, 10)
+// {
+// 	assert_eq(RET, 1, 1, just_timeout_bro());
+// 	assert_eq(RET, 1, just_timeout_bro(), 1);
+// 	assert_neq(RET, 1, just_timeout_bro(), just_timeout_bro());
+// }
+
+// Test(test_time_out_during_asserts, 4)
+// {
+// 	assert_eq(RET, 2, 1, just_timeout_bro());
+// 	assert_eq(RET, 2, just_timeout_bro(), 1);
+// 	assert_neq(RET, 2, just_timeout_bro(), just_timeout_bro());
+// }
+
+// Test(test_time_out_before_asserts, 1)
+// {
+// 	assert_eq(RET, 2, 1, just_timeout_bro());
+// 	assert_eq(RET, 2, just_timeout_bro(), 1);
+// 	assert_neq(RET, 2, just_timeout_bro(), just_timeout_bro());
+// }
+
+Test(test_crash_after_asserts, 0)
 {
-	assert_eq(RET, 1, 1, just_timeout_bro());
-	assert_eq(RET, 1, just_timeout_bro(), 1);
-	assert_neq(RET, 1, just_timeout_bro(), just_timeout_bro());
+	assert_eq(RET, 0, 1, just_crash_bro());
+	assert_eq(RET, 0, just_crash_bro(), 1);
+	assert_neq(RET, 0, just_crash_bro(), just_crash_bro());
+	just_crash_bro();
 }
 
-Test(test_time_out_during_asserts, 4)
+Test(test_crash_during_asserts, 0)
 {
-	assert_eq(RET, 2, 1, just_timeout_bro());
-	assert_eq(RET, 2, just_timeout_bro(), 1);
-	assert_neq(RET, 2, just_timeout_bro(), just_timeout_bro());
+	assert_eq(RET, 0, 1, just_crash_bro());
+	assert_eq(RET, 0, just_crash_bro(), 1);
+	just_crash_bro();
+	assert_neq(RET, 0, just_crash_bro(), just_crash_bro());
 }
 
-Test(test_time_out_before_asserts, 1)
+Test(test_crash_before_asserts, 0)
 {
-	assert_eq(RET, 2, 1, just_timeout_bro());
-	assert_eq(RET, 2, just_timeout_bro(), 1);
-	assert_neq(RET, 2, just_timeout_bro(), just_timeout_bro());
+	just_crash_bro();
+	assert_eq(RET, 0, 1, just_crash_bro());
+	assert_eq(RET, 0, just_crash_bro(), 1);
+	assert_neq(RET, 0, just_crash_bro(), just_crash_bro());
 }
+
+// Test infinite loop sans timeout dans assert puis ctrl+c dans terminal
 
 // Test(assert_crash, 0)
 // {

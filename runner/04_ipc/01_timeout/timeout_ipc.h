@@ -8,6 +8,7 @@
 */
 #else
 
+#include "timeout_priv.h"
 #include <signal.h>
 #include <stdbool.h>
 

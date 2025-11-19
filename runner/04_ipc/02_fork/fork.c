@@ -13,13 +13,14 @@
 static inline void	fork_init_parent(t_context *context);
 static inline void	fork_init_child(t_context *context);
 
-void	_fut_fork_init(t_context *context, size_t timeout)
+void	_fut_fork_init(t_context *context, bool is_set, size_t timeout)
 {
 	context->child_pid = -1;
 	context->result_pipe[0] = -1;
 	context->result_pipe[1] = -1;
 	context->sync_pipe[0] = -1;
 	context->sync_pipe[1] = -1;
+	context->is_set = is_set;
 
 	exit_if(pipe(context->result_pipe) == -1, RESULT_PIPE_CREATION_FAILED);
 	exit_if(pipe(context->sync_pipe) == -1, SYNC_PIPE_CREATION_FAILED);
@@ -46,16 +47,17 @@ void	fork_cleanup(t_context *context)
 		close(context->sync_pipe[0]);
 	if (context->sync_pipe[1] != -1)
 		close(context->sync_pipe[1]);
-
 	context->result_pipe[0] = -1;
 	context->result_pipe[1] = -1;
 	context->sync_pipe[0] = -1;
 	context->sync_pipe[1] = -1;
-	
+
 	timeout_cancel();
 	context->timeout = 0;
 
-	if (context->child_pid > 0)
+	if (context->child_pid > 0 && context->is_set)
+		kill(-context->child_pid, SIGKILL);
+	else if (context->child_pid > 0 && !context->is_set)
 		kill(context->child_pid, SIGKILL);
 	if (context->child_pid != -1)
 		context->child_pid = -1;
@@ -78,6 +80,9 @@ static inline void	fork_init_parent(t_context *context)
 static inline void	fork_init_child(t_context *context)
 {
 	bool	ready;
+
+	if (context->is_set)
+		setpgid(0, 0);
 
 	close(context->result_pipe[0]);
 	close(context->sync_pipe[1]);

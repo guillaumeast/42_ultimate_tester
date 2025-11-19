@@ -29,7 +29,7 @@ void	set_run(t_set *set)
 	set_print_title(set);
 	set->result.status.type = RUNNING;
 
-	_fut_fork_init(&s_context, set->timeout);
+	_fut_fork_init(&s_context, true, set->timeout);
 	if (s_context.child_pid > 0)
 		run_parent(set);
 	else
@@ -73,27 +73,25 @@ static inline void	read_results_from_child(int *status, t_set *set)
 	ssize_t		bytes;
 	t_result	new_result;
 	pid_t		pid;
+	bool		child_reaped;
 
 	flags = fcntl(s_context.result_pipe[0], F_GETFL);
 	fcntl(s_context.result_pipe[0], F_SETFL, flags | O_NONBLOCK);
-	
+
+	child_reaped = false;
 	while (1)
 	{
 		while ((bytes = read(s_context.result_pipe[0], &new_result, sizeof(t_result))) > 0)
 			result_add(&new_result, &set->result);
-		if (bytes == 0)
-			break;
-		if (bytes == -1 && errno != EAGAIN)
-			break;
-
+		if (bytes == 0) break;
+		if (bytes == -1 && errno != EAGAIN) break;
 		pid = waitpid(s_context.child_pid, status, WNOHANG);
 		if (pid == s_context.child_pid)
-			break;
-		if (pid == -1 && errno != EINTR)
-			break;
-
+			{ child_reaped = true; break; }
+		if (pid == -1 && errno != EINTR) break;
 		usleep(200);
 	}
+	if (!child_reaped) waitpid(s_context.child_pid, status, 0);
 }
 
 static inline void	run_child(t_set *set)

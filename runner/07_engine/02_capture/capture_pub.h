@@ -60,7 +60,7 @@ void	_fut_capture_child(t_context *ctx, t_capture_res *res);
 																\
 		memset(&capture_var_name, 0, sizeof(capture_var_name));	\
 		capture_var_name.status.timeout = time_out;				\
-		_fut_fork_init(&ctx, time_out);							\
+		_fut_fork_init(&ctx, false, time_out);					\
 		if (ctx.child_pid > 0)									\
 			_fut_capture_parent(&ctx, &capture_var_name);		\
 		else													\
