@@ -23,7 +23,9 @@ void	my_void_func(void)
 Test(eq_pass, 0)
 {
 	// TODO: handle basic values without warnings
-	assert_eq(GET_RET_BOTH, 1, my_void_func(), my_void_func());
+	t_capture	my_tmp_cap;
+	capture(GET_BOTH, 1, my_void_func(), my_tmp_cap);
+	assert_eq(GET_BOTH, 1, my_void_func(), my_void_func());
 	// TODO: handle `void (*fn)(void)`
 	// assert_eq(GET_RET_BOTH, 1, my_broken_function(), 4);
 	// TODO: pass var values as expected
