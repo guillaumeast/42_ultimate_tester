@@ -28,5 +28,8 @@ bool	compare_intptr_t(intptr_t i1, intptr_t i2)
 
 bool	compare_structs(void *s1, void *s2, size_t struct_size)
 {
+	if (!s1 || !s2)
+		return (!s1 && !s2);
+	
 	return (memcmp(s1, s2, struct_size) == 0);
 }

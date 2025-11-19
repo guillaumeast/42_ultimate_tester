@@ -43,23 +43,30 @@ void	_fut_assert_run(t_assert *assert);
 	_fut_assert.exp_name = #exp_expr;												\
 	_fut_assert.got_capt = &_fut_capt_got;											\
 	_fut_assert.exp_capt = &_fut_capt_exp;											\
-	_fut_assert.ret_size = sizeof(__typeof__(exp_expr)); 							\
-	_fut_assert.format = _Generic((exp_expr), 										\
-			char: F_CHAR, 															\
-			signed char: F_SIGNED, 													\
-			short: F_SIGNED, 														\
-			int: F_SIGNED, 															\
-			long: F_SIGNED, 														\
-			long long: F_SIGNED, 													\
-			unsigned char: F_UNSIGNED, 												\
-			unsigned short: F_UNSIGNED, 											\
-			unsigned int: F_UNSIGNED, 												\
-			unsigned long: F_UNSIGNED, 												\
-			unsigned long long: F_UNSIGNED, 										\
-			char *: F_STRING,														\
-			const char *: F_STRING,													\
-			default: F_STRUCT);														\
-																					\
+	if (__type_is_void(exp_expr) && __type_is_void(got_expr))						\
+	{																				\
+		_fut_assert.ret_size = sizeof(int);											\
+		_fut_assert.format = F_SIGNED;												\
+	}																				\
+	else																			\
+	{																				\
+		_fut_assert.ret_size = sizeof(__typeof__(exp_expr)); 						\
+		_fut_assert.format = _Generic((exp_expr), 									\
+				char: F_CHAR, 														\
+				signed char: F_SIGNED, 												\
+				short: F_SIGNED, 													\
+				int: F_SIGNED, 														\
+				long: F_SIGNED, 													\
+				long long: F_SIGNED, 												\
+				unsigned char: F_UNSIGNED, 											\
+				unsigned short: F_UNSIGNED, 										\
+				unsigned int: F_UNSIGNED, 											\
+				unsigned long: F_UNSIGNED, 											\
+				unsigned long long: F_UNSIGNED, 									\
+				char *: F_STRING,													\
+				const char *: F_STRING,												\
+				default: F_STRUCT);													\
+	}																				\
 	_fut_assert_run(&_fut_assert);													\
 	} while (0)
 

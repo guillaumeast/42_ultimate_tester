@@ -4,34 +4,34 @@
 
 #include <inttypes.h>
 
-int	my_broken_function(void)
-{
-	int	a;
-	int	b;
-
-	a = 1;
-	b = 2;
-
-	return (a + b);
-}
-
 void	my_void_func(void)
 {
 	printf("Hello world");
 }
 
+int	add(int a, int b)
+{
+	return (a + b);
+}
+
 Test(eq_pass, 0)
 {
+	assert_eq(GET_RET_BOTH, 1, add(1,2), 4);
+	assert_eq(GET_RET_BOTH, 1, my_void_func(), my_void_func());
+	assert_eq(GET_RET_BOTH, 1, printf("%i", 42), printf("%i", -42));
+
+}
+	// TODO: test with struct as return value
+	// TODO: test with struct pointer as return value
 	// TODO: handle basic values without warnings
-	t_capture	my_tmp_cap;
-	capture(GET_BOTH, 1, my_void_func(), my_tmp_cap);
-	assert_eq(GET_BOTH, 1, my_void_func(), my_void_func());
 	// TODO: handle `void (*fn)(void)`
 	// assert_eq(GET_RET_BOTH, 1, my_broken_function(), 4);
 	// TODO: pass var values as expected
 	// TODO: test compare
 	// compare(GET_RET_BOTH, 1, printf, ft_printf, ("Hello world"));
-}
+	// TODO: all int, all char...
+	// TODO: memleaks / fdleaks...
+
 // assert_eq(GET_RET, 1, (printf("%c", 'a')), (ft_printf("%c", 'a')));
 
 	// assert_eq("assert_eq(expl char)", (char)'a', (char)'a');
