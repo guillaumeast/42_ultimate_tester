@@ -1,8 +1,8 @@
 #define __FUT_INSIDE__
 #define __FUT_IPC_INSIDE__
 #include "timeout_priv.h"
-#undef __FUT_IPC_INSIDE__
 #include "error_priv.h"
+#undef __FUT_IPC_INSIDE__
 #undef __FUT_INSIDE__
 
 #include <unistd.h>

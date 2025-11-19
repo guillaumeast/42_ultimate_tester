@@ -1,9 +1,9 @@
 #define __FUT_INSIDE__
 #define __FUT_IO_INSIDE__
 #include "file_priv.h"
-#undef __FUT_IO_INSIDE__
 #include "error_priv.h"
 #include "redirect_priv.h"
+#undef __FUT_IO_INSIDE__
 #undef __FUT_INSIDE__
 
 #include <stdlib.h>

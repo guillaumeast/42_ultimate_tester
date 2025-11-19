@@ -1,9 +1,9 @@
-#include <stdio.h>
 #define __FUT_INSIDE__
 #include "report_priv.h"
 #include "set_priv.h"
 #undef __FUT_INSIDE__
 
+#include <stdio.h>
 #include <stdlib.h>
 
 #if defined(__APPLE__)

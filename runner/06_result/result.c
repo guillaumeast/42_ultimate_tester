@@ -15,3 +15,13 @@ void	result_compute(t_result *res)
 	else if (res->crashed > 0)
 		res->status.type = CRASHED;
 }
+
+void	result_add(const t_result *from, t_result *to)
+{
+	to->passed += from->passed;
+	to->failed += from->failed;
+	to->timed += from->timed;
+	to->crashed += from->crashed;
+
+	result_compute(to);
+}

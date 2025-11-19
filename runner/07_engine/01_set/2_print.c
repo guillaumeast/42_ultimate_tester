@@ -24,12 +24,12 @@ typedef struct s_set_colors
 
 static inline void	get_colors(const t_result *res, t_set_colors *colors);
 
-void	print_set_title(const t_set *set)
+void	set_print_title(const t_set *set)
 {
 	print_stdout("%s%s %sTesting %s%s%s...\n", BLUE, EMJ_ARW_RIGHT, NONE, BLUE, set->name, NONE);
 }
 
-void	print_set_result(const t_set *set)
+void	set_print_result(const t_set *set)
 {
 	const t_result	*res;
 	t_set_colors	colors;

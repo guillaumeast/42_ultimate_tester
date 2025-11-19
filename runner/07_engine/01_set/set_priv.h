@@ -8,14 +8,14 @@
 */
 #else
 
-#include "error_priv.h"
 #include "set_pub.h"
 #include <stdbool.h>
 #include <stddef.h>
 
 extern t_result	g_result;
 
-t_error	set_run(t_set *set);
+void	set_run(t_set *set);
+void	set_add_result(t_result *result);
 
 #endif /* __FUT_INSIDE__ */
 

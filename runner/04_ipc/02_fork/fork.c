@@ -1,9 +1,9 @@
 #define __FUT_INSIDE__
-#include "fork_pub.h"
 #define __FUT_IPC_INSIDE__
+#include "fork_pub.h"
+#include "error_priv.h"
 #include "timeout_ipc.h"
 #undef __FUT_IPC_INSIDE__
-#include "error_priv.h"
 #undef __FUT_INSIDE__
 
 #include <stdlib.h>

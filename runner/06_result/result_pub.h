@@ -15,5 +15,6 @@ typedef struct s_result
 }	t_result;
 
 void	result_compute(t_result *res);
+void	result_add(const t_result *from, t_result *to);
 
 #endif /* ULT_RESULT_PRIV_H */

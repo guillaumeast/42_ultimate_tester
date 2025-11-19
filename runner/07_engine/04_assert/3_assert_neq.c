@@ -2,8 +2,8 @@
 #define __FUT_ENGINE_INSIDE__
 #include "assert_pub.h"
 #include "compare_int.h"
-#undef __FUT_ENGINE_INSIDE__
 #include "print_priv.h"
+#undef __FUT_ENGINE_INSIDE__
 #undef __FUT_INSIDE__
 
 #include <inttypes.h>

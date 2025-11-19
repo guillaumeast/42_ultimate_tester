@@ -2,10 +2,10 @@
 #define __FUT_IO_INSIDE__
 #define __FUT_REDIRECT_INSIDE__
 #include "redirect_internal.h"
-#undef __FUT_REDIRECT_INSIDE__
-#include "file_priv.h"
-#undef __FUT_IO_INSIDE__
 #include "error_priv.h"
+#include "file_priv.h"
+#undef __FUT_REDIRECT_INSIDE__
+#undef __FUT_IO_INSIDE__
 #undef __FUT_INSIDE__
 
 #include <stdlib.h>

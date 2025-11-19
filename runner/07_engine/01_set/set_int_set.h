@@ -10,8 +10,8 @@
 
 #include "set_priv.h"
 
-void	print_set_title(const t_set *set);
-void	print_set_result(const t_set *set);
+void	set_print_title(const t_set *set);
+void	set_print_result(const t_set *set);
 
 #endif /* __FUT_INSIDE__ */
 
