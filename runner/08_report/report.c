@@ -48,6 +48,7 @@ void	print_start(void)
 	printf(" %s┌-------------------------------┐%s\n", BLUE, NONE);
 	printf(" %s| %s   |%s\n", BLUE, title, NONE);
 	printf(" %s├-------------------------------┘%s\n", BLUE, NONE);
+	print_stdout("\n");
 }
 
 void	print_result(const t_result *result)

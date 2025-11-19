@@ -4,10 +4,31 @@
 
 #include <inttypes.h>
 
+int	my_broken_function(void)
+{
+	int	a;
+	int	b;
+
+	a = 1;
+	b = 2;
+
+	return (a + b);
+}
+
+void	my_void_func(void)
+{
+	printf("Hello world");
+}
+
 Test(eq_pass, 0)
 {
-	assert_eq(GET_RET_OUT, 1, (printf("%i", -42)), (ft_printf("%i", 42)));
-	assert_neq(GET_RET_OUT, 1, (printf("%i", -42)), (ft_printf("%i", -42)));
+	// TODO: handle basic values without warnings
+	assert_eq(GET_RET_BOTH, 1, my_void_func(), my_void_func());
+	// TODO: handle `void (*fn)(void)`
+	// assert_eq(GET_RET_BOTH, 1, my_broken_function(), 4);
+	// TODO: pass var values as expected
+	// TODO: test compare
+	// compare(GET_RET_BOTH, 1, printf, ft_printf, ("Hello world"));
 }
 // assert_eq(GET_RET, 1, (printf("%c", 'a')), (ft_printf("%c", 'a')));
 

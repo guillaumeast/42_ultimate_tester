@@ -55,28 +55,28 @@ static inline t_status	check_status(t_assert *assert)
 		{
 			status.type = CRASHED;
 			status.sig = assert->got_capt->status.sig;
-			print_stderr("%s  %s %sCRASHED%s: ", RED, EMJ_ARW_DR, EMJ_CRSH_Y, NONE);
+			print_stderr("%s  %s %sCRASHED %s%s%s ", RED, EMJ_ARW_DR, EMJ_CRSH_Y, GREY, EMJ_ARW_RIGHT, NONE);
 			print_status_fail(assert->got_name, &assert->got_capt->status);
 		}
 		else if (assert->got_capt->status.type == TIMED)
 		{
 			status.type = TIMED;
 			status.timeout = assert->got_capt->status.timeout;
-			print_stderr("%s  %s %sTIMED%s:   ", RED, EMJ_ARW_DR, EMJ_TIMD, NONE);
+			print_stderr("%s  %s %sTIMED   %s%s%s ", RED, EMJ_ARW_DR, EMJ_TIMD, GREY, EMJ_ARW_RIGHT, NONE);
 			print_status_fail(assert->got_name, &assert->got_capt->status);
 		}
 		else if (assert->exp_capt->status.type == CRASHED)
 		{
 			status.type = CRASHED;
 			status.sig = assert->exp_capt->status.sig;
-			print_stderr("%s  %s %sCRASHED%s: ", RED, EMJ_ARW_DR, EMJ_CRSH_Y, NONE);
+			print_stderr("%s  %s %sCRASHED %s%s%s ", RED, EMJ_ARW_DR, EMJ_CRSH_Y, GREY, EMJ_ARW_RIGHT, NONE);
 			print_status_fail(assert->exp_name, &assert->exp_capt->status);
 		}
 		else if (assert->exp_capt->status.type == TIMED)
 		{
 			status.type = TIMED;
 			status.timeout = assert->exp_capt->status.timeout;
-			print_stderr("%s  %s %sTIMED%s:   ", RED, EMJ_ARW_DR, EMJ_TIMD, NONE);
+			print_stderr("%s  %s %sTIMED   %s%s%s ", RED, EMJ_ARW_DR, EMJ_TIMD, GREY, EMJ_ARW_RIGHT, NONE);
 			print_status_fail(assert->exp_name, &assert->exp_capt->status);
 		}
 	}
@@ -121,10 +121,9 @@ static inline t_status	check_out(t_assert *assert)
 	else
 	{
 		status.type = FAILED;
-		print_stderr("%s  %s %sFAILED%s:  ", RED, EMJ_ARW_DR, EMJ_FAIL, NONE);
-		print_stderr("[%s%s%s] and [%s%s%s] ", RED, assert->got_name, NONE, RED, assert->exp_name, NONE);
-		print_stderr("%soutputed%s the same value ", YELLOW, NONE);
-		print_stderr("[%s%s%s]\n", RED, assert->exp_capt->out, NONE);
+		print_stderr("%s  %s %sFAILED  %s%s%s %s ", RED, EMJ_ARW_DR, EMJ_FAIL, GREY, EMJ_ARW_RIGHT, RED, assert->got_name);
+		print_raw_err("%soutputed%s %s%s ", YELLOW, RED, assert->got_capt->out, GREY);
+		print_raw_err("instead of %sanything else%s\n", RED, NONE);
 	}
 	return (status);
 }
@@ -134,25 +133,26 @@ static inline void	print_status_fail(const char *expr_name, t_status *status)
 	char status_buffer[STATUS_BUFFER_SIZE];
 	
 	status_format(status, status_buffer, STATUS_BUFFER_SIZE);
-	print_stderr("[%s%s%s] has [%s%s%s]\n", RED, expr_name, NONE, RED, status_buffer, NONE);
+	print_raw_err("%s%s%s has %s%s%s\n", RED, expr_name, GREY, RED, status_buffer, NONE);
 }
 
 static inline void	print_ret_fail(t_assert *assert)
 {
-	print_stderr("%s  %s %sFAILED%s:  ", RED, EMJ_ARW_DR, EMJ_FAIL, NONE);
-	print_stderr("[%s%s%s] and [%s%s%s] ", RED, assert->got_name, NONE, RED, assert->exp_name, NONE);
-	print_stderr("%sreturned%s the same value ", YELLOW, NONE);
-
+	print_stderr("%s  %s %sFAILED  %s%s%s %s ", RED, EMJ_ARW_DR, EMJ_FAIL, GREY, EMJ_ARW_RIGHT, RED, assert->got_name);
 	if (assert->format == F_STRUCT)
-		print_stderr("[%ssame struct content%s]\n", RED, NONE);
+	{
+		print_raw_err("%sreturned%s %ssame struct content%s\n", YELLOW, GREY, RED, NONE);
+		return ;
+	}
 	else if (assert->format == F_STRING)
-		print_stderr("[%s%s%s]\n", RED, (char *)assert->exp_capt->ret, NONE);
+		print_raw_err("%sreturned%s %s%s ", YELLOW, RED, (char *)assert->got_capt->ret, GREY);
 	else if (assert->format == F_CHAR)
-		print_stderr("[%s%c%s]\n", RED, (char)assert->exp_capt->ret, NONE);
+		print_raw_err("%sreturned%s %s%c%s ", YELLOW, NONE, RED, (char)assert->got_capt->ret, GREY);
 	else if (assert->format == F_SIGNED)
-		print_stderr("[%s%" PRIdPTR "%s]\n", RED, (intptr_t)assert->exp_capt->ret, NONE);
+		print_raw_err("%sreturned%s %s%" PRIdPTR "%s ", YELLOW, NONE, RED, (intptr_t)assert->got_capt->ret, GREY);
 	else if (assert->format == F_UNSIGNED)
-		print_stderr("[%s%" PRIuPTR "%s]\n", RED, (uintptr_t)assert->exp_capt->ret, NONE);
+		print_raw_err("%sreturned%s %s%" PRIuPTR "%s ", YELLOW, NONE, RED, (uintptr_t)assert->got_capt->ret, GREY);
 	else
-		print_stderr("[%s%" PRIxPTR "%s]\n", RED, (uintptr_t)assert->exp_capt->ret, NONE);
+		print_raw_err("%sreturned%s %s%" PRIxPTR "%s ", YELLOW, NONE, RED, (uintptr_t)assert->got_capt->ret, GREY);
+	print_raw_err("instead of %sanything else%s\n", RED, NONE);
 }

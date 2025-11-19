@@ -26,7 +26,7 @@ static inline void	get_colors(const t_result *res, t_set_colors *colors);
 
 void	set_print_title(const t_set *set)
 {
-	print_stdout("%s%s %sTesting %s%s%s...\n", BLUE, EMJ_ARW_RIGHT, NONE, BLUE, set->name, NONE);
+	print_stdout("%s%s %s%s\n", BLUE, EMJ_ARW_RIGHT, set->name, NONE);
 }
 
 void	set_print_result(const t_set *set)
@@ -41,7 +41,7 @@ void	set_print_result(const t_set *set)
 
 	i = 0;
 	i += snprintf(buff + i, sizeof(buff) - i, \
-		"     %s%s %s%s ", colors.start, EMJ_ARW_DR, colors.emoji, NONE);
+		"%s%s%s", colors.start, colors.emoji, NONE);
 	i += snprintf(buff + i, sizeof(buff) - i, \
 		"%sPASSED: %zu %s|%s ", colors.passed, res->passed, GREY, NONE);
 	i += snprintf(buff + i, sizeof(buff) - i, \
@@ -50,7 +50,8 @@ void	set_print_result(const t_set *set)
 		"%sTIMED: %zu %s|%s ", colors.timed, res->timed, GREY, NONE);
 	i += snprintf(buff + i, sizeof(buff) - i, \
 		"%sCRASHED: %zu%s\n", colors.crashed, res->crashed, NONE);
-	print_stdout(buff);
+	print_stdout("%s", buff);
+	print_stdout("\n");
 }
 
 static inline void	get_colors(const t_result *res, t_set_colors *colors)

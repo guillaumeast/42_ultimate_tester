@@ -10,7 +10,6 @@
 
 static inline void	ult_fprintf(t_ult_fd fd, const char *fmt, va_list args);
 
-__attribute__((format(printf, 1, 2)))
 void	print_stdout(const char *fstring, ...)
 {
 	va_list	args;
@@ -20,7 +19,6 @@ void	print_stdout(const char *fstring, ...)
 	va_end(args);
 }
 
-__attribute__((format(printf, 1, 2)))
 void	print_stderr(const char *fstring, ...)
 {
 	va_list	args;
@@ -40,4 +38,22 @@ static inline void	ult_fprintf(t_ult_fd fd, const char *fmt, va_list args)
 
 	dprintf(target_fd, "%s | %s", BLUE, NONE);
 	vdprintf(target_fd, fmt, args);
+}
+
+void	print_raw_out(const char *fmt, ...)
+{
+	va_list	args;
+
+	va_start(args, fmt);
+	vdprintf(g_output.real_stdout_fd, fmt, args);
+	va_end(args);
+}
+
+void	print_raw_err(const char *fmt, ...)
+{
+	va_list	args;
+
+	va_start(args, fmt);
+	vdprintf(g_output.real_stderr_fd, fmt, args);
+	va_end(args);
 }

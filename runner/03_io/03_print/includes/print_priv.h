@@ -49,6 +49,14 @@
 #define EMJ_FAIL_START	print_emoji_fail_title_start()
 #define EMJ_FAIL_END	print_emoji_fail_title_end()
 
+//-------------------- PRINT ---------------------//
+
+__attribute__((format(printf, 1, 2)))
+void	print_raw_out(const char *fmt, ...);
+
+__attribute__((format(printf, 1, 2)))
+void	print_raw_err(const char *fmt, ...);
+
 #endif /* __FUT_INSIDE__ */
 
 #endif /* ULT_PRINT_PRIV_H */
