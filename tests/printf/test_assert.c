@@ -6,11 +6,8 @@
 
 Test(eq_pass, 0)
 {
-	t_capture	my_cap;
-
-	capture(GET_RET_OUT, 1, (printf("%i", 42)), my_cap);
-	print_stdout("RET = %" PRIdPTR "\n", (intptr_t)my_cap.ret);
-	print_stdout("OUT = %s\n", my_cap.out);
+	assert_eq(GET_RET_OUT, 1, (printf("%i", -42)), (ft_printf("%i", 42)));
+	assert_neq(GET_RET_OUT, 1, (printf("%i", -42)), (ft_printf("%i", -42)));
 }
 // assert_eq(GET_RET, 1, (printf("%c", 'a')), (ft_printf("%c", 'a')));
 

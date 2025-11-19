@@ -55,28 +55,28 @@ static inline t_status	check_status(t_assert *assert)
 		{
 			status.type = CRASHED;
 			status.sig = assert->got_capt->status.sig;
-			print_stderr("%s    %s %s CRASHED%s: ", RED, EMJ_ARW_DR, EMJ_CRSH_Y, NONE);
+			print_stderr("%s  %s %sCRASHED%s: ", RED, EMJ_ARW_DR, EMJ_CRSH_Y, NONE);
 			print_status_fail(assert->got_name, &assert->got_capt->status);
 		}
 		else if (assert->got_capt->status.type == TIMED)
 		{
 			status.type = TIMED;
 			status.timeout = assert->got_capt->status.timeout;
-			print_stderr("%s    %s %s TIMED%s:   ", RED, EMJ_ARW_DR, EMJ_TIMD, NONE);
+			print_stderr("%s  %s %sTIMED%s:   ", RED, EMJ_ARW_DR, EMJ_TIMD, NONE);
 			print_status_fail(assert->got_name, &assert->got_capt->status);
 		}
 		else if (assert->exp_capt->status.type == CRASHED)
 		{
 			status.type = CRASHED;
 			status.sig = assert->exp_capt->status.sig;
-			print_stderr("%s    %s %s CRASHED%s: ", RED, EMJ_ARW_DR, EMJ_CRSH_Y, NONE);
+			print_stderr("%s  %s %sCRASHED%s: ", RED, EMJ_ARW_DR, EMJ_CRSH_Y, NONE);
 			print_status_fail(assert->exp_name, &assert->exp_capt->status);
 		}
 		else if (assert->exp_capt->status.type == TIMED)
 		{
 			status.type = TIMED;
 			status.timeout = assert->exp_capt->status.timeout;
-			print_stderr("%s    %s %s TIMED%s:   ", RED, EMJ_ARW_DR, EMJ_TIMD, NONE);
+			print_stderr("%s  %s %sTIMED%s:   ", RED, EMJ_ARW_DR, EMJ_TIMD, NONE);
 			print_status_fail(assert->exp_name, &assert->exp_capt->status);
 		}
 	}
@@ -121,7 +121,7 @@ static inline t_status	check_out(t_assert *assert)
 	else
 	{
 		status.type = FAILED;
-		print_stderr("%s    %s %s FAILED%s:  ", RED, EMJ_ARW_DR, EMJ_FAIL, NONE);
+		print_stderr("%s  %s %sFAILED%s:  ", RED, EMJ_ARW_DR, EMJ_FAIL, NONE);
 		print_stderr("[%s%s%s] and [%s%s%s] ", RED, assert->got_name, NONE, RED, assert->exp_name, NONE);
 		print_stderr("%soutputed%s the same value ", YELLOW, NONE);
 		print_stderr("[%s%s%s]\n", RED, assert->exp_capt->out, NONE);
@@ -139,7 +139,7 @@ static inline void	print_status_fail(const char *expr_name, t_status *status)
 
 static inline void	print_ret_fail(t_assert *assert)
 {
-	print_stderr("%s    %s %s FAILED%s:  ", RED, EMJ_ARW_DR, EMJ_FAIL, NONE);
+	print_stderr("%s  %s %sFAILED%s:  ", RED, EMJ_ARW_DR, EMJ_FAIL, NONE);
 	print_stderr("[%s%s%s] and [%s%s%s] ", RED, assert->got_name, NONE, RED, assert->exp_name, NONE);
 	print_stderr("%sreturned%s the same value ", YELLOW, NONE);
 
