@@ -1,5 +1,5 @@
-#ifndef ULT_FILE_PRIV_H
-#define ULT_FILE_PRIV_H
+#ifndef ULT_FILE_IO_H
+#define ULT_FILE_IO_H
 
 #ifndef __FUT_IO_INSIDE__
 /*
@@ -19,4 +19,4 @@ void	flush_all();
 
 #endif /* __FUT_INSIDE__ */
 
-#endif /* ULT_FILE_PRIV_H */
+#endif /* ULT_FILE_IO_H */

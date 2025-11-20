@@ -2,7 +2,6 @@
 #include "capture_pub.h"
 #include "error_priv.h"
 #include "fork_priv.h"
-#include "timeout_priv.h"
 #undef __FUT_INSIDE__
 
 #include <stdlib.h>
@@ -17,7 +16,7 @@ void	_fut_capture_parent(t_context *ctx, t_capture *capture)
 
 	waitpid(ctx->child_pid, &status, 0);
 	
-	if (g_timeout_triggered)
+	if (fork_is_timeout_triggered())
 		capture->status.type = TIMED;
 	else if (WIFEXITED(status) && WEXITSTATUS(status) == EXIT_SUCCESS)
 	{

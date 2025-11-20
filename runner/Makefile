@@ -17,12 +17,14 @@ CFLAGS			:= -Wall -Wextra -Werror -g3
 
 FUT_SRCS		:= \
 	$(wildcard 01_main/*.c) \
-	$(wildcard 02_error/*.c)	\
+	$(wildcard 02_error/01_internal_error/*.c)	\
+	$(wildcard 02_error/02_stacktrace/*.c)	\
 	$(wildcard 03_io/01_file/*.c) \
 	$(wildcard 03_io/02_redirect/*.c) \
 	$(wildcard 03_io/03_print/*.c) \
-	$(wildcard 04_ipc/01_timeout/*.c) \
-	$(wildcard 04_ipc/02_fork/*.c) \
+	$(wildcard 04_ipc/01_handlers/*.c) \
+	$(wildcard 04_ipc/02_timeout/*.c) \
+	$(wildcard 04_ipc/03_fork/*.c) \
 	$(wildcard 05_status/*.c) \
 	$(wildcard 06_result/*.c) \
 	$(wildcard 07_engine/01_set/*.c) \
@@ -33,12 +35,14 @@ FUT_SRCS		:= \
 FUT_INCLUDES	:= \
 	-I. \
 	-I01_main \
-	-I02_error \
+	-I02_error/01_internal_error \
+	-I02_error/02_stacktrace \
 	-I03_io/01_file \
 	-I03_io/02_redirect \
 	-I03_io/03_print/includes \
-	-I04_ipc/01_timeout \
-	-I04_ipc/02_fork \
+	-I04_ipc/01_handlers \
+	-I04_ipc/02_timeout \
+	-I04_ipc/03_fork \
 	-I05_status \
 	-I06_result \
 	-I07_engine/01_set \

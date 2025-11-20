@@ -10,6 +10,7 @@
 
 #include "fork_pub.h"
 
+bool	fork_is_timeout_triggered(void);
 void	fork_cleanup(t_context *context);
 
 #endif /* __FUT_INSIDE__ */

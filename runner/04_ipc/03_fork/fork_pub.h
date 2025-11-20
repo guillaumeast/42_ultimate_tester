@@ -10,9 +10,8 @@ typedef struct s_fork_context
 	pid_t	child_pid;
 	int		sync_pipe[2];
 	int		result_pipe[2];
-	bool	is_set;
 }	t_context;
 
-void	_fut_fork_init(t_context *context, bool is_set, size_t timeout);
+void	_fut_fork_init(t_context *context, size_t timeout);
 
 #endif

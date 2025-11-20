@@ -9,7 +9,6 @@
 #else
 
 #include "redirect_priv.h"
-#include "file_priv.h"
 
 void	redirect_init(void);
 void	redirect_save(void);

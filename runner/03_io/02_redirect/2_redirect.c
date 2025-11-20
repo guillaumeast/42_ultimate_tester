@@ -3,7 +3,7 @@
 #define __FUT_REDIRECT_INSIDE__
 #include "redirect_internal.h"
 #include "error_priv.h"
-#include "file_priv.h"
+#include "file_io.h"
 #undef __FUT_REDIRECT_INSIDE__
 #undef __FUT_IO_INSIDE__
 #undef __FUT_INSIDE__

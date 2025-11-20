@@ -1,5 +1,5 @@
-#ifndef ULT_TIMEOUT_IPC_H
-#define ULT_TIMEOUT_IPC_H
+#ifndef ULT_HANDLERS_IPC_H
+#define ULT_HANDLERS_IPC_H
 
 #ifndef __FUT_IPC_INSIDE__
 /*
@@ -8,12 +8,13 @@
 */
 #else
 
-#include "timeout_priv.h"
 #include <signal.h>
-#include <stdbool.h>
 
-void	timeout_init(pid_t target_pid, unsigned int time);
-void	timeout_cancel(void);
+extern volatile sig_atomic_t	g_timeout_triggered;
+
+void	handlers_set_target_pid(pid_t pid);
+void	timeout_handler(int sig);
+void	sigint_handler(int sig);
 
 #endif /* __FUT_INSIDE__ */
 

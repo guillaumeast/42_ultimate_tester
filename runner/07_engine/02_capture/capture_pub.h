@@ -60,18 +60,18 @@ void	_fut_capture_child(t_context *ctx, t_capture_res *res);
 																\
 		memset(&capture_var_name, 0, sizeof(capture_var_name));	\
 		capture_var_name.status.timeout = time_out;				\
-		_fut_fork_init(&ctx, false, time_out);					\
+		_fut_fork_init(&ctx, time_out);							\
 		if (ctx.child_pid > 0)									\
 			_fut_capture_parent(&ctx, &capture_var_name);		\
 		else													\
 		{														\
 			t_capture_res capture_res = {0};					\
-			if (mode != RET)								\
+			if (mode != RET)									\
 				redirect_start(g_capture_to_redirect[mode]);	\
 			CAP_DISPATCH(expr, capture_res.ret);				\
 			if (__type_is_void(expr))							\
 				capture_res.ret = 0;							\
-			if (mode != RET)								\
+			if (mode != RET)									\
 			{													\
 				capture_res.out = redirect_read();				\
 				redirect_stop();								\

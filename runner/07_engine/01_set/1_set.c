@@ -3,7 +3,6 @@
 #define __FUT_ENGINE_INSIDE__
 #define __FUT_SET_INSIDE__
 #include "set_int_set.h"
-#include "timeout_priv.h"
 #include "print_priv.h"
 #include "fork_priv.h"
 #undef __FUT_SET_INSIDE__
@@ -29,7 +28,7 @@ void	set_run(t_set *set)
 	set_print_title(set);
 	set->result.status.type = RUNNING;
 
-	_fut_fork_init(&s_context, true, set->timeout);
+	_fut_fork_init(&s_context, set->timeout);
 	if (s_context.child_pid > 0)
 		run_parent(set);
 	else
@@ -45,7 +44,7 @@ static inline void	run_parent(t_set *set)
 
 	read_results_from_child(&status, set);
 
-	if (g_timeout_triggered || (WIFSIGNALED(status) && WTERMSIG(status) == SIGALRM))
+	if (fork_is_timeout_triggered() || (WIFSIGNALED(status) && WTERMSIG(status) == SIGALRM))
 	{
 		set->result.timed++;
 		set->result.status.timeout = set->timeout;
@@ -102,7 +101,7 @@ static inline void	run_child(t_set *set)
 	exit(EXIT_SUCCESS);
 }
 
-// Called by assert module (inside set_child)
+// Note: Called by assert module (inside set_child)
 void	set_add_result(t_result *result)
 {
 	(void)write(s_context.result_pipe[1], result, sizeof(t_result));

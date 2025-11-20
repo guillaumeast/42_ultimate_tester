@@ -4,6 +4,21 @@
 
 #include <inttypes.h>
 
+/* ---------- TODO: final form START ---------- */
+// Set(name, 0)
+// {
+// 	// assert_eq(mode, timeout, expr1, expr2)
+// }
+// Test(name, func_to_test, 0)
+// {
+// 	// test_eq(mode, timeout, args, expected) // No need te rewrite tested func name
+// }
+// Compare(name, func1, func2, 0)
+// {
+// 	// compare_eq(mode, timeout, args) // No need to rewrite compared func names
+// }
+/* ---------- TODO: final form END ---------- */
+
 void	my_void_func(void)
 {
 	printf("Hello world");
@@ -31,90 +46,90 @@ void just_crash_bro(void)
 	*oops = 42;
 }
 
-// Test(nonvoid_and_constant, 0)
-// {
-// 	assert_eq(RET, 1, add(1,2), 3);			// TRUE
-// 	assert_neq(RET, 1, add(1,2), 3);			// FALSE
-// 	assert_eq(RET, 1, add(1,2), 4);			// FALSE
-// 	assert_neq(RET, 1, add(1,2), 4);			// TRUE
+Test(nonvoid_and_constant, 0)
+{
+	assert_eq(RET, 1, add(1,2), 3);			// TRUE
+	assert_neq(RET, 1, add(1,2), 3);			// FALSE
+	assert_eq(RET, 1, add(1,2), 4);			// FALSE
+	assert_neq(RET, 1, add(1,2), 4);			// TRUE
 
-// 	assert_eq(OUT, 1, add(1,2), 3);			// TRUE
-// 	assert_neq(OUT, 1, add(1,2), 3);			// FALSE
-// 	assert_eq(OUT, 1, add(1,2), 4);			// TRUE
-// 	assert_neq(OUT, 1, add(1,2), 4);			// FALSE
+	assert_eq(OUT, 1, add(1,2), 3);			// TRUE
+	assert_neq(OUT, 1, add(1,2), 3);			// FALSE
+	assert_eq(OUT, 1, add(1,2), 4);			// TRUE
+	assert_neq(OUT, 1, add(1,2), 4);			// FALSE
 
-// 	assert_eq(RET_BOTH, 1, add(1,2), 3);		// TRUE
-// 	assert_neq(RET_BOTH, 1, add(1,2), 3);	// FALSE
-// 	assert_eq(RET_BOTH, 1, add(1,2), 4);		// FALSE
-// 	assert_neq(RET_BOTH, 1, add(1,2), 4);	// FALSE
+	assert_eq(RET_BOTH, 1, add(1,2), 3);		// TRUE
+	assert_neq(RET_BOTH, 1, add(1,2), 3);	// FALSE
+	assert_eq(RET_BOTH, 1, add(1,2), 4);		// FALSE
+	assert_neq(RET_BOTH, 1, add(1,2), 4);	// FALSE
 
-// 	// TRUE = 5 | FALSE = 7
-// }
-// Test(nonvoid_and_var, 0)
-// {
-// 	int exp = 3;
+	// TRUE = 5 | FALSE = 7
+}
+Test(nonvoid_and_var, 0)
+{
+	int exp = 3;
 
-// 	assert_eq(RET, 1, add(1,2), exp);			// TRUE
-// 	assert_neq(RET, 1, add(1,2), exp);			// FALSE
-// 	assert_eq(OUT, 1, add(1,2), exp);			// TRUE
-// 	assert_neq(OUT, 1, add(1,2), exp);			// FALSE
-// 	assert_eq(RET_BOTH, 1, add(1,2), exp);		// TRUE
-// 	assert_neq(RET_BOTH, 1, add(1,2), exp);		// FALSE
+	assert_eq(RET, 1, add(1,2), exp);			// TRUE
+	assert_neq(RET, 1, add(1,2), exp);			// FALSE
+	assert_eq(OUT, 1, add(1,2), exp);			// TRUE
+	assert_neq(OUT, 1, add(1,2), exp);			// FALSE
+	assert_eq(RET_BOTH, 1, add(1,2), exp);		// TRUE
+	assert_neq(RET_BOTH, 1, add(1,2), exp);		// FALSE
 
-// 	exp = 4;
-// 	assert_eq(RET, 1, add(1,2), exp);			// FALSE
-// 	assert_neq(RET, 1, add(1,2), exp);			// TRUE
-// 	assert_eq(OUT, 1, add(1,2), exp);			// TRUE
-// 	assert_neq(OUT, 1, add(1,2), exp);			// FALSE
-// 	assert_eq(RET_BOTH, 1, add(1,2), exp);		// FALSE
-// 	assert_neq(RET_BOTH, 1, add(1,2), exp);		// FALSE
+	exp = 4;
+	assert_eq(RET, 1, add(1,2), exp);			// FALSE
+	assert_neq(RET, 1, add(1,2), exp);			// TRUE
+	assert_eq(OUT, 1, add(1,2), exp);			// TRUE
+	assert_neq(OUT, 1, add(1,2), exp);			// FALSE
+	assert_eq(RET_BOTH, 1, add(1,2), exp);		// FALSE
+	assert_neq(RET_BOTH, 1, add(1,2), exp);		// FALSE
 
-// 	// TRUE = 5 | FALSE = 7
-// }
+	// TRUE = 5 | FALSE = 7
+}
 
-// Test(nonvoid_and_unref, 0)
-// {
-// 	int exp = 3;
-// 	int *exp_p = &exp;
+Test(nonvoid_and_unref, 0)
+{
+	int exp = 3;
+	int *exp_p = &exp;
 
-// 	assert_eq(RET, 1, add(1,2), *exp_p);			// TRUE
-// 	assert_neq(RET, 1, add(1,2), *exp_p);		// FALSE
-// 	assert_eq(OUT, 1, add(1,2), *exp_p);			// TRUE
-// 	assert_neq(OUT, 1, add(1,2), *exp_p);		// FALSE
-// 	assert_eq(RET_BOTH, 1, add(1,2), *exp_p);	// TRUE
-// 	assert_neq(RET_BOTH, 1, add(1,2), *exp_p);	// FALSE
+	assert_eq(RET, 1, add(1,2), *exp_p);			// TRUE
+	assert_neq(RET, 1, add(1,2), *exp_p);		// FALSE
+	assert_eq(OUT, 1, add(1,2), *exp_p);			// TRUE
+	assert_neq(OUT, 1, add(1,2), *exp_p);		// FALSE
+	assert_eq(RET_BOTH, 1, add(1,2), *exp_p);	// TRUE
+	assert_neq(RET_BOTH, 1, add(1,2), *exp_p);	// FALSE
 
-// 	exp = 4;
-// 	assert_eq(RET, 1, add(1,2), *exp_p);			// FALSE
-// 	assert_neq(RET, 1, add(1,2), *exp_p);		// TRUE
-// 	assert_eq(OUT, 1, add(1,2), *exp_p);			// TRUE
-// 	assert_neq(OUT, 1, add(1,2), *exp_p);		// FALSE
-// 	assert_eq(RET_BOTH, 1, add(1,2), *exp_p);	// FALSE
-// 	assert_neq(RET_BOTH, 1, add(1,2), *exp_p);	// FALSE
+	exp = 4;
+	assert_eq(RET, 1, add(1,2), *exp_p);			// FALSE
+	assert_neq(RET, 1, add(1,2), *exp_p);		// TRUE
+	assert_eq(OUT, 1, add(1,2), *exp_p);			// TRUE
+	assert_neq(OUT, 1, add(1,2), *exp_p);		// FALSE
+	assert_eq(RET_BOTH, 1, add(1,2), *exp_p);	// FALSE
+	assert_neq(RET_BOTH, 1, add(1,2), *exp_p);	// FALSE
 
-// 	// TRUE = 5 | FALSE = 7
-// }
+	// TRUE = 5 | FALSE = 7
+}
 
-// Test(test_time_out_after_asserts, 10)
-// {
-// 	assert_eq(RET, 1, 1, just_timeout_bro());
-// 	assert_eq(RET, 1, just_timeout_bro(), 1);
-// 	assert_neq(RET, 1, just_timeout_bro(), just_timeout_bro());
-// }
+Test(test_time_out_after_asserts, 10)
+{
+	assert_eq(RET, 1, 1, just_timeout_bro());
+	assert_eq(RET, 1, just_timeout_bro(), 1);
+	assert_neq(RET, 1, just_timeout_bro(), just_timeout_bro());
+}
 
-// Test(test_time_out_during_asserts, 4)
-// {
-// 	assert_eq(RET, 2, 1, just_timeout_bro());
-// 	assert_eq(RET, 2, just_timeout_bro(), 1);
-// 	assert_neq(RET, 2, just_timeout_bro(), just_timeout_bro());
-// }
+Test(test_time_out_during_asserts, 4)
+{
+	assert_eq(RET, 2, 1, just_timeout_bro());
+	assert_eq(RET, 2, just_timeout_bro(), 1);
+	assert_neq(RET, 2, just_timeout_bro(), just_timeout_bro());
+}
 
-// Test(test_time_out_before_asserts, 1)
-// {
-// 	assert_eq(RET, 2, 1, just_timeout_bro());
-// 	assert_eq(RET, 2, just_timeout_bro(), 1);
-// 	assert_neq(RET, 2, just_timeout_bro(), just_timeout_bro());
-// }
+Test(test_time_out_before_asserts, 1)
+{
+	assert_eq(RET, 2, 1, just_timeout_bro());
+	assert_eq(RET, 2, just_timeout_bro(), 1);
+	assert_neq(RET, 2, just_timeout_bro(), just_timeout_bro());
+}
 
 Test(test_crash_after_asserts, 0)
 {
@@ -138,6 +153,11 @@ Test(test_crash_before_asserts, 0)
 	assert_eq(RET, 0, 1, just_crash_bro());
 	assert_eq(RET, 0, just_crash_bro(), 1);
 	assert_neq(RET, 0, just_crash_bro(), just_crash_bro());
+}
+
+Test(please_kill_me, 0)
+{
+	assert_eq(RET, 0, just_timeout_bro(), just_timeout_bro());
 }
 
 // Test infinite loop sans timeout dans assert puis ctrl+c dans terminal
