@@ -4,21 +4,6 @@
 
 #include <inttypes.h>
 
-/* ---------- TODO: final form START ---------- */
-// Set(name, 0)
-// {
-// 	// assert_eq(mode, timeout, expr1, expr2)
-// }
-// Test(name, func_to_test, 0)
-// {
-// 	// test_eq(mode, timeout, args, expected) // No need te rewrite tested func name
-// }
-// Compare(name, func1, func2, 0)
-// {
-// 	// compare_eq(mode, timeout, args) // No need to rewrite compared func names
-// }
-/* ---------- TODO: final form END ---------- */
-
 void	my_void_func(void)
 {
 	printf("Hello world");
@@ -155,10 +140,10 @@ Test(test_crash_before_asserts, 0)
 	assert_neq(RET, 0, just_crash_bro(), just_crash_bro());
 }
 
-Test(please_kill_me, 0)
-{
-	assert_eq(RET, 0, just_timeout_bro(), just_timeout_bro());
-}
+// Test(please_kill_me, 0)
+// {
+// 	assert_eq(RET, 0, just_timeout_bro(), just_timeout_bro());
+// }
 
 // Test infinite loop sans timeout dans assert puis ctrl+c dans terminal
 

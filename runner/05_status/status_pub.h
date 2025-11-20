@@ -33,6 +33,7 @@ typedef struct s_status
 {
 	t_status_type	type;
 	int				sig;
+	void			*crash_address;
 	size_t			timeout;
 }	t_status;
 

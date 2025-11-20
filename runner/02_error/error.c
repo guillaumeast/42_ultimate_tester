@@ -49,7 +49,7 @@ void	error_print_trace(void)
 	while(--i >= 0)
 	{
 		error = s_error_trace[i];
-		print_stderr("%s %s %s%s\n", RED, EMJ_ARW_DR, error_names[error], NONE);
+		print_stderr(" %s%s %s%s", YELLOW, EMJ_ARW_RIGHT, error_names[error], NONE);
 	}
 }
 
@@ -59,9 +59,9 @@ void	exit_if(bool condition, t_error error)
 		return ;
 
 	error_log(error);
-	print_stderr("%s %s Error:%s\n", RED, EMJ_ERR, NONE);
+	print_stderr("                %s%s Internal error%s", RED, EMJ_ERR, NONE);
 	error_print_trace();
-	print_stderr(" %s Please try again or report the issue\n", EMJ_ARW_RIGHT);
+	print_stderr("Please try again or report the issue\n");
 
 	exit(100 + error);
 }

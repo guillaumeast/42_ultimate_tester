@@ -12,9 +12,11 @@
 
 extern volatile sig_atomic_t	g_timeout_triggered;
 
-void	handlers_set_target_pid(pid_t pid);
+void	handlers_set_target_pid(pid_t target_pid);
+void	handlers_set_fd_to_parent(int fd_to_parent);
 void	timeout_handler(int sig);
 void	sigint_handler(int sig);
+void	stacktrace_handler(int sig, siginfo_t *info, void *ucontext);
 
 #endif /* __FUT_INSIDE__ */
 

@@ -13,9 +13,11 @@ static inline void	read_result(t_context *ctx, t_capture *capture);
 void	_fut_capture_parent(t_context *ctx, t_capture *capture)
 {
 	int		status;
+	void	*crash_address;
+	size_t	bytes;
 
 	waitpid(ctx->child_pid, &status, 0);
-	
+
 	if (fork_is_timeout_triggered())
 		capture->status.type = TIMED;
 	else if (WIFEXITED(status) && WEXITSTATUS(status) == EXIT_SUCCESS)
@@ -28,8 +30,12 @@ void	_fut_capture_parent(t_context *ctx, t_capture *capture)
 		capture->status.type = CRASHED;
 		if (WIFSIGNALED(status))
 			capture->status.sig = WTERMSIG(status);
-	}
 
+		crash_address = NULL;
+		bytes = read(ctx->crash_infos_pipe[0], &crash_address, sizeof crash_address);
+		if (bytes == sizeof crash_address)
+			capture->status.crash_address = crash_address;
+	}
 	fork_cleanup(ctx);
 }
 

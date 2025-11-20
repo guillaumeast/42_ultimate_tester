@@ -2,6 +2,7 @@
 #define __FUT_IPC_INSIDE__
 #include "fork_priv.h"
 #include "error_priv.h"
+#include "stacktrace_ipc.h"
 #include "timeout_ipc.h"
 #undef __FUT_IPC_INSIDE__
 #undef __FUT_INSIDE__
@@ -11,20 +12,16 @@
 #include <signal.h>
 
 static size_t	s_fork_depth = 0;
+static int		sync_pipe[2];
 
 static inline void	fork_init_parent(t_context *context);
 static inline void	fork_init_child(t_context *context);
 
 void	_fut_fork_init(t_context *context, size_t timeout)
 {
-	context->child_pid = -1;
-	context->result_pipe[0] = -1;
-	context->result_pipe[1] = -1;
-	context->sync_pipe[0] = -1;
-	context->sync_pipe[1] = -1;
-
-	exit_if(pipe(context->result_pipe) == -1, RESULT_PIPE_CREATION_FAILED);
-	exit_if(pipe(context->sync_pipe) == -1, SYNC_PIPE_CREATION_FAILED);
+	exit_if(pipe(context->result_pipe) == -1, PIPE_CREATION_FAILED);
+	exit_if(pipe(context->crash_infos_pipe) == -1, PIPE_CREATION_FAILED);
+	exit_if(pipe(sync_pipe) == -1, PIPE_CREATION_FAILED);
 
 	context->timeout = timeout;
 	context->child_pid = fork();
@@ -41,7 +38,10 @@ static inline void	fork_init_parent(t_context *context)
 	struct sigaction	new_action = {0};
 
 	close(context->result_pipe[1]);
-	close(context->sync_pipe[0]);
+	context->result_pipe[1] = -1;
+	close(context->crash_infos_pipe[1]);
+	context->crash_infos_pipe[1] = -1;
+	close(sync_pipe[0]);
 
 	if (s_fork_depth == 0)
 	{
@@ -57,8 +57,8 @@ static inline void	fork_init_parent(t_context *context)
 	timeout_init(context->timeout);
 
 	ready = 1;
-	write(context->sync_pipe[1], &ready, sizeof ready);
-	close(context->sync_pipe[1]);
+	write(sync_pipe[1], &ready, sizeof ready);
+	close(sync_pipe[1]);
 }
 
 static inline void	fork_init_child(t_context *context)
@@ -70,12 +70,18 @@ static inline void	fork_init_child(t_context *context)
 		setpgid(0, 0);
 
 	close(context->result_pipe[0]);
-	close(context->sync_pipe[1]);
+	context->result_pipe[0] = -1;
+	close(context->crash_infos_pipe[0]);
+	context->crash_infos_pipe[0] = -1;
+	close(sync_pipe[1]);
 
-	if (read(context->sync_pipe[0], &ready, sizeof ready) != sizeof ready)
+	handlers_set_fd_to_parent(context->crash_infos_pipe[1]);
+	stacktrace_init();
+
+	if (read(sync_pipe[0], &ready, sizeof ready) != sizeof ready)
 		exit_if(true, SYNC_PIPE_READ_FAILED);
 
-	close(context->sync_pipe[0]);
+	close(sync_pipe[0]);
 }
 
 void	fork_cleanup(t_context *context)
@@ -89,14 +95,14 @@ void	fork_cleanup(t_context *context)
 		close(context->result_pipe[0]);
 	if (context->result_pipe[1] != -1)
 		close(context->result_pipe[1]);
-	if (context->sync_pipe[0] != -1)
-		close(context->sync_pipe[0]);
-	if (context->sync_pipe[1] != -1)
-		close(context->sync_pipe[1]);
+	if (context->crash_infos_pipe[0] != -1)
+		close(context->crash_infos_pipe[0]);
+	if (context->crash_infos_pipe[1] != -1)
+		close(context->crash_infos_pipe[1]);
 	context->result_pipe[0] = -1;
 	context->result_pipe[1] = -1;
-	context->sync_pipe[0] = -1;
-	context->sync_pipe[1] = -1;
+	context->crash_infos_pipe[0] = -1;
+	context->crash_infos_pipe[1] = -1;
 
 	timeout_cancel();
 	context->timeout = 0;

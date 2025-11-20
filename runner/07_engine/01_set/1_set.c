@@ -3,8 +3,9 @@
 #define __FUT_ENGINE_INSIDE__
 #define __FUT_SET_INSIDE__
 #include "set_int_set.h"
-#include "print_priv.h"
 #include "fork_priv.h"
+#include "print_priv.h"
+#include "stacktrace_priv.h"
 #undef __FUT_SET_INSIDE__
 #undef __FUT_ENGINE_INSIDE__
 #undef __FUT_INSIDE__
@@ -40,7 +41,8 @@ void	set_run(t_set *set)
 
 static inline void	run_parent(t_set *set)
 {
-	int	status;
+	int		status;
+	char	stacktrace[STACKTRACE_BUFFER_SIZE];
 
 	read_results_from_child(&status, set);
 
@@ -49,17 +51,17 @@ static inline void	run_parent(t_set *set)
 		set->result.timed++;
 		set->result.status.timeout = set->timeout;
 
-		print_stderr("%s%sTIMED %s(set exceeded %zus)%s\n", \
-			RED, EMJ_TIMD, YELLOW, set->timeout, NONE);
+		print_stderr("%s%sTIMED (set exceeded %zus)%s\n", \
+			YELLOW, EMJ_TIMD, set->timeout, NONE);
 	}
-	else if (WIFSIGNALED(status))	// TODO: plutôt if sig != EXIT_SUCCESS ?
+	else if (set->result.status.crash_address || WIFSIGNALED(status))
 	{
 		set->result.crashed++;
 		set->result.status.sig = WTERMSIG(status);
-
-		print_stderr("%s%sCRASHED %s(set crashed: %s)%s\n", \
-			RED, EMJ_CRSH_Y, YELLOW, \
-			status_sig(&set->result.status), NONE);
+		stacktrace_format_addr(set->result.status.crash_address, \
+			stacktrace, sizeof stacktrace);
+		print_stderr("%s%sCRASHED (%s) %sat%s %s%s\n", YELLOW, EMJ_CRSH_Y, \
+			status_sig(&set->result.status), GREY, BLUE, stacktrace, NONE);
 	}
 
 	result_compute(&set->result);
@@ -73,6 +75,7 @@ static inline void	read_results_from_child(int *status, t_set *set)
 	t_result	new_result;
 	pid_t		pid;
 	bool		child_reaped;
+	void		*crash_address;
 
 	flags = fcntl(s_context.result_pipe[0], F_GETFL);
 	fcntl(s_context.result_pipe[0], F_SETFL, flags | O_NONBLOCK);
@@ -82,15 +85,29 @@ static inline void	read_results_from_child(int *status, t_set *set)
 	{
 		while ((bytes = read(s_context.result_pipe[0], &new_result, sizeof(t_result))) > 0)
 			result_add(&new_result, &set->result);
-		if (bytes == 0) break;
-		if (bytes == -1 && errno != EAGAIN) break;
+		if (bytes == 0)
+			break;
+		if (bytes == -1 && errno != EAGAIN)
+			break;
+
+		crash_address = NULL;
+		bytes = read(s_context.crash_infos_pipe[0], &crash_address, sizeof crash_address);
+		if (bytes == sizeof crash_address)
+			set->result.status.crash_address = crash_address;
+
 		pid = waitpid(s_context.child_pid, status, WNOHANG);
 		if (pid == s_context.child_pid)
-			{ child_reaped = true; break; }
-		if (pid == -1 && errno != EINTR) break;
+		{
+			child_reaped = true;
+			break;
+		}
+		if (pid == -1 && errno != EINTR)
+			break;
+
 		usleep(200);
 	}
-	if (!child_reaped) waitpid(s_context.child_pid, status, 0);
+	if (!child_reaped)
+		waitpid(s_context.child_pid, status, 0);
 }
 
 static inline void	run_child(t_set *set)

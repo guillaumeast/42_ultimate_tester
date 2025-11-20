@@ -3,6 +3,7 @@
 #include "assert_pub.h"
 #include "compare_int.h"
 #include "print_priv.h"
+#include "stacktrace_priv.h"
 #undef __FUT_ENGINE_INSIDE__
 #undef __FUT_INSIDE__
 
@@ -130,10 +131,18 @@ static inline t_status	check_out(t_assert *assert)
 
 static inline void	print_status_fail(const char *expr_name, t_status *status)
 {
-	char status_buffer[STATUS_BUFFER_SIZE];
+	char	status_buffer[STATUS_BUFFER_SIZE];
+	char	stacktrace[STACKTRACE_BUFFER_SIZE];
 	
 	status_format(status, status_buffer, STATUS_BUFFER_SIZE);
-	print_raw_err("%s%s%s has %s%s%s\n", RED, expr_name, GREY, YELLOW, status_buffer, NONE);
+
+	if (status->crash_address)
+	{
+		stacktrace_format_addr(status->crash_address, stacktrace, sizeof stacktrace);
+		print_raw_err("%s%s%s has %s%s %sat%s %s%s\n", RED, expr_name, GREY, YELLOW, status_buffer, GREY, BLUE, stacktrace, NONE);
+	}
+	else
+		print_raw_err("%s%s%s has %s%s%s\n", RED, expr_name, GREY, YELLOW, status_buffer, NONE);
 }
 
 static inline void	print_ret_fail(t_assert *assert)
