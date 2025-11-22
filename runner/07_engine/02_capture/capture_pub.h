@@ -47,11 +47,11 @@ void	_fut_capture_child(t_context *ctx, t_capture_res *res);
 
 #define __type_is_void(expr) __builtin_types_compatible_p(__typeof__(expr), void)
 #define __expr_or_zero(expr) __builtin_choose_expr(__type_is_void(expr), 0, (expr))
+#define CAP_VOID(expr, dest) ({ (void)(expr); (dest) = 0; 0; })
 #define CAP_VALUE(expr, dest) ({ (dest) = (intptr_t)(__expr_or_zero(expr)); 0; })
-#define CAP_VOID(expr) ({ (void)(expr); 0; })
 #define CAP_DISPATCH(expr, dest) \
 	__builtin_choose_expr(__type_is_void(expr), \
-		CAP_VOID(expr), \
+		CAP_VOID(expr, dest), \
 		CAP_VALUE(expr, dest))
 
 #define capture(mode, time_out, expr, capture_var_name)			\
@@ -69,8 +69,6 @@ void	_fut_capture_child(t_context *ctx, t_capture_res *res);
 			if (mode != RET)									\
 				redirect_start(g_capture_to_redirect[mode]);	\
 			CAP_DISPATCH(expr, capture_res.ret);				\
-			if (__type_is_void(expr))							\
-				capture_res.ret = 0;							\
 			if (mode != RET)									\
 			{													\
 				capture_res.out = redirect_read();				\

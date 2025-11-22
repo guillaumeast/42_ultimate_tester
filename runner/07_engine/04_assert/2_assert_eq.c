@@ -147,31 +147,33 @@ static inline void	print_status_fail(t_assert *assert)
 static inline void	print_ret_fail(t_assert *assert)
 {
 	print_stderr("%s  %s %sFAILED  %s%s%s %s ", RED, EMJ_ARW_DR, EMJ_FAIL, GREY, EMJ_ARW_RIGHT, RED, assert->got_name);
-	if (assert->format == F_STRUCT)
-		print_raw_err("%sreturned%s %sunexpected struct content%s\n", YELLOW, GREY, RED, NONE);
-	else if (assert->format == F_STRING)
+	switch (assert->format)
 	{
-		print_raw_err("%sreturned%s '%s%s%s' ", YELLOW, GREY, RED, (char *)assert->got_capt->ret, GREY);
-		print_raw_err("instead of '%s%s%s'%s\n", RED, (char *)assert->exp_capt->ret, GREY, NONE);
-	}
-	else if (assert->format == F_CHAR)
-	{
-		print_raw_err("%sreturned%s %s%c%s ", YELLOW, NONE, RED, (char)assert->got_capt->ret, GREY);
-		print_raw_err("instead of %s%c%s\n", RED, (char)assert->exp_capt->ret, NONE);
-	}
-	else if (assert->format == F_SIGNED)
-	{
-		print_raw_err("%sreturned%s %s%" PRIdPTR "%s ", YELLOW, NONE, RED, (intptr_t)assert->got_capt->ret, GREY);
-		print_raw_err("instead of %s%" PRIdPTR "%s\n", RED, (intptr_t)assert->exp_capt->ret, NONE);
-	}
-	else if (assert->format == F_UNSIGNED)
-	{
-		print_raw_err("%sreturned%s %s%" PRIuPTR "%s ", YELLOW, NONE, RED, (uintptr_t)assert->got_capt->ret, GREY);
-		print_raw_err("instead of %s%" PRIuPTR "%s\n", RED, (uintptr_t)assert->exp_capt->ret, NONE);
-	}
-	else
-	{
-		print_raw_err("%sreturned%s %s%" PRIxPTR "%s ", YELLOW, NONE, RED, (uintptr_t)assert->got_capt->ret, GREY);
-		print_raw_err("instead of %s%" PRIxPTR "%s\n", RED, (uintptr_t)assert->exp_capt->ret, NONE);
+		case F_BOOL:
+			print_raw_err("%sis %sFALSE%s\n", GREY, YELLOW, NONE);
+			break;
+		case F_STRUCT:
+			print_raw_err("%sreturned%s %sunexpected struct content%s\n", YELLOW, GREY, RED, NONE);
+			break;
+		case F_STRING:
+			print_raw_err("%sreturned%s '%s%s%s' ", YELLOW, GREY, RED, (char *)assert->got_capt->ret, GREY);
+			print_raw_err("instead of '%s%s%s'%s\n", RED, (char *)assert->exp_capt->ret, GREY, NONE);
+			break;
+		case F_CHAR:
+			print_raw_err("%sreturned%s %s%c%s ", YELLOW, NONE, RED, (char)assert->got_capt->ret, GREY);
+			print_raw_err("instead of %s%c%s\n", RED, (char)assert->exp_capt->ret, NONE);
+			break;
+		case F_SIGNED:
+			print_raw_err("%sreturned%s %s%" PRIdPTR "%s ", YELLOW, NONE, RED, (intptr_t)assert->got_capt->ret, GREY);
+			print_raw_err("instead of %s%" PRIdPTR "%s\n", RED, (intptr_t)assert->exp_capt->ret, NONE);
+			break;
+		case F_UNSIGNED:
+			print_raw_err("%sreturned%s %s%" PRIuPTR "%s ", YELLOW, NONE, RED, (uintptr_t)assert->got_capt->ret, GREY);
+			print_raw_err("instead of %s%" PRIuPTR "%s\n", RED, (uintptr_t)assert->exp_capt->ret, NONE);
+			break;
+		default:
+			print_raw_err("%sreturned%s %s%" PRIxPTR "%s ", YELLOW, NONE, RED, (uintptr_t)assert->got_capt->ret, GREY);
+			print_raw_err("instead of %s%" PRIxPTR "%s\n", RED, (uintptr_t)assert->exp_capt->ret, NONE);
+			break;
 	}
 }

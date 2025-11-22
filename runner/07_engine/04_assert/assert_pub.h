@@ -6,6 +6,7 @@
 #include <stdint.h>
 
 typedef enum e_format {
+	F_BOOL,
 	F_SIGNED,
 	F_UNSIGNED,
 	F_HEX,
@@ -28,53 +29,75 @@ typedef struct s_assert
 
 void	_fut_assert_run(t_assert *assert);
 
-#define _fut_assert(should_be_equal, cap_mode, time_out, got_expr, exp_expr)		\
+#define assert(time_out, expr) 														\
 	do {																			\
-	t_capture _fut_capt_got = {0};													\
-	capture(cap_mode, time_out, (got_expr), _fut_capt_got);							\
+		t_capture _fut_capt_got = {0};												\
+		capture(RET, time_out, (expr), _fut_capt_got);								\
 																					\
-	t_capture _fut_capt_exp = {0};													\
-	capture(cap_mode, time_out, (exp_expr), _fut_capt_exp);							\
+		t_capture _fut_capt_exp = {0};												\
+		_fut_capt_exp.status.type = DONE;											\
+		_fut_capt_exp.ret = true;													\
 																					\
-	t_assert _fut_assert = {0};														\
-	_fut_assert.mode = cap_mode;													\
-	_fut_assert.eq = should_be_equal;												\
-	_fut_assert.got_name = #got_expr;												\
-	_fut_assert.exp_name = #exp_expr;												\
-	_fut_assert.got_capt = &_fut_capt_got;											\
-	_fut_assert.exp_capt = &_fut_capt_exp;											\
-	if (__type_is_void(exp_expr) && __type_is_void(got_expr))						\
-	{																				\
-		_fut_assert.ret_size = sizeof(int);											\
-		_fut_assert.format = F_SIGNED;												\
-	}																				\
-	else																			\
-	{																				\
-		_fut_assert.ret_size = sizeof(__typeof__(exp_expr)); 						\
-		_fut_assert.format = _Generic((exp_expr), 									\
-				char: F_CHAR, 														\
-				signed char: F_SIGNED, 												\
-				short: F_SIGNED, 													\
-				int: F_SIGNED, 														\
-				long: F_SIGNED, 													\
-				long long: F_SIGNED, 												\
-				unsigned char: F_UNSIGNED, 											\
-				unsigned short: F_UNSIGNED, 										\
-				unsigned int: F_UNSIGNED, 											\
-				unsigned long: F_UNSIGNED, 											\
-				unsigned long long: F_UNSIGNED, 									\
-				char *: F_STRING,													\
-				const char *: F_STRING,												\
-				default: F_STRUCT);													\
-	}																				\
-	_fut_assert_run(&_fut_assert);													\
+		t_assert _fut_assert = {0};													\
+		_fut_assert.mode = RET;														\
+		_fut_assert.eq = true;														\
+		_fut_assert.got_name = #expr;												\
+		_fut_assert.exp_name = "true";												\
+		_fut_assert.got_capt = &_fut_capt_got;										\
+		_fut_assert.exp_capt = &_fut_capt_exp;										\
+		_fut_assert.ret_size = sizeof(bool);										\
+		_fut_assert.format = F_BOOL;												\
+																					\
+		_fut_assert_run(&_fut_assert);												\
 	} while (0)
 
-#define assert_eq(cap_mode, time_out, got_expr, exp_expr)		\
+#define _fut_assert(should_be_equal, cap_mode, time_out, got_expr, exp_expr)		\
+	do {																			\
+		t_capture _fut_capt_got = {0};												\
+		capture(cap_mode, time_out, (got_expr), _fut_capt_got);						\
+																					\
+		t_capture _fut_capt_exp = {0};												\
+		capture(cap_mode, time_out, (exp_expr), _fut_capt_exp);						\
+																					\
+		t_assert _fut_assert = {0};													\
+		_fut_assert.mode = cap_mode;												\
+		_fut_assert.eq = should_be_equal;											\
+		_fut_assert.got_name = #got_expr;											\
+		_fut_assert.exp_name = #exp_expr;											\
+		_fut_assert.got_capt = &_fut_capt_got;										\
+		_fut_assert.exp_capt = &_fut_capt_exp;										\
+		if (__type_is_void(exp_expr) && __type_is_void(got_expr))					\
+		{																			\
+			_fut_assert.ret_size = sizeof(int);										\
+			_fut_assert.format = F_SIGNED;											\
+		}																			\
+		else																		\
+		{																			\
+			_fut_assert.ret_size = sizeof(__typeof__(exp_expr)); 					\
+			_fut_assert.format = _Generic((exp_expr), 								\
+					char: F_CHAR, 													\
+					signed char: F_SIGNED, 											\
+					short: F_SIGNED, 												\
+					int: F_SIGNED, 													\
+					long: F_SIGNED, 												\
+					long long: F_SIGNED, 											\
+					unsigned char: F_UNSIGNED, 										\
+					unsigned short: F_UNSIGNED, 									\
+					unsigned int: F_UNSIGNED, 										\
+					unsigned long: F_UNSIGNED, 										\
+					unsigned long long: F_UNSIGNED, 								\
+					char *: F_STRING,												\
+					const char *: F_STRING,											\
+					default: F_STRUCT);												\
+		}																			\
+		_fut_assert_run(&_fut_assert);												\
+	} while (0)
+
+#define assert_eq(cap_mode, time_out, got_expr, exp_expr)							\
 	_fut_assert(true, cap_mode, time_out, got_expr, exp_expr)
-#define assert_neq(cap_mode, time_out, got_expr, exp_expr)	\
+#define assert_neq(cap_mode, time_out, got_expr, exp_expr)							\
 	_fut_assert(false, cap_mode, time_out, got_expr, exp_expr)
-#define compare(cap_mode, time_out, fn1_name, fn2_name, fn_args)	\
+#define compare(cap_mode, time_out, fn1_name, fn2_name, fn_args)					\
 	assert_eq(cap_mode, time_out, fn1_name fn_args, fn2_name fn_args)
 
 #endif

@@ -148,20 +148,26 @@ static inline void	print_status_fail(const char *expr_name, t_status *status)
 static inline void	print_ret_fail(t_assert *assert)
 {
 	print_stderr("%s  %s %sFAILED  %s%s%s %s ", RED, EMJ_ARW_DR, EMJ_FAIL, GREY, EMJ_ARW_RIGHT, RED, assert->got_name);
-	if (assert->format == F_STRUCT)
+		switch (assert->format)
 	{
-		print_raw_err("%sreturned%s %ssame struct content%s\n", YELLOW, GREY, RED, NONE);
-		return ;
+		case F_STRUCT:
+			print_raw_err("%sreturned%s %ssame struct content%s\n", YELLOW, GREY, RED, NONE);
+			return ;
+		case F_STRING:
+			print_raw_err("%sreturned%s '%s%s%s' ", YELLOW, GREY, RED, (char *)assert->got_capt->ret, GREY);
+			break;
+		case F_CHAR:
+			print_raw_err("%sreturned%s %s%c%s ", YELLOW, NONE, RED, (char)assert->got_capt->ret, GREY);
+			break;
+		case F_SIGNED:
+			print_raw_err("%sreturned%s %s%" PRIdPTR "%s ", YELLOW, NONE, RED, (intptr_t)assert->got_capt->ret, GREY);
+			break;
+		case F_UNSIGNED:
+			print_raw_err("%sreturned%s %s%" PRIuPTR "%s ", YELLOW, NONE, RED, (uintptr_t)assert->got_capt->ret, GREY);
+			break;
+		default:
+			print_raw_err("%sreturned%s %s%" PRIxPTR "%s ", YELLOW, NONE, RED, (uintptr_t)assert->got_capt->ret, GREY);
+			break;
 	}
-	else if (assert->format == F_STRING)
-		print_raw_err("%sreturned%s '%s%s%s' ", YELLOW, GREY, RED, (char *)assert->got_capt->ret, GREY);
-	else if (assert->format == F_CHAR)
-		print_raw_err("%sreturned%s %s%c%s ", YELLOW, NONE, RED, (char)assert->got_capt->ret, GREY);
-	else if (assert->format == F_SIGNED)
-		print_raw_err("%sreturned%s %s%" PRIdPTR "%s ", YELLOW, NONE, RED, (intptr_t)assert->got_capt->ret, GREY);
-	else if (assert->format == F_UNSIGNED)
-		print_raw_err("%sreturned%s %s%" PRIuPTR "%s ", YELLOW, NONE, RED, (uintptr_t)assert->got_capt->ret, GREY);
-	else
-		print_raw_err("%sreturned%s %s%" PRIxPTR "%s ", YELLOW, NONE, RED, (uintptr_t)assert->got_capt->ret, GREY);
 	print_raw_err("instead of %sanything else%s\n", RED, NONE);
 }

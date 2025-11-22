@@ -2,6 +2,8 @@
 // #include "libftprintf.h"
 // #include <stdlib.h>
 
+// TODO: test multiple redirection handling
+
 // Test(Redirect_stdout, 0)
 // {
 // 	t_string	*output;

@@ -31,98 +31,104 @@ void just_crash_bro(void)
 	*oops = 42;
 }
 
-Test(nonvoid_and_constant, 0)
-{
-	assert_eq(RET, 1, add(1,2), 3);			// TRUE
-	assert_neq(RET, 1, add(1,2), 3);			// FALSE
-	assert_eq(RET, 1, add(1,2), 4);			// FALSE
-	assert_neq(RET, 1, add(1,2), 4);			// TRUE
+// Test(generic_assert, 0)
+// {
+// 	assert(0, add(1, 2) > 2 && add(1, 2) < 4);
+// 	assert(0, add(1, 2) > 3 && add(1, 2) < 4);
+// }
 
-	assert_eq(OUT, 1, add(1,2), 3);			// TRUE
-	assert_neq(OUT, 1, add(1,2), 3);			// FALSE
-	assert_eq(OUT, 1, add(1,2), 4);			// TRUE
-	assert_neq(OUT, 1, add(1,2), 4);			// FALSE
+// Test(nonvoid_and_constant, 0)
+// {
+// 	assert_eq(RET, 1, add(1,2), 3);			// TRUE
+// 	assert_neq(RET, 1, add(1,2), 3);			// FALSE
+// 	assert_eq(RET, 1, add(1,2), 4);			// FALSE
+// 	assert_neq(RET, 1, add(1,2), 4);			// TRUE
 
-	assert_eq(RET_BOTH, 1, add(1,2), 3);		// TRUE
-	assert_neq(RET_BOTH, 1, add(1,2), 3);	// FALSE
-	assert_eq(RET_BOTH, 1, add(1,2), 4);		// FALSE
-	assert_neq(RET_BOTH, 1, add(1,2), 4);	// FALSE
+// 	assert_eq(OUT, 1, add(1,2), 3);			// TRUE
+// 	assert_neq(OUT, 1, add(1,2), 3);			// FALSE
+// 	assert_eq(OUT, 1, add(1,2), 4);			// TRUE
+// 	assert_neq(OUT, 1, add(1,2), 4);			// FALSE
 
-	// TRUE = 5 | FALSE = 7
-}
-Test(nonvoid_and_var, 0)
-{
-	int exp = 3;
+// 	assert_eq(RET_BOTH, 1, add(1,2), 3);		// TRUE
+// 	assert_neq(RET_BOTH, 1, add(1,2), 3);	// FALSE
+// 	assert_eq(RET_BOTH, 1, add(1,2), 4);		// FALSE
+// 	assert_neq(RET_BOTH, 1, add(1,2), 4);	// FALSE
 
-	assert_eq(RET, 1, add(1,2), exp);			// TRUE
-	assert_neq(RET, 1, add(1,2), exp);			// FALSE
-	assert_eq(OUT, 1, add(1,2), exp);			// TRUE
-	assert_neq(OUT, 1, add(1,2), exp);			// FALSE
-	assert_eq(RET_BOTH, 1, add(1,2), exp);		// TRUE
-	assert_neq(RET_BOTH, 1, add(1,2), exp);		// FALSE
+// 	// TRUE = 5 | FALSE = 7
+// }
+// Test(nonvoid_and_var, 0)
+// {
+// 	int exp = 3;
 
-	exp = 4;
-	assert_eq(RET, 1, add(1,2), exp);			// FALSE
-	assert_neq(RET, 1, add(1,2), exp);			// TRUE
-	assert_eq(OUT, 1, add(1,2), exp);			// TRUE
-	assert_neq(OUT, 1, add(1,2), exp);			// FALSE
-	assert_eq(RET_BOTH, 1, add(1,2), exp);		// FALSE
-	assert_neq(RET_BOTH, 1, add(1,2), exp);		// FALSE
+// 	assert_eq(RET, 1, add(1,2), exp);			// TRUE
+// 	assert_neq(RET, 1, add(1,2), exp);			// FALSE
+// 	assert_eq(OUT, 1, add(1,2), exp);			// TRUE
+// 	assert_neq(OUT, 1, add(1,2), exp);			// FALSE
+// 	assert_eq(RET_BOTH, 1, add(1,2), exp);		// TRUE
+// 	assert_neq(RET_BOTH, 1, add(1,2), exp);		// FALSE
 
-	// TRUE = 5 | FALSE = 7
-}
+// 	exp = 4;
+// 	assert_eq(RET, 1, add(1,2), exp);			// FALSE
+// 	assert_neq(RET, 1, add(1,2), exp);			// TRUE
+// 	assert_eq(OUT, 1, add(1,2), exp);			// TRUE
+// 	assert_neq(OUT, 1, add(1,2), exp);			// FALSE
+// 	assert_eq(RET_BOTH, 1, add(1,2), exp);		// FALSE
+// 	assert_neq(RET_BOTH, 1, add(1,2), exp);		// FALSE
 
-Test(nonvoid_and_unref, 0)
-{
-	int exp = 3;
-	int *exp_p = &exp;
+// 	// TRUE = 5 | FALSE = 7
+// }
 
-	assert_eq(RET, 1, add(1,2), *exp_p);			// TRUE
-	assert_neq(RET, 1, add(1,2), *exp_p);		// FALSE
-	assert_eq(OUT, 1, add(1,2), *exp_p);			// TRUE
-	assert_neq(OUT, 1, add(1,2), *exp_p);		// FALSE
-	assert_eq(RET_BOTH, 1, add(1,2), *exp_p);	// TRUE
-	assert_neq(RET_BOTH, 1, add(1,2), *exp_p);	// FALSE
+// Test(nonvoid_and_unref, 0)
+// {
+// 	int exp = 3;
+// 	int *exp_p = &exp;
 
-	exp = 4;
-	assert_eq(RET, 1, add(1,2), *exp_p);			// FALSE
-	assert_neq(RET, 1, add(1,2), *exp_p);		// TRUE
-	assert_eq(OUT, 1, add(1,2), *exp_p);			// TRUE
-	assert_neq(OUT, 1, add(1,2), *exp_p);		// FALSE
-	assert_eq(RET_BOTH, 1, add(1,2), *exp_p);	// FALSE
-	assert_neq(RET_BOTH, 1, add(1,2), *exp_p);	// FALSE
+// 	assert_eq(RET, 1, add(1,2), *exp_p);			// TRUE
+// 	assert_neq(RET, 1, add(1,2), *exp_p);		// FALSE
+// 	assert_eq(OUT, 1, add(1,2), *exp_p);			// TRUE
+// 	assert_neq(OUT, 1, add(1,2), *exp_p);		// FALSE
+// 	assert_eq(RET_BOTH, 1, add(1,2), *exp_p);	// TRUE
+// 	assert_neq(RET_BOTH, 1, add(1,2), *exp_p);	// FALSE
 
-	// TRUE = 5 | FALSE = 7
-}
+// 	exp = 4;
+// 	assert_eq(RET, 1, add(1,2), *exp_p);			// FALSE
+// 	assert_neq(RET, 1, add(1,2), *exp_p);		// TRUE
+// 	assert_eq(OUT, 1, add(1,2), *exp_p);			// TRUE
+// 	assert_neq(OUT, 1, add(1,2), *exp_p);		// FALSE
+// 	assert_eq(RET_BOTH, 1, add(1,2), *exp_p);	// FALSE
+// 	assert_neq(RET_BOTH, 1, add(1,2), *exp_p);	// FALSE
 
-Test(test_time_out_after_asserts, 10)
-{
-	assert_eq(RET, 1, 1, just_timeout_bro());
-	assert_eq(RET, 1, just_timeout_bro(), 1);
-	assert_neq(RET, 1, just_timeout_bro(), just_timeout_bro());
-}
+// 	// TRUE = 5 | FALSE = 7
+// }
 
-Test(test_time_out_during_asserts, 4)
-{
-	assert_eq(RET, 2, 1, just_timeout_bro());
-	assert_eq(RET, 2, just_timeout_bro(), 1);
-	assert_neq(RET, 2, just_timeout_bro(), just_timeout_bro());
-}
+// Test(test_time_out_after_asserts, 10)
+// {
+// 	assert_eq(RET, 1, 1, just_timeout_bro());
+// 	assert_eq(RET, 1, just_timeout_bro(), 1);
+// 	assert_neq(RET, 1, just_timeout_bro(), just_timeout_bro());
+// }
 
-Test(test_time_out_before_asserts, 1)
-{
-	assert_eq(RET, 2, 1, just_timeout_bro());
-	assert_eq(RET, 2, just_timeout_bro(), 1);
-	assert_neq(RET, 2, just_timeout_bro(), just_timeout_bro());
-}
+// Test(test_time_out_during_asserts, 4)
+// {
+// 	assert_eq(RET, 2, 1, just_timeout_bro());
+// 	assert_eq(RET, 2, just_timeout_bro(), 1);
+// 	assert_neq(RET, 2, just_timeout_bro(), just_timeout_bro());
+// }
 
-Test(test_crash_after_asserts, 0)
-{
-	assert_eq(RET, 0, 1, just_crash_bro());
-	assert_eq(RET, 0, just_crash_bro(), 1);
-	assert_neq(RET, 0, just_crash_bro(), just_crash_bro());
-	just_crash_bro();
-}
+// Test(test_time_out_before_asserts, 1)
+// {
+// 	assert_eq(RET, 2, 1, just_timeout_bro());
+// 	assert_eq(RET, 2, just_timeout_bro(), 1);
+// 	assert_neq(RET, 2, just_timeout_bro(), just_timeout_bro());
+// }
+
+// Test(test_crash_after_asserts, 0)
+// {
+// 	assert_eq(RET, 0, 1, just_crash_bro());
+// 	assert_eq(RET, 0, just_crash_bro(), 1);
+// 	assert_neq(RET, 0, just_crash_bro(), just_crash_bro());
+// 	just_crash_bro();
+// }
 
 Test(test_crash_during_asserts, 0)
 {
@@ -132,18 +138,20 @@ Test(test_crash_during_asserts, 0)
 	assert_neq(RET, 0, just_crash_bro(), just_crash_bro());
 }
 
-Test(test_crash_before_asserts, 0)
-{
-	just_crash_bro();
-	assert_eq(RET, 0, 1, just_crash_bro());
-	assert_eq(RET, 0, just_crash_bro(), 1);
-	assert_neq(RET, 0, just_crash_bro(), just_crash_bro());
-}
+// Test(test_crash_before_asserts, 0)
+// {
+// 	just_crash_bro();
+// 	assert_eq(RET, 0, 1, just_crash_bro());
+// 	assert_eq(RET, 0, just_crash_bro(), 1);
+// 	assert_neq(RET, 0, just_crash_bro(), just_crash_bro());
+// }
 
 // Test(please_kill_me, 0)
 // {
 // 	assert_eq(RET, 0, just_timeout_bro(), just_timeout_bro());
 // }
+
+/* ---------------------------------------- TODO ---------------------------------------- */
 
 // Test infinite loop sans timeout dans assert puis ctrl+c dans terminal
 

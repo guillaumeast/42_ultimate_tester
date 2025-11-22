@@ -11,6 +11,13 @@
 #include <unistd.h>
 #include <string.h>
 
+#if defined(__APPLE__)
+#define PATH_FALLBACK ""
+#else
+#define PATH_FALLBACK "/proc/self/exe"
+#endif
+
+
 void	stacktrace_init(void)
 {
 	struct sigaction	action = {0};
@@ -33,57 +40,68 @@ static void	get_binary_path(char *buffer, size_t buffer_size)
 	if (!buffer || buffer_size == 0)
 		return;
 	buffer[0] = '\0';
-	if (dladdr((void *)&stacktrace_format_addr, &info) != 0 \
+	if (dladdr((void *)&get_binary_path, &info) != 0 \
 		&& info.dli_fname && info.dli_fname[0] != '\0')
 		snprintf(buffer, buffer_size, "%s", info.dli_fname);
 	else
-		snprintf(buffer, buffer_size, "/proc/self/exe");
+		snprintf(buffer, buffer_size, PATH_FALLBACK);
 }
 
-/* ---------- TODO: REFACTO THIS AI SHIT 🤪 - START ---------- */
-
 #if defined(__APPLE__)
-static void resolve_address(void *addr, char *buffer, size_t buffer_size)
+static inline void	build_atos_cmd(void *addr, char *cmd_buff, size_t buffer_size)
 {
-	Dl_info info;
-	char binary_path[PATH_MAX];
-	char cmd[PATH_MAX + 256];
-	FILE *fp;
-	char loc[256];
+	Dl_info	info;
+	char	binary_path[PATH_MAX];
 
 	if (!addr || dladdr(addr, &info) == 0 || !info.dli_fbase)
-		return;
+		return ;
 
 	get_binary_path(binary_path, sizeof binary_path);
-	snprintf(cmd, sizeof cmd,
-		"atos -o \"%s\" -l %#lx %#lx 2>/dev/null",
-		binary_path,
-		(unsigned long)info.dli_fbase,
-		(unsigned long)addr
+	snprintf(cmd_buff, buffer_size, "atos -o \"%s\" -l %#lx %#lx 2>/dev/null",
+		binary_path, (unsigned long)info.dli_fbase, (unsigned long)addr
 	);
+}
+
+static inline void	run_atos_cmd(const char *cmd, char *buffer, size_t buffer_size)
+{
+	FILE	*fp;
 
 	fp = popen(cmd, "r");
 	if (!fp)
 		return;
-	if (!fgets(loc, sizeof loc, fp))
+
+	if (!fgets(buffer, buffer_size, fp))
 	{
 		pclose(fp);
 		return;
 	}
 	pclose(fp);
 
-	if (loc[0] == '\0' || strstr(loc, "0x") == loc)
+	if (buffer[0] == '\0' || strstr(buffer, "0x") == buffer)
 		return;
-	loc[strcspn(loc, "\r\n")] = '\0';
+	buffer[strcspn(buffer, "\r\n")] = '\0';
+}
 
-	/* --- Extract only file:line from atos output --- */
-	char *p1 = strrchr(loc, '(');
-	char *p2 = strrchr(loc, ')');
+static inline void resolve_address(void *addr, char *buffer, size_t buffer_size)
+{
+	char	cmd[PATH_MAX + 256];
+	char	resolved[256];
+	char	*opening_par;
+	char	*closing_par;
 
-	if (p1 && p2 && p2 > p1 + 1)
+	if (!addr || !buffer)
+		return;
+
+	build_atos_cmd(addr, cmd, sizeof cmd);
+	run_atos_cmd(cmd, resolved, sizeof resolved);
+
+	opening_par = strrchr(resolved, '(');
+	closing_par = strrchr(resolved, ')');
+
+	if (opening_par && closing_par && closing_par > opening_par + 1)
 	{
-		*p2 = '\0'; /* cut after ')' */
-		snprintf(buffer, buffer_size, "%s", p1 + 1);
+		*closing_par = '\0';
+		snprintf(buffer, buffer_size, "%s", opening_par + 1);
 	}
 	else
 	{
@@ -91,15 +109,15 @@ static void resolve_address(void *addr, char *buffer, size_t buffer_size)
 	}
 }
 #else
-static void resolve_address(void *addr, char *buffer, size_t buffer_size)
+static inline void resolve_address(void *addr, char *buffer, size_t buffer_size)
 {
 	char	binary_path[PATH_MAX];
 	char	cmd[PATH_MAX + 128];
-	FILE	*fp;
 	char	loc[256];
+	char	func[256];
+	FILE	*fp;
 
 	get_binary_path(binary_path, sizeof binary_path);
-	char	func[256];
 	snprintf(cmd, sizeof cmd, "addr2line -f -e \"%s\" %p 2>/dev/null", binary_path, addr);
 	fp = popen(cmd, "r");
 	if (!fp)
@@ -120,8 +138,6 @@ static void resolve_address(void *addr, char *buffer, size_t buffer_size)
 	snprintf(buffer, buffer_size, "%s() in %s", func, loc);
 }
 #endif
-
-/* ---------- TODO: REFACTO THIS AI SHIT 🤪 - END ---------- */
 
 void	stacktrace_format_addr(void *addr, char *buffer, size_t buffer_size)
 {
