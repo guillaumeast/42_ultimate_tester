@@ -28,9 +28,10 @@ FUT_SRCS		:= \
 	$(wildcard 05_status/*.c) \
 	$(wildcard 06_result/*.c) \
 	$(wildcard 07_engine/01_set/*.c) \
-	$(wildcard 07_engine/02_capture/*.c) \
-	$(wildcard 07_engine/03_compare/*.c) \
-	$(wildcard 07_engine/04_assert/*.c) \
+	$(wildcard 07_engine/02_memcheck/*.c) \
+	$(wildcard 07_engine/03_capture/*.c) \
+	$(wildcard 07_engine/04_compare/*.c) \
+	$(wildcard 07_engine/05_assert/*.c) \
 	$(wildcard 08_report/*.c)
 FUT_INCLUDES	:= \
 	-I. \
@@ -46,14 +47,19 @@ FUT_INCLUDES	:= \
 	-I05_status \
 	-I06_result \
 	-I07_engine/01_set \
-	-I07_engine/02_capture \
-	-I07_engine/03_compare \
-	-I07_engine/04_assert \
+	-I07_engine/02_memcheck \
+	-I07_engine/03_capture \
+	-I07_engine/04_compare \
+	-I07_engine/05_assert \
 	-I08_report
 
 SRCS			:= $(FUT_SRCS) $(PROJ_SRCS) $(TESTS_SRCS)
 INCLUDES		:= $(FUT_INCLUDES) $(PROJ_INCLUDES) $(TESTS_INCLUDES)
-LIBS			:= $(PROJ_LIBS)
+ifeq ($(shell uname -s),Linux)
+    LIBS := $(PROJ_LIBS) -ldl
+else
+    LIBS := $(PROJ_LIBS)
+endif
 
 OBJ_DIR			:= obj
 OBJS			:= $(SRCS:%.c=$(OBJ_DIR)/%.o)
@@ -64,7 +70,7 @@ project:
 	@make -C $(PROJ_DIR) || true
 
 $(NAME): project $(OBJS)
-	$(CC) $(CFLAGS) $(INCLUDES) $(OBJS) -o $(NAME) $(PROJ_LIBS)
+	$(CC) $(CFLAGS) $(INCLUDES) $(OBJS) -o $(NAME) $(LIBS)
 
 $(OBJ_DIR)/%.o : %.c
 	@mkdir -p $(dir $@)

@@ -1,0 +1,72 @@
+#define __FUT_MEMCHECK_INSIDE__
+#include "memcheck_int.h"
+#undef __FUT_MEMCHECK_INSIDE__
+#include <dlfcn.h>
+
+static void	*(*real_malloc)(size_t) = NULL;
+static void	*(*real_calloc)(size_t count, size_t) = NULL;
+static void	*(*real_realloc)(void *ptr, size_t) = NULL;
+static void	(*real_free)(void *) = NULL;
+
+static inline void	init_hooks(void)
+{
+	if (!real_malloc)
+	{
+		real_malloc = dlsym(RTLD_NEXT, "malloc");
+		real_calloc = dlsym(RTLD_NEXT, "calloc");
+		real_realloc = dlsym(RTLD_NEXT, "realloc");
+		real_free = dlsym(RTLD_NEXT, "free");
+	}
+}
+
+void	*malloc(size_t size)
+{
+	void	*ptr;
+	void	*caller;
+
+	init_hooks();
+	ptr = real_malloc(size);
+	caller = __builtin_return_address(0);
+	register_alloc(ptr, size, caller);
+	return (ptr);
+}
+
+void	*calloc(size_t count, size_t size)
+{
+	void	*ptr;
+	void	*caller;
+
+	init_hooks();
+	ptr = real_calloc(count, size);
+	caller = __builtin_return_address(0);
+	register_alloc(ptr, size, caller);
+	return (ptr);
+}
+
+void	*realloc(void *ptr, size_t size)
+{
+	void	*new_ptr;
+	void	*caller;
+
+	init_hooks();
+
+	if (size == 0)
+		register_free(ptr);
+	
+	new_ptr = real_realloc(ptr, size);
+
+	if (size > 0 && new_ptr)
+	{
+		register_free(ptr);
+		caller = __builtin_return_address(0);
+		register_alloc(new_ptr, size, caller);
+	}
+	return (new_ptr);
+}
+
+void	free(void *ptr)
+{
+	init_hooks();
+	register_free(ptr);
+	real_free(ptr);
+}

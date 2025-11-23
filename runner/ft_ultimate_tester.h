@@ -1,9 +1,10 @@
 #ifndef FT_ULTIMATE_TESTER_H
 #define FT_ULTIMATE_TESTER_H
 
-#include "set_pub.h"
+#include "io_pub.h"
+#include "process_pub.h"
+#include "memcheck_pub.h"
+#include "capture_pub.h"
 #include "assert_pub.h"
-#include "redirect_pub.h"
-#include "print_pub.h"
 
 #endif

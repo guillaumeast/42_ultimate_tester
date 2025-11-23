@@ -1,0 +1,67 @@
+#define __FUT_INSIDE__
+#define __FUT_MEMCHECK_INSIDE__
+#include "error_priv.h"
+#include "process_priv.h"
+#include "memcheck_int.h"
+#include "result_pub.h"
+#include "status_pub.h"
+#undef __FUT_MEMCHECK_INSIDE__
+#undef __FUT_INSIDE__
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
+static inline void	wait_for_child(int *status, t_context *ctx, t_result *result);
+
+void	_memcheck_parent(const char *expr, t_context *ctx)
+{
+	int			status;
+	t_result	result = {0};
+
+	wait_for_child(&status, ctx, &result);
+
+	if (timeout_is_triggered())
+	{
+		result.timed++;
+		send_incorrect_status(ctx, expr, &result.status, NULL);
+	}
+	else if (!WIFEXITED(status) || WEXITSTATUS(status) != EXIT_SUCCESS)
+	{
+		if (WIFSIGNALED(status))
+			result.status.sig = WTERMSIG(status);
+
+		result.crashed++;
+		send_incorrect_status(ctx, expr, &result.status, NULL);
+	}
+
+	result_compute(&result);
+	message_send(ctx->pipe, RESULT, (t_message_data *)&result);
+	fork_cleanup(ctx);
+}
+
+static inline void	wait_for_child(int *status, t_context *ctx, t_result *result)
+{
+	t_message	message;
+
+	while (message_receive(ctx->pipe, &message))
+	{
+		switch (message.type)
+		{
+			case RESULT:
+				logs_print_indicator(&message.data.result.status);
+				result_add(&message.data.result, result);
+				break;
+			case CRASH:
+				result->status.crash_address = message.data.crash_addr;
+				break;
+			case LOG:
+				message_send(ctx->pipe, LOG, &message.data);
+				break;
+			default: exit_if(true, SET_UNKNOWN_MESSAGE_TYPE);
+		}
+	}
+
+	waitpid(ctx->child_pid, status, 0);
+}

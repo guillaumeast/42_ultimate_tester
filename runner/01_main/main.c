@@ -23,10 +23,10 @@ static void	ult_main(void)
 {
 	t_set	*set;
 	
-	print_start();
 	for (set = START_SET; set < STOP_SET; set++)
 		set_run(set);
-	print_result(&g_result);
+	
+	print_report(&g_result);
 
 	exit(EXIT_SUCCESS);
 }
