@@ -11,8 +11,8 @@
 #include "assert_pub.h"
 #include "status_pub.h"
 
-t_status	check_assert_eq(t_assert *assert);
-t_status	check_assert_neq(t_assert *assert);
+t_status	assert_check_eq(t_assert *assert);
+t_status	assert_check_neq(t_assert *assert);
 
 #endif /* __FUT_ASSERT_INSIDE__ */
 

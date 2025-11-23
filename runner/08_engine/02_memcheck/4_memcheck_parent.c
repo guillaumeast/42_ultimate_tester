@@ -19,7 +19,7 @@ void	_memcheck_parent(const char *expr)
 	if (timeout_is_triggered())
 	{
 		result.timed++;
-		send_incorrect_status(g_context.pipe_to_parent, expr, &result.status, NULL);
+		send_incorrect_status(expr, &result.status, NULL);
 	}
 	else if (!WIFEXITED(status) || WEXITSTATUS(status) != EXIT_SUCCESS)
 	{
@@ -27,7 +27,7 @@ void	_memcheck_parent(const char *expr)
 			result.status.sig = WTERMSIG(status);
 
 		result.crashed++;
-		send_incorrect_status(g_context.pipe_to_parent, expr, &result.status, NULL);
+		send_incorrect_status(expr, &result.status, NULL);
 	}
 
 	result_compute(&result);

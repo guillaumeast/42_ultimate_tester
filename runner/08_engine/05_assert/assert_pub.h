@@ -1,7 +1,7 @@
 #ifndef ULT_ASSERT_PUB_H
 #define ULT_ASSERT_PUB_H
 
-#include "engine_pub.h"
+#include "format_pub.h"
 #include "capture_pub.h"
 #include <stdbool.h>
 #include <stdint.h>

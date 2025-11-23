@@ -1,5 +1,5 @@
-#ifndef ULT_COMPARE_INTERNAL_H
-#define ULT_COMPARE_INTERNAL_H
+#ifndef ULT_COMPARE_ENGINE_H
+#define ULT_COMPARE_ENGINE_H
 
 #ifndef __FUT_ENGINE_INSIDE__
 /*
@@ -20,4 +20,4 @@ bool	compare_structs(const void *s1, const void *s2, size_t struct_size);
 
 #endif /* __FUT_ENGINE_INSIDE__ */
 
-#endif /* ULT_CHECK_INTERNAL_H */
+#endif /* ULT_COMPARE_ENGINE_H */

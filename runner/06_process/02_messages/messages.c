@@ -17,10 +17,11 @@ void	message_send(int pipe[2], t_message_type type, t_message_data *data)
 
 	switch (type)
 	{
-		case RESULT:	len = sizeof(t_result); break;
-		case CRASH:		len = sizeof(void *); break;
-		case LOG:		len = strlen((char *)data); break;
-		default:		exit_if(true, MESSAGE_UNKNOWN_TYPE);
+		case RETURN_VALUE:	len = sizeof(intptr_t); break;
+		case RESULT:		len = sizeof(t_result); break;
+		case CRASH:			len = sizeof(void *); break;
+		case LOG:			len = strlen((char *)data); break;
+		default:			exit_if(true, MESSAGE_UNKNOWN_TYPE);
 	}
 	exit_if(len >= sizeof(t_message_data), MESSAGE_TOO_LONG);
 
@@ -39,6 +40,9 @@ bool	message_receive(int pipe[2], t_message *buff)
 		return (false);
 	switch (buff->type)
 	{
+		case RETURN_VALUE:
+			exit_if(len != sizeof(size_t), MESSAGE_INVALID_LEN);
+			break;
 		case RESULT:
 			exit_if(len != sizeof(t_result), MESSAGE_INVALID_LEN);
 			break;
@@ -56,6 +60,21 @@ bool	message_receive(int pipe[2], t_message *buff)
 	if (buff->type == LOG)
 		buff->data.log[len] = '\0';
 	return (true);
+}
+
+bool	message_read_type(int pipe[2], t_message_type *buff)
+{
+	return (read_complete(pipe[0], buff, sizeof buff));
+}
+
+bool	message_read_len(int pipe[2], size_t *buff)
+{
+	return (read_complete(pipe[0], buff, sizeof buff));
+}
+
+bool	message_read_data(int pipe[2], void *buff, size_t len)
+{
+	return (read_complete(pipe[0], buff, len));
 }
 
 static inline bool	read_complete(int fd, void *buff, size_t message_size)

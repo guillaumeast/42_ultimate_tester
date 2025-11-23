@@ -14,10 +14,13 @@
 
 static inline void	wait_for_child(int *status, t_set *set);
 
+static t_set	*s_current_set;
+
 void	set_run_parent(t_set *set)
 {
 	int		status;
 
+	s_current_set = set;
 	wait_for_child(&status, set);
 	logs_print_h2();
 
@@ -37,8 +40,8 @@ void	set_run_parent(t_set *set)
 			RED, set->name, YELLOW, format_status(&set->result.status), \
 			GREY, format_addr(set->result.status.crash_address), NONE);
 	}
-
 	result_compute(&set->result);
+	result_add(&set->result, &g_result);
 	fork_cleanup();
 }
 

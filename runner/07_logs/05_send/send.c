@@ -9,7 +9,7 @@
 
 static inline void	add_formatted_value(char *buff, size_t cap, size_t *offset, t_format fmt, intptr_t value);
 
-void	send_incorrect_status(int pipe[2], const char *expr, t_status *got, t_status *exp)
+void	send_incorrect_status(const char *expr, t_status *got, t_status *exp)
 {
 	char	log[H2_CAP];
 	size_t	offset;
@@ -21,10 +21,10 @@ void	send_incorrect_status(int pipe[2], const char *expr, t_status *got, t_statu
 		offset += snprintf(log + offset, sizeof log - offset, " %sinstead of %s%s", GREY, RED, format_status(exp));
 
 	snprintf(log + offset, sizeof log - offset, "%s\n", NONE);
-	message_send(pipe, LOG, (t_message_data *)log);
+	message_send(g_context.pipe_to_parent, LOG, (t_message_data *)log);
 }
 
-void	send_incorrect_return(int pipe[2], const char *expr, t_format fmt, intptr_t got, intptr_t *exp)
+void	send_incorrect_return(const char *expr, t_format fmt, intptr_t got, intptr_t *exp)
 {
 	char	log[H2_CAP];
 	size_t	offset;
@@ -38,10 +38,10 @@ void	send_incorrect_return(int pipe[2], const char *expr, t_format fmt, intptr_t
 	}
 
 	snprintf(log + offset, sizeof log - offset, "%s\n", NONE);
-	message_send(pipe, LOG, (t_message_data *)log);
+	message_send(g_context.pipe_to_parent, LOG, (t_message_data *)log);
 }
 
-void	send_incorrect_output(int pipe[2], const char *expr, const char *got, const char *exp)
+void	send_incorrect_output(const char *expr, const char *got, const char *exp)
 {
 	char	log[H2_CAP];
 	size_t	offset;
@@ -51,10 +51,10 @@ void	send_incorrect_output(int pipe[2], const char *expr, const char *got, const
 		offset += snprintf(log + offset, sizeof log - offset, " %sinstead of %s%s", GREY, RED, exp);
 
 	snprintf(log + offset, sizeof log - offset, "%s\n", NONE);
-	message_send(pipe, LOG, (t_message_data *)log);
+	message_send(g_context.pipe_to_parent, LOG, (t_message_data *)log);
 }
 
-void	send_leak(int pipe[2], const char *expr, size_t size, void *caller)
+void	send_leak(const char *expr, size_t size, void *caller)
 {
 	char	log[H2_CAP];
 
@@ -62,7 +62,7 @@ void	send_leak(int pipe[2], const char *expr, size_t size, void *caller)
 		RED, expr, YELLOW, "leaked", RED, size, GREY, \
 		format_addr(caller), NONE
 	);
-	message_send(pipe, LOG, (t_message_data *)log);
+	message_send(g_context.pipe_to_parent, LOG, (t_message_data *)log);
 }
 
 static inline void	add_formatted_value(char *buff, size_t cap, size_t *offset, t_format fmt, intptr_t value)

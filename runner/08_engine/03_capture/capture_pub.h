@@ -52,7 +52,7 @@ void	_capture_child(t_capture_res *res);
 
 #define capture(mode, time_out, expr, capture_var_name)			\
 	do {														\
-		memset(&capture_var_name, 0, sizeof(capture_var_name));	\
+		memset(&capture_var_name, 0, sizeof capture_var_name);	\
 		capture_var_name.status.timeout = time_out;				\
 		_fork_init(time_out);									\
 		if (g_context.child_pid > 0)							\

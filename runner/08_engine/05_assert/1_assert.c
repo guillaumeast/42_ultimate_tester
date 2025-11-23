@@ -1,8 +1,7 @@
 #define __FUT_INSIDE__
 #define __FUT_ASSERT_INSIDE__
 #include "assert_int.h"
-#include "set_priv.h"
-#include "result_pub.h"
+#include "messages_priv.h"
 #undef __FUT_ASSERT_INSIDE__
 #undef __FUT_INSIDE__
 
@@ -12,9 +11,9 @@ void	_assert_run(t_assert *assert)
 	t_result	result = {0};
 
 	if (assert->eq == true)
-		status = check_assert_eq(assert);
+		status = assert_check_eq(assert);
 	else
-	 	status = check_assert_neq(assert);
+	 	status = assert_check_neq(assert);
 
 	if (status.type == PASSED)
 		result.passed++;
@@ -24,6 +23,7 @@ void	_assert_run(t_assert *assert)
 		result.timed++;
 	else if (status.type == CRASHED)
 		result.crashed++;
-	result.total++;
-	set_add_result(&result);
+
+	result_compute(&result);
+	message_send(g_context.pipe_to_parent, RESULT, (t_message_data *)&result);
 }

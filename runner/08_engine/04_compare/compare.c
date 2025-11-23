@@ -1,5 +1,5 @@
 #define __FUT_ENGINE_INSIDE__
-#include "compare_int.h"
+#include "compare_engine.h"
 #undef __FUT_ENGINE_INSIDE__
 
 #include <stdbool.h>

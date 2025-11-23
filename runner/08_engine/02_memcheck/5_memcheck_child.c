@@ -15,7 +15,7 @@ void	_memcheck_child(const char *expr)
 
 	for (size_t i = 0; i < g_leaks_count; i++)
 	{
-		send_leak(g_context.pipe_to_parent, expr, g_leaks_table[i].size, g_leaks_table[i].caller);
+		send_leak(expr, g_leaks_table[i].size, g_leaks_table[i].caller);
 		result.leaks++;
 	}
 
