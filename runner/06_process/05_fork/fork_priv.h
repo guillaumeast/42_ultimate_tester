@@ -10,7 +10,7 @@
 
 #include "fork_pub.h"
 
-void	fork_cleanup(t_context *context);
+void	fork_cleanup(void);
 
 #endif /* __FUT_INSIDE__ */
 

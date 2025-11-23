@@ -13,11 +13,10 @@
 #include <inttypes.h>
 #include <stdio.h>
 
-
-void	send_incorrect_status(t_context *ctx, const char *expr, t_status *got, t_status *exp);
-void	send_incorrect_return(t_context *ctx, const char *expr, t_format fmt, intptr_t got, intptr_t *exp);
-void	send_incorrect_output(t_context *ctx, const char *expr, const char *got, const char *exp);
-void	send_leak(t_context *ctx, const char *expr, size_t size, void *caller);
+void	send_incorrect_status(int pipe[2], const char *expr, t_status *got, t_status *exp);
+void	send_incorrect_return(int pipe[2], const char *expr, t_format fmt, intptr_t got, intptr_t *exp);
+void	send_incorrect_output(int pipe[2], const char *expr, const char *got, const char *exp);
+void	send_leak(int pipe[2], const char *expr, size_t size, void *caller);
 
 #endif /* __FUT_INSIDE__ */
 

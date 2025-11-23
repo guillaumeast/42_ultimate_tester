@@ -13,16 +13,16 @@ static void	timeout_handler(int sig);
 static bool				active = false;
 volatile sig_atomic_t	g_timeout_triggered = (sig_atomic_t)false;
 
-void	timeout_init(t_context *context, size_t timeout)
+void	timeout_init(size_t timeout)
 {
-	context->timeout = timeout;
+	g_context.child_timeout = timeout;
 }
 
-void	timeout_start(t_context *context)
+void	timeout_start(void)
 {
 	struct sigaction	new_action = {0};
 
-	if (context->timeout == 0)
+	if (g_context.child_timeout == 0)
 		return ;
 
 	g_timeout_triggered = false;
@@ -32,11 +32,11 @@ void	timeout_start(t_context *context)
 	new_action.sa_handler = timeout_handler;
 	exit_if(sigaction(SIGALRM, &new_action, NULL) == -1, ALARM_SET_FAILED);
 
-	(void)alarm(context->timeout);
+	(void)alarm(g_context.child_timeout);
 	active = true;
 }
 
-void	timeout_cancel(t_context *context)
+void	timeout_cancel(void)
 {
 	struct sigaction action = {0};
 
@@ -49,7 +49,7 @@ void	timeout_cancel(t_context *context)
 	(void)alarm(0);
 
 	active = false;
-	context->timeout = 0;
+	g_context.child_timeout = -1;
 }
 
 bool	timeout_is_triggered(void)

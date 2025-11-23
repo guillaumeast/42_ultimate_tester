@@ -1,6 +1,6 @@
 #define __FUT_INSIDE__
 #define __FUT_PROCESS_INSIDE__
-#include "context_pub.h"
+#include "context_priv.h"
 #include "error_priv.h"
 #undef __FUT_PROCESS_INSIDE__
 #undef __FUT_INSIDE__
@@ -10,14 +10,27 @@
 
 static void	sigint_handler(int sig);
 
+t_context				g_context;
 volatile sig_atomic_t	g_handlers_target_pid = -1;
+
+void	context_init(void)
+{
+	g_context.has_parent = false;
+	g_context.has_child = false;
+	g_context.child_pid = -1;
+	g_context.child_timeout = -1;
+	g_context.pipe_to_parent[0] = -1;
+	g_context.pipe_to_parent[1] = -1;
+	g_context.pipe_to_child[0] = -1;
+	g_context.pipe_to_child[1] = -1;
+}
 
 void	context_set_target_pid(pid_t target_pid)
 {
 	g_handlers_target_pid = (sig_atomic_t)target_pid;
 }
 
-void	context_init_sigint_handler(t_context *context)
+void	context_init_sigint_handler(void)
 {
 	struct sigaction	new_action = {0};
 
@@ -27,7 +40,7 @@ void	context_init_sigint_handler(t_context *context)
 	exit_if(sigaction(SIGINT, &new_action, NULL) == -1, SIGINT_HANDLER_SET_FAILED);
 }
 
-void	context_cancel_sigint_handler(t_context *context)
+void	context_cancel_sigint_handler(void)
 {
 	struct sigaction action = {0};
 	

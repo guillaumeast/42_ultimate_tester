@@ -1,12 +1,8 @@
 #ifndef ULT_CAPTURE_PUB_H
 #define ULT_CAPTURE_PUB_H
 
-#include "fork_pub.h"
 #include "redirect_pub.h"
 #include "status_pub.h"
-#include <stdbool.h>
-#include <stddef.h>
-#include <stdint.h>
 #include <string.h>
 
 typedef enum e_capture_mode
@@ -42,8 +38,8 @@ typedef struct s_capture_res
 	char		*out;
 }	t_capture_res;
 
-void	_capture_parent(t_context *ctx, t_capture *capture);
-void	_capture_child(t_context *ctx, t_capture_res *res);
+void	_capture_parent(t_capture *capture);
+void	_capture_child(t_capture_res *res);
 
 #define __type_is_void(expr) __builtin_types_compatible_p(__typeof__(expr), void)
 #define __expr_or_zero(expr) __builtin_choose_expr(__type_is_void(expr), 0, (expr))
@@ -56,13 +52,11 @@ void	_capture_child(t_context *ctx, t_capture_res *res);
 
 #define capture(mode, time_out, expr, capture_var_name)			\
 	do {														\
-		t_context	ctx;										\
-																\
 		memset(&capture_var_name, 0, sizeof(capture_var_name));	\
 		capture_var_name.status.timeout = time_out;				\
-		_fork_init(&ctx, time_out);								\
-		if (ctx.child_pid > 0)									\
-			_capture_parent(&ctx, &capture_var_name);			\
+		_fork_init(time_out);									\
+		if (g_context.child_pid > 0)							\
+			_capture_parent(&capture_var_name);					\
 		else													\
 		{														\
 			t_capture_res capture_res = {0};					\
@@ -74,7 +68,7 @@ void	_capture_child(t_context *ctx, t_capture_res *res);
 				capture_res.out = redirect_read();				\
 				redirect_stop();								\
 			}													\
-			_capture_child(&ctx, &capture_res);					\
+			_capture_child(&capture_res);						\
 		}														\
 	} while (0)
 

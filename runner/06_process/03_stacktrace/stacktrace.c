@@ -1,4 +1,9 @@
-#include "context_pub.h"
+#define __FUT_INSIDE__
+#define __FUT_PROCESS_INSIDE__
+#include "messages_priv.h"
+#undef __FUT_PROCESS_INSIDE__
+#undef __FUT_INSIDE__
+
 
 #include <signal.h>
 #include <stddef.h>
@@ -38,7 +43,7 @@ static volatile sig_atomic_t	s_fd_to_parent = -1;
 
 static void	stacktrace_handler(int sig, siginfo_t *info, void *ucontext);
 
-void	stacktrace_init(t_context *ctx)
+void	stacktrace_init(int fd_to_parent)
 {
 	struct sigaction	action = {0};
 
@@ -52,13 +57,15 @@ void	stacktrace_init(t_context *ctx)
 	sigaction(SIGILL, &action, NULL);
 	sigaction(SIGABRT, &action, NULL);
 
-	s_fd_to_parent = (sig_atomic_t)ctx->pipe[1];
+	s_fd_to_parent = (sig_atomic_t)fd_to_parent;
 }
 
 static void	stacktrace_handler(int sig, siginfo_t *info, void *ucontext)
 {
-	ucontext_t	*proc_context;
-	void		*program_counter;
+	ucontext_t		*proc_context;
+	void			*program_counter;
+	t_message_type	type;
+	size_t			len;
 
 	(void)sig;
 	(void)info;
@@ -66,9 +73,14 @@ static void	stacktrace_handler(int sig, siginfo_t *info, void *ucontext)
 	proc_context = (ucontext_t *)ucontext;
 	program_counter = GET_PROGRAM_COUNTER(proc_context);
 
-	// TODO: write message type before (set to non blocking ?!)
 	if (s_fd_to_parent != -1)
-		write((int)s_fd_to_parent, &program_counter, sizeof program_counter);
+	{
+		type = CRASH;
+		len = sizeof program_counter;
+		(void)write(s_fd_to_parent, &type, sizeof type);
+		(void)write(s_fd_to_parent, &len, sizeof len);
+		(void)write(s_fd_to_parent, &program_counter, len);
+	}
 
 	signal(sig, SIG_DFL);
 	raise(sig);

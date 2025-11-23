@@ -13,6 +13,6 @@ void	set_run_child(t_set *set)
 {
 	set->func();
 
-	fork_cleanup(&s_context);
+	fork_cleanup();
 	exit(EXIT_SUCCESS);
 }

@@ -8,6 +8,7 @@
 */
 #else
 
+#include "context_process.h"
 #include "logs_priv.h"
 #include "result_pub.h"
 

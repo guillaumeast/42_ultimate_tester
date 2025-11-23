@@ -8,11 +8,9 @@
 */
 #else
 
-#include "context_pub.h"
-
-void	timeout_init(t_context *context, size_t timeout);
-void	timeout_start(t_context *context);
-void	timeout_cancel(t_context *context);
+void	timeout_init(size_t timeout);
+void	timeout_start(void);
+void	timeout_cancel(void);
 
 #endif /* __FUT_PROCESS_INSIDE__ */
 

@@ -2,7 +2,6 @@
 #define __FUT_ENGINE_INSIDE__
 #define __FUT_SET_INSIDE__
 #include "error_priv.h"
-#include "logs_priv.h"
 #include "set_internal.h"
 #undef __FUT_SET_INSIDE__
 #undef __FUT_ENGINE_INSIDE__
@@ -40,14 +39,14 @@ void	set_run_parent(t_set *set)
 	}
 
 	result_compute(&set->result);
-	fork_cleanup(&s_context);
+	fork_cleanup();
 }
 
 static inline void	wait_for_child(int *status, t_set *set)
 {
 	t_message	message;
 
-	while (message_receive(s_context.pipe, &message))
+	while (message_receive(g_context.pipe_to_child, &message))
 	{
 		switch (message.type)
 		{

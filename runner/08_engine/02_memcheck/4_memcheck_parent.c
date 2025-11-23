@@ -1,31 +1,25 @@
 #define __FUT_INSIDE__
 #define __FUT_MEMCHECK_INSIDE__
 #include "error_priv.h"
-#include "process_priv.h"
-#include "memcheck_int.h"
-#include "result_pub.h"
-#include "status_pub.h"
+#include "messages_priv.h"
 #undef __FUT_MEMCHECK_INSIDE__
 #undef __FUT_INSIDE__
 
-#include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
 
-static inline void	wait_for_child(int *status, t_context *ctx, t_result *result);
+static inline void	wait_for_child(int *status, t_result *result);
 
-void	_memcheck_parent(const char *expr, t_context *ctx)
+void	_memcheck_parent(const char *expr)
 {
 	int			status;
 	t_result	result = {0};
 
-	wait_for_child(&status, ctx, &result);
+	wait_for_child(&status, &result);
 
 	if (timeout_is_triggered())
 	{
 		result.timed++;
-		send_incorrect_status(ctx, expr, &result.status, NULL);
+		send_incorrect_status(g_context.pipe_to_parent, expr, &result.status, NULL);
 	}
 	else if (!WIFEXITED(status) || WEXITSTATUS(status) != EXIT_SUCCESS)
 	{
@@ -33,19 +27,19 @@ void	_memcheck_parent(const char *expr, t_context *ctx)
 			result.status.sig = WTERMSIG(status);
 
 		result.crashed++;
-		send_incorrect_status(ctx, expr, &result.status, NULL);
+		send_incorrect_status(g_context.pipe_to_parent, expr, &result.status, NULL);
 	}
 
 	result_compute(&result);
-	message_send(ctx->pipe, RESULT, (t_message_data *)&result);
-	fork_cleanup(ctx);
+	message_send(g_context.pipe_to_parent, RESULT, (t_message_data *)&result);
+	fork_cleanup();
 }
 
-static inline void	wait_for_child(int *status, t_context *ctx, t_result *result)
+static inline void	wait_for_child(int *status, t_result *result)
 {
 	t_message	message;
 
-	while (message_receive(ctx->pipe, &message))
+	while (message_receive(g_context.pipe_to_child, &message))
 	{
 		switch (message.type)
 		{
@@ -57,11 +51,11 @@ static inline void	wait_for_child(int *status, t_context *ctx, t_result *result)
 				result->status.crash_address = message.data.crash_addr;
 				break;
 			case LOG:
-				message_send(ctx->pipe, LOG, &message.data);
+				message_send(g_context.pipe_to_parent, LOG, &message.data);
 				break;
 			default: exit_if(true, SET_UNKNOWN_MESSAGE_TYPE);
 		}
 	}
 
-	waitpid(ctx->child_pid, status, 0);
+	waitpid(g_context.child_pid, status, 0);
 }

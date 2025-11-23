@@ -8,7 +8,7 @@
 */
 #else
 
-void	stacktrace_init(void);
+void	stacktrace_init(int fd_to_parent);
 
 #endif /* __FUT_PROCESS_INSIDE__ */
 

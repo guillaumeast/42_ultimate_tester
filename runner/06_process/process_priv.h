@@ -8,8 +8,10 @@
 */
 #else
 
-#include "fork_priv.h"
+#include "context_priv.h"
 #include "messages_priv.h"
+#include "timeout_priv.h"
+#include "fork_priv.h"
 #include "timeout_priv.h"
 
 #endif /* __FUT_INSIDE__ */

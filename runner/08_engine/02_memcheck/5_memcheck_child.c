@@ -1,15 +1,13 @@
 #define __FUT_INSIDE__
 #define __FUT_MEMCHECK_INSIDE__
 #include "memcheck_int.h"
-#include "process_priv.h"
+#include "messages_priv.h"
 #undef __FUT_MEMCHECK_INSIDE__
 #undef __FUT_INSIDE__
 
-#include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 
-void	_memcheck_child(const char *expr, t_context *ctx)
+void	_memcheck_child(const char *expr)
 {
 	t_result	result = {0};
 
@@ -17,14 +15,14 @@ void	_memcheck_child(const char *expr, t_context *ctx)
 
 	for (size_t i = 0; i < g_leaks_count; i++)
 	{
-		send_leak(ctx, expr, g_leaks_table[i].size, g_leaks_table[i].caller);
+		send_leak(g_context.pipe_to_parent, expr, g_leaks_table[i].size, g_leaks_table[i].caller);
 		result.leaks++;
 	}
 
 	result_compute(&result);
-	message_send(ctx->pipe, RESULT, (t_message_data *)&result);
+	message_send(g_context.pipe_to_parent, RESULT, (t_message_data *)&result);
 
-	fork_cleanup(ctx);
+	fork_cleanup();
 
 	exit(EXIT_SUCCESS);
 }

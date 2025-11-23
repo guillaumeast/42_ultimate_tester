@@ -1,28 +1,29 @@
 #define __FUT_INSIDE__
 #include "capture_pub.h"
 #include "error_priv.h"
-#include "fork_priv.h"
+#include "process_priv.h"
 #undef __FUT_INSIDE__
 
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
-static inline void	read_result(t_context *ctx, t_capture *capture);
+static inline void	read_result(t_capture *capture);
 
-void	_capture_parent(t_context *ctx, t_capture *capture)
+void	_capture_parent(t_capture *capture)
 {
 	int		status;
 	void	*crash_address;
 	size_t	bytes;
 
-	waitpid(ctx->child_pid, &status, 0);
+	// TODO: read and wait (cf memcheck)
+	waitpid(g_context.child_pid, &status, 0);
 
 	if (timeout_is_triggered())
 		capture->status.type = TIMED;
 	else if (WIFEXITED(status) && WEXITSTATUS(status) == EXIT_SUCCESS)
 	{
-		read_result(ctx, capture);
+		read_result(capture);
 		capture->status.type = DONE;
 	}
 	else
@@ -30,41 +31,39 @@ void	_capture_parent(t_context *ctx, t_capture *capture)
 		capture->status.type = CRASHED;
 		if (WIFSIGNALED(status))
 			capture->status.sig = WTERMSIG(status);
-
-		crash_address = NULL;
-		bytes = read(ctx->crash_infos_pipe[0], &crash_address, sizeof crash_address);
-		if (bytes == sizeof crash_address)
-			capture->status.crash_address = crash_address;
 	}
-	fork_cleanup(ctx);
+	fork_cleanup();
 }
 
-void	_capture_child(t_context *ctx, t_capture_res *res)
+void	_capture_child(t_capture_res *res)
 {
 	size_t	len;
 
-	write(ctx->result_pipe[1], &res->ret, sizeof res->ret);
+	// TODO: use message module (!!! Don't limit output size -> make message module ok with that !!!)
+	write(g_context.pipe_to_parent[1], &res->ret, sizeof res->ret);
 
 	if (res->out)
 		len = strlen(res->out);
 	else
 	 	len = 0;
-	write(ctx->result_pipe[1], &len, sizeof len);
-	write(ctx->result_pipe[1], res->out, len);
+	// TODO: use message module
+	write(g_context.result_pipe[1], &len, sizeof len);
+	write(g_context.result_pipe[1], res->out, len);
 
-	fork_cleanup(ctx);
+	fork_cleanup();
 	exit (EXIT_SUCCESS);
 }
 
-static inline void	read_result(t_context *ctx, t_capture *capture)
+static inline void	read_result(t_capture *capture)
 {
 	size_t	len;
 
-	read(ctx->result_pipe[0], &capture->ret, sizeof capture->ret);
-	read(ctx->result_pipe[0], &len, sizeof len);
+	// TODO: use message module
+	read(g_context.result_pipe[0], &capture->ret, sizeof capture->ret);
+	read(g_context.result_pipe[0], &len, sizeof len);
 
 	capture->out = malloc(len + 1);
 	exit_if(!capture->out, NOT_ENOUGH_MEMORY);
-	read(ctx->result_pipe[0], capture->out, len);
+	read(g_context.result_pipe[0], capture->out, len);
 	capture->out[len] = '\0';
 }
