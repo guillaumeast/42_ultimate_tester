@@ -7,7 +7,7 @@ PROJ_SRCS		:= $(wildcard $(PROJ_DIR)/*.c)
 PROJ_INCLUDES	:= -I$(PROJ_DIR)/includes
 
 TESTS_DIR		:= /Users/gui/repos/42_ultimate_tester/tests/$(PROJ_NAME)
-TESTS_SRCS		:= $(wildcard $(TESTS_DIR)/*.c)
+TESTS_SRCS		:= $(wildcard $(TESTS_DIR)/*.c) $(wildcard $(TESTS_DIR)/mandatory/*.c) $(wildcard $(TESTS_DIR)/bonus/*.c)
 TESTS_INCLUDES	:=
 #-------------------------------------------------------------#
 
