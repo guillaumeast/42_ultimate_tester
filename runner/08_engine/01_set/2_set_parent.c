@@ -67,5 +67,5 @@ static inline void	wait_for_child(int *status, t_set *set)
 		}
 	}
 
-	waitpid(s_context.child_pid, status, 0);
+	waitpid(g_context.child_pid, status, 0);
 }

@@ -15,6 +15,7 @@ void	message_send(int pipe[2], t_message_type type, t_message_data *data)
 {
 	size_t	len;
 
+	len = 0;
 	switch (type)
 	{
 		case RETURN_VALUE:	len = sizeof(intptr_t); break;

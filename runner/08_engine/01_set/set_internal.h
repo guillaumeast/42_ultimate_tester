@@ -11,8 +11,6 @@
 #include "process_priv.h"
 #include "set_priv.h"
 
-extern t_context	s_context;
-
 void	set_run_parent(t_set *set);
 void	set_run_child(t_set *set);
 

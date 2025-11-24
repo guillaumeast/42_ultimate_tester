@@ -15,7 +15,7 @@ void	set_run(t_set *set)
 	set->result.status.type = RUNNING;
 
 	_fork_init(set->timeout);
-	if (s_context.child_pid > 0)
+	if (g_context.child_pid > 0)
 		set_run_parent(set);
 	else
 		set_run_child(set);

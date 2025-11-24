@@ -23,9 +23,11 @@ t_status	assert_check_neq(t_assert *assert)
 	if (status_res.type != PASSED)
 		return (status_res);
 
+	ret_passed = true;
 	if (assert->mode != OUT && assert->mode != ERR && assert->mode != BOTH)
 		ret_passed = check_ret(assert);
 
+	out_passed = true;
 	if (assert->mode != RET)
 		out_passed = check_out(assert);
 

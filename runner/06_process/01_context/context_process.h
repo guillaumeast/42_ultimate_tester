@@ -8,7 +8,7 @@
 */
 #else
 
-#include "context_priv.h"
+#include "context_pub.h"
 #include <signal.h>
 
 extern volatile sig_atomic_t	g_handlers_target_pid;

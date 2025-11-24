@@ -16,8 +16,6 @@ static inline void	read_crash(t_capture *capture);
 void	_capture_parent(t_capture *capture)
 {
 	int		status;
-	void	*crash_address;
-	size_t	bytes;
 
 	wait_for_child(&status, capture);
 
@@ -35,11 +33,8 @@ void	_capture_parent(t_capture *capture)
 
 static inline void	wait_for_child(int *status, t_capture *capture)
 {
-	t_message		first_message;
 	t_message_type	type;
-	size_t			len;
 
-	len = 0;
 	while (message_read_type(g_context.pipe_to_child, &type))
 	{
 		switch (type)

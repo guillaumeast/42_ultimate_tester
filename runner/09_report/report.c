@@ -1,6 +1,7 @@
 #define __FUT_INSIDE__
 #define __FUT_RESULT_INSIDE__
-#include "print_priv.h"
+#include "colors_priv.h"
+#include "emojis_priv.h"
 #undef __FUT_RESULT_INSIDE__
 #include "result_pub.h"
 #undef __FUT_INSIDE__

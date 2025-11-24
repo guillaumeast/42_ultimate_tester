@@ -1,6 +1,6 @@
 #define __FUT_INSIDE__
 #define __FUT_PROCESS_INSIDE__
-#include "context_priv.h"
+#include "context_pub.h"
 #include "error_priv.h"
 #undef __FUT_PROCESS_INSIDE__
 #undef __FUT_INSIDE__

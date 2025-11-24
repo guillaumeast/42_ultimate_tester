@@ -15,9 +15,9 @@ void	_memcheck_child(const char *expr);
 #define memcheck(timeout, expr)				\
 	do {									\
 		_fork_init(timeout);				\
-		if (ctx.child_pid > 0)				\
+		if (g_context.child_pid > 0)		\
 			_memcheck_parent(#expr);		\
-		if (ctx.child_pid == 0)				\
+		if (g_context.child_pid == 0)		\
 		{									\
 			_memcheck_enable();				\
 			expr;							\

@@ -8,7 +8,7 @@
 */
 #else
 
-#include "context_priv.h"
+#include "process_pub.h"
 #include "messages_priv.h"
 #include "timeout_priv.h"
 #include "fork_priv.h"

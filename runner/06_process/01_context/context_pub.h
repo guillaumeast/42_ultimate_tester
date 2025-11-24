@@ -1,13 +1,6 @@
 #ifndef ULT_CONTEXT_PRIV_H
 #define ULT_CONTEXT_PRIV_H
 
-#ifndef __FUT_INSIDE__
-/*
-**  Private header for the FUT modules.
-**  Not available outside its compilation unit.
-*/
-#else
-
 #include <stdbool.h>
 #include <sys/types.h>
 
@@ -23,6 +16,4 @@ typedef struct s_context
 
 extern t_context	g_context;
 
-#endif /* __FUT_INSIDE__ */
-
-#endif /* ULT_CONTEXT_PRIV_H */
+#endif

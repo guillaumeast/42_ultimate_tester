@@ -1,6 +1,8 @@
 #define __FUT_INSIDE__
 #include "error_priv.h"
-#include "print_priv.h"
+#include "colors_priv.h"
+#include "emojis_priv.h"
+#include "print_wrapper_pub.h"
 #undef __FUT_INSIDE__
 
 #include <stdlib.h>
@@ -59,7 +61,7 @@ void	exit_if(bool condition, t_error error)
 		return ;
 
 	error_log(error);
-	print_stderr("                %s%s Internal error%s", RED, EMJ_ERR, NONE);
+	print_stderr(" %s%s Internal error%s", RED, EMJ_ERR, NONE);
 	error_print_trace();
 	print_stderr("Please try again or report the issue\n");
 

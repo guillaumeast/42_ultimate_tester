@@ -13,30 +13,35 @@
 
 static size_t		s_fork_depth = 0;
 
-static inline void	fork_init_parent(t_context *prev_context, int new_pipe[2]);
-static inline void	fork_init_child(t_context *prev_context, int new_pipe[2]);
+static inline void	fork_init_parent(t_context *prev_context, int new_pipe[2], int sync_pipe[2]);
+static inline void	fork_init_child(int new_pipe[2], int sync_pipe[2]);
 
 void	_fork_init(size_t timeout)
 {
 	t_context	previous_context;
 	int			new_pipe[2];
+	int			sync_pipe[2];
 
 	previous_context = g_context;
 	context_init();
 
 	exit_if(pipe(new_pipe) == -1, PIPE_CREATION_FAILED);
+	exit_if(pipe(sync_pipe) == -1, PIPE_CREATION_FAILED);
 	timeout_init(timeout);
 
 	g_context.child_pid = fork();
 	exit_if(g_context.child_pid < 0, FORK_FAILED);
 	
 	if (g_context.child_pid > 0)
-		fork_init_parent(&previous_context, new_pipe);
+		fork_init_parent(&previous_context, new_pipe, sync_pipe);
 	else
-	 	fork_init_child(&previous_context, new_pipe);
+	 	fork_init_child(new_pipe, sync_pipe);
+
+	close(sync_pipe[0]);
+	close(sync_pipe[1]);
 }
 
-static inline void	fork_init_parent(t_context *prev_context, int new_pipe[2])
+static inline void	fork_init_parent(t_context *prev_context, int new_pipe[2], int sync_pipe[2])
 {
 	bool	ready;
 
@@ -59,13 +64,13 @@ static inline void	fork_init_parent(t_context *prev_context, int new_pipe[2])
 	g_context.pipe_to_child[1] = new_pipe[1];
 
 	timeout_start();
-	ready = 1;
-	write(g_context.pipe_to_child[1], &ready, sizeof ready);
+	ready = true;
+	write(sync_pipe[1], &ready, sizeof ready);
 	close(g_context.pipe_to_child[1]);
 	g_context.pipe_to_child[1] = -1;
 }
 
-static inline void	fork_init_child(t_context *prev_context, int new_pipe[2])
+static inline void	fork_init_child(int new_pipe[2], int sync_pipe[2])
 {
 	bool	ready;
 
@@ -80,7 +85,7 @@ static inline void	fork_init_child(t_context *prev_context, int new_pipe[2])
 
 	stacktrace_init(g_context.pipe_to_parent[1]);
 
-	read(g_context.pipe_to_parent[0], &ready, sizeof ready);
+	read(sync_pipe[0], &ready, sizeof ready);
 	close(g_context.pipe_to_parent[0]);
 	g_context.pipe_to_parent[0] = -1;
 }
