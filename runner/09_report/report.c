@@ -69,8 +69,6 @@ static inline void	get_colors(const t_result *res, t_res_colors *col)
 
 static inline void	get_content(const t_result *res, t_res_colors *colors, t_res_content *cont)
 {
-	const char	*emj_crash;
-
 	if (res->passed == res->total)
 		sprintf(cont->title, " %s|          %s YOU WON! %s           |%s", \
 			colors->borders, EMJ_SUC_START, EMJ_SUC_END, NONE);
@@ -78,15 +76,14 @@ static inline void	get_content(const t_result *res, t_res_colors *colors, t_res_
 		sprintf(cont->title, " %s|          %s TRY AGAIN %s          |%s", \
 			colors->borders, EMJ_FAIL_START, EMJ_FAIL_END, NONE);
 
-	emj_crash = res->crashed > 0 ? EMJ_CRSH_Y : EMJ_CRSH_N;
 	sprintf(cont->separator, "%s%c%s", colors->borders, '|', NONE);
 
-	sprintf(cont->passed, "%s %s%s %*zu%s", cont->separator, \
+	sprintf(cont->passed, "%s %s%s  %*zu%s", cont->separator, \
 		colors->passed, EMJ_PASS, SCORE_DIGITS, res->passed, NONE);
-	sprintf(cont->failed, "%s %s%s %*zu%s", cont->separator, \
+	sprintf(cont->failed, "%s %s%s  %*zu%s", cont->separator, \
 		colors->failed, EMJ_FAIL, SCORE_DIGITS, res->failed, NONE);
-	sprintf(cont->timed, "%s %s%s%*zu%s", cont->separator, \
+	sprintf(cont->timed, "%s %s%s %*zu%s", cont->separator, \
 		colors->timed, EMJ_TIMD, SCORE_DIGITS, res->timed, NONE);
-	sprintf(cont->crashed, "%s %s%s  %*zu %s", cont->separator, \
-		colors->crashed, emj_crash, SCORE_DIGITS, res->crashed, cont->separator);
+	sprintf(cont->crashed, "%s %s%s   %*zu %s", cont->separator, \
+		colors->crashed, EMJ_CRSH, SCORE_DIGITS, res->crashed, cont->separator);
 }

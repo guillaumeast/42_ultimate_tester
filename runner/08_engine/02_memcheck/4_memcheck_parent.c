@@ -44,10 +44,10 @@ static inline void	wait_for_child(int *status, t_result *result)
 		switch (message.type)
 		{
 			case RESULT:
-				logs_print_indicator(&message.data.result.status);
 				result_add(&message.data.result, result);
 				break;
 			case CRASH:
+				result->status.type = CRASHED;
 				result->status.crash_address = message.data.crash_addr;
 				break;
 			case LOG:

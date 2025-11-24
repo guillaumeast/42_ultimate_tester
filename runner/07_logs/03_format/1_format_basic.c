@@ -20,9 +20,9 @@ const char	*format_h1(const char *fmt, va_list args)
 	static char	buff[H1_CAP];
 	size_t	offset;
 
-	offset = snprintf(buff, sizeof buff, " %s%s%s", GREY, EMJ_ARW_RIGHT, NONE);
+	offset = snprintf(buff, sizeof buff, " %s%s%s ", GREY, EMJ_ARW_RIGHT, NONE);
 	offset += vsnprintf(buff + offset, sizeof buff - offset, fmt, args);
-	snprintf(buff + offset, sizeof buff - offset, " %s%s%s", GREY, EMJ_ARW_RIGHT, NONE);
+	snprintf(buff + offset, sizeof buff - offset, " %s%s%s ", GREY, EMJ_ARW_RIGHT, NONE);
 
 	return (buff);
 }
@@ -33,11 +33,11 @@ const char	*format_indicator(t_status *status)
 
 	switch (status->type)
 	{
-		case PASSED:	snprintf(buff, sizeof buff, "%s%s%s", GREEN, EMJ_PASS, NONE); break;
-		case FAILED:	snprintf(buff, sizeof buff, "%s%s%s", RED, EMJ_FAIL, NONE); break;
-		case TIMED:		snprintf(buff, sizeof buff, "%s%s%s", RED, EMJ_TIMD, NONE); break;
-		case CRASHED:	snprintf(buff, sizeof buff, "%s%s%s", RED, EMJ_CRSH_Y, NONE); break;
-		case LEAKED:	snprintf(buff, sizeof buff, "%s%s%s", RED, EMJ_LEAK, NONE); break;
+		case PASSED:	snprintf(buff, sizeof buff, "%s%s%s ", GREEN, EMJ_PASS, NONE); break;
+		case FAILED:	snprintf(buff, sizeof buff, "%s%s%s ", RED, EMJ_FAIL, NONE); break;
+		case TIMED:		snprintf(buff, sizeof buff, "%s%s%s ", RED, EMJ_TIMD, NONE); break;
+		case CRASHED:	snprintf(buff, sizeof buff, "%s%s%s ", RED, EMJ_CRSH, NONE); break;
+		case LEAKED:	snprintf(buff, sizeof buff, "%s%s%s ", RED, EMJ_LEAK, NONE); break;
 		default:		buff[0] = '\0'; break;
 	}
 	return (buff);

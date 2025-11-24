@@ -14,42 +14,44 @@ t_leak	*g_leaks_table = NULL;
 size_t	g_leaks_count = 0;
 
 static size_t	s_leaks_table_cap = 0;
-static bool		s_memcheck_enabled = false;
+static bool		s_enabled = false;
+t_mem_mode		g_mem_mode;
 
 void	register_alloc(void *ptr, size_t size, void *caller);
 void	register_free(void *ptr);
 
-void	_memcheck_enable(void)
+void	_memcheck_enable(t_mem_mode mode)
 {
 	if (s_leaks_table_cap > 0)
 		bzero(g_leaks_table, g_leaks_count * sizeof(t_leak));
 	else
 	{
 		s_leaks_table_cap = TABLE_INITIAL_SIZE;
-		s_memcheck_enabled = false;
+		s_enabled = false;
 		g_leaks_table = calloc(s_leaks_table_cap, sizeof(t_leak));
 	}
 
 	g_leaks_count = 0;
-	s_memcheck_enabled = true;
+	s_enabled = true;
+	g_mem_mode = mode;
 }
 
 void	memcheck_disable(void)
 {
-	s_memcheck_enabled = false;
+	s_enabled = false;
 }
 
 void	register_alloc(void *ptr, size_t size, void *caller)
 {
-	if (!s_memcheck_enabled)
+	if (!s_enabled)
 		return ;
 
 	if (g_leaks_count == s_leaks_table_cap)
 	{
 		s_leaks_table_cap *= TABLE_GROWTH_RATIO;
-		s_memcheck_enabled = false;
+		s_enabled = false;
 		g_leaks_table = realloc(g_leaks_table, s_leaks_table_cap * sizeof(t_leak));
-		s_memcheck_enabled = true;
+		s_enabled = true;
 		exit_if(!g_leaks_table, NOT_ENOUGH_MEMORY);
 	}
 
@@ -63,7 +65,7 @@ void	register_free(void *ptr)
 {
 	size_t	i;
 
-	if (!s_memcheck_enabled)
+	if (!s_enabled)
 		return ;
 
 	i = 0;

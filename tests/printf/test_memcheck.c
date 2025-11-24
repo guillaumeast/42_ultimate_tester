@@ -32,17 +32,34 @@ void	unsafe_func(void)
 	free(nb);
 }
 
+void	worst_func(void)
+{
+	int	*nb;
+
+	nb = malloc(sizeof(int));
+	*nb = 5;
+}
+
 Test(correct, 0)
 {
-	memcheck(0, correct_func());
+	memleaks(0, correct_func());
+	memsafety(0, correct_func());
 }
 
 Test(no_free, 0)
 {
-	memcheck(0, no_free_func());
+	memleaks(0, no_free_func());
+	memsafety(0, no_free_func());
 }
 
 Test(unsafe, 0)
 {
-	memcheck(0, unsafe_func());
+	memleaks(0, unsafe_func());
+	memsafety(0, unsafe_func());
+}
+
+Test(both, 0)
+{
+	memleaks(0, worst_func());
+	memsafety(0, worst_func());
 }

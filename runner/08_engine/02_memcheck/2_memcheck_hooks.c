@@ -25,9 +25,14 @@ void	*malloc(size_t size)
 	void	*caller;
 
 	init_hooks();
+
+	if (g_mem_mode == SAFETY)
+		return (NULL);
+
 	ptr = real_malloc(size);
 	caller = __builtin_return_address(0);
 	register_alloc(ptr, size, caller);
+
 	return (ptr);
 }
 
@@ -37,9 +42,14 @@ void	*calloc(size_t count, size_t size)
 	void	*caller;
 
 	init_hooks();
+
+	if (g_mem_mode == SAFETY)
+		return (NULL);
+
 	ptr = real_calloc(count, size);
 	caller = __builtin_return_address(0);
 	register_alloc(ptr, size, caller);
+
 	return (ptr);
 }
 
@@ -49,6 +59,13 @@ void	*realloc(void *ptr, size_t size)
 	void	*caller;
 
 	init_hooks();
+
+	if (g_mem_mode == SAFETY)
+	{
+		if (ptr == NULL)
+			return (NULL);
+		return (ptr);
+	}
 
 	if (size == 0)
 		register_free(ptr);

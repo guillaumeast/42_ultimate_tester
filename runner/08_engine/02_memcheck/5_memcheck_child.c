@@ -19,6 +19,9 @@ void	_memcheck_child(const char *expr)
 		result.leaks++;
 	}
 
+	if (result.leaks == 0)
+		result.passed++;
+	
 	result_compute(&result);
 	message_send(g_context.pipe_to_parent, RESULT, (t_message_data *)&result);
 
