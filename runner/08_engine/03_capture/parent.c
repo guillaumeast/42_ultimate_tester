@@ -27,6 +27,8 @@ void	_capture_parent(t_capture *capture)
 		if (WIFSIGNALED(status))
 			capture->status.sig = WTERMSIG(status);
 	}
+	else
+		capture->status.type = DONE;
 
 	fork_cleanup();
 }

@@ -14,13 +14,21 @@ void	send_incorrect_status(const char *expr, t_status *got, t_status *exp)
 	char	log[H2_CAP];
 	size_t	offset;
 
-	offset = snprintf(log, sizeof log, "%s%s %s%s", RED, expr, YELLOW, format_status(got));
-	if (got->crash_address)
-		offset += snprintf(log + offset, sizeof log - offset, " %sat %s", GREY, format_addr(got->crash_address));
-	if (exp)
-		offset += snprintf(log + offset, sizeof log - offset, " %sinstead of %s%s", GREY, RED, format_status(exp));
+	if (got->type == DONE)
+	{
+		exp->crash_address = NULL;
+		snprintf(log, sizeof log, "%s%s %sdid not %s\n", RED, expr, YELLOW, format_status(exp));
+	}
+	else
+	{
+		offset = snprintf(log, sizeof log, "%s%s %s%s", RED, expr, YELLOW, format_status(got));
+		if (got->crash_address)
+			offset += snprintf(log + offset, sizeof log - offset, " %sat %s", GREY, format_addr(got->crash_address));
+		if (exp && exp->type != DONE)
+			offset += snprintf(log + offset, sizeof log - offset, " %sinstead of %s%s", GREY, RED, format_status(exp));
 
-	snprintf(log + offset, sizeof log - offset, "%s\n", NONE);
+		snprintf(log + offset, sizeof log - offset, "%s\n", NONE);
+	}
 	message_send(g_context.pipe_to_parent, LOG, (t_message_data *)log);
 }
 
@@ -29,15 +37,20 @@ void	send_incorrect_return(const char *expr, t_format fmt, intptr_t got, intptr_
 	char	log[H2_CAP];
 	size_t	offset;
 
-	offset = snprintf(log, sizeof log, "%s%s %s%s %s", RED, expr, YELLOW, "outputed", RED);
-	add_formatted_value(log, sizeof log, &offset, fmt, got);
-	if (exp)
+	if (fmt == F_BOOL)
+		snprintf(log, sizeof log, "%s%s %s%s %s\n", RED, expr, YELLOW, "is false", NONE);
+	else
 	{
-		offset += snprintf(log + offset, sizeof log - offset, " %sinstead of %s", GREY, RED);
-		add_formatted_value(log, sizeof log, &offset, fmt, *exp);
-	}
+		offset = snprintf(log, sizeof log, "%s%s %s%s %s", RED, expr, YELLOW, "returned", RED);
+		add_formatted_value(log, sizeof log, &offset, fmt, got);
+		if (exp)
+		{
+			offset += snprintf(log + offset, sizeof log - offset, " %sinstead of %s", GREY, RED);
+			add_formatted_value(log, sizeof log, &offset, fmt, *exp);
+		}
 
-	snprintf(log + offset, sizeof log - offset, "%s\n", NONE);
+		snprintf(log + offset, sizeof log - offset, "%s\n", NONE);
+	}
 	message_send(g_context.pipe_to_parent, LOG, (t_message_data *)log);
 }
 

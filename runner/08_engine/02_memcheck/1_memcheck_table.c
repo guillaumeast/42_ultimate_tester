@@ -43,7 +43,7 @@ void	memcheck_disable(void)
 
 void	register_alloc(void *ptr, size_t size, void *caller)
 {
-	if (!s_enabled)
+	if (!s_enabled || g_mem_mode != LEAKS)
 		return ;
 
 	if (g_leaks_count == s_leaks_table_cap)
@@ -65,7 +65,7 @@ void	register_free(void *ptr)
 {
 	size_t	i;
 
-	if (!s_enabled)
+	if (!s_enabled || g_mem_mode != LEAKS)
 		return ;
 
 	i = 0;

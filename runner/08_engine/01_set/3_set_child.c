@@ -7,7 +7,6 @@
 #undef __FUT_INSIDE__
 
 #include <stdlib.h>
-#include <unistd.h>
 
 void	set_run_child(t_set *set)
 {

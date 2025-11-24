@@ -23,6 +23,8 @@ static void	ult_main(void)
 {
 	t_set	*set;
 	
+	set_init((t_set *)START_SET, (t_set *)STOP_SET);
+
 	printf("\n");
 	for (set = START_SET; set < STOP_SET; set++)
 		set_run(set);

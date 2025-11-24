@@ -13,7 +13,7 @@ void	print_stdout(const char *fmt, ...)
 	va_list	args;
 
 	va_start(args, fmt);
-	vdprintf(ULT_STDOUT, fmt, args);
+	vdprintf(g_output.real_stdout_fd, fmt, args);
 	va_end(args);
 }
 
@@ -22,7 +22,7 @@ void	print_stderr(const char *fmt, ...)
 	va_list	args;
 
 	va_start(args, fmt);
-	vdprintf(ULT_STDERR, fmt, args);
+	vdprintf(g_output.real_stderr_fd, fmt, args);
 	va_end(args);
 }
 

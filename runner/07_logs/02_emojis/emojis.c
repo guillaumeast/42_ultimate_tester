@@ -48,7 +48,7 @@ static inline void	emojis_init(void)
 	g_emojis.failed =					isutf8 ? "✖" : "X ";
 	g_emojis.timed =					isutf8 ? "❄" : "T ";
 	g_emojis.crashed =					isutf8 ? "☠" : "C ";
-	g_emojis.leaked =					isutf8 ? "⊙" : "L ";
+	g_emojis.leaked =					isutf8 ? "◍" : "L ";
 	g_emojis.error =					isutf8 ? "❗️" : "E ";
 	g_emojis.test =						isutf8 ? "🧪" : " ";
 	g_emojis.success_title_start =		isutf8 ? "🎉" : " ";

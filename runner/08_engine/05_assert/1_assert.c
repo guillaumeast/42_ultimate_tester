@@ -5,6 +5,8 @@
 #undef __FUT_ASSERT_INSIDE__
 #undef __FUT_INSIDE__
 
+#include <stdlib.h>
+
 void	_assert_run(t_assert *assert)
 {
 	t_status	status = {0};
@@ -25,5 +27,11 @@ void	_assert_run(t_assert *assert)
 		result.crashed++;
 
 	result_compute(&result);
+	logs_print_indicator(&result.status);
 	message_send(g_context.pipe_to_parent, RESULT, (t_message_data *)&result);
+
+	if (assert->got_capt->out)
+		free(assert->got_capt->out);
+	if (assert->exp_capt->out)
+		free(assert->exp_capt->out);
 }

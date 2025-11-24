@@ -22,6 +22,7 @@ void	_capture_child(t_capture_res *res)
 		write(g_context.pipe_to_parent[1], &len, sizeof len);
 
 		write(g_context.pipe_to_parent[1], res->out, len);
+		free(res->out);
 	}
 
 	fork_cleanup();

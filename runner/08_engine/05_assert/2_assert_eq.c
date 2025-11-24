@@ -75,7 +75,7 @@ static inline bool	check_ret(t_assert *a)
 		send_incorrect_return(a->got_name, a->format, a->got_capt->ret, &a->exp_capt->ret);
 		return (false);
 	}
-	else if (!compare_intptr_t(a->got_capt->ret, a->exp_capt->ret))
+	else if (a->format != F_STRING && a->format != F_STRUCT && !compare_intptr_t(a->got_capt->ret, a->exp_capt->ret))
 	{
 		send_incorrect_return(a->got_name, a->format, a->got_capt->ret, &a->exp_capt->ret);
 		return (false);

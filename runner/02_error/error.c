@@ -63,7 +63,7 @@ void	exit_if(bool condition, t_error error)
 	error_log(error);
 	print_stderr(" %s%s Internal error%s", RED, EMJ_ERR, NONE);
 	error_print_trace();
-	print_stderr("Please try again or report the issue\n");
+	print_stderr("%s Please try again or report the issue%s\n", GREY, NONE);
 
 	exit(100 + error);
 }

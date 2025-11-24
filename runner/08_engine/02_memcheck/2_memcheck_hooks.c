@@ -1,6 +1,10 @@
+#define __FUT_INSIDE__
 #define __FUT_MEMCHECK_INSIDE__
 #include "memcheck_int.h"
+#include "error_priv.h"
 #undef __FUT_MEMCHECK_INSIDE__
+#undef __FUT_INSIDE__
+
 #include <dlfcn.h>
 
 static void	*(*real_malloc)(size_t) = NULL;
@@ -17,6 +21,11 @@ static inline void	init_hooks(void)
 		real_realloc = dlsym(RTLD_NEXT, "realloc");
 		real_free = dlsym(RTLD_NEXT, "free");
 	}
+
+	exit_if( \
+		!real_malloc || !real_calloc || !real_realloc || !real_free,\
+		UNABLE_TO_FETCH_REAL_ALLOCATORS \
+	);
 }
 
 void	*malloc(size_t size)

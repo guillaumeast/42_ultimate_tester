@@ -12,6 +12,7 @@
 
 extern t_result	g_result;
 
+void	set_init(t_set *first_set, t_set *last_set);
 void	set_run(t_set *set);
 
 #endif /* __FUT_INSIDE__ */

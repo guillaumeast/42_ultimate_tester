@@ -42,7 +42,7 @@ bool	message_receive(int pipe[2], t_message *buff)
 	switch (buff->type)
 	{
 		case RETURN_VALUE:
-			exit_if(len != sizeof(size_t), MESSAGE_INVALID_LEN);
+			exit_if(len != sizeof(intptr_t), MESSAGE_INVALID_LEN);
 			break;
 		case RESULT:
 			exit_if(len != sizeof(t_result), MESSAGE_INVALID_LEN);
@@ -65,12 +65,12 @@ bool	message_receive(int pipe[2], t_message *buff)
 
 bool	message_read_type(int pipe[2], t_message_type *buff)
 {
-	return (read_complete(pipe[0], buff, sizeof buff));
+	return (read_complete(pipe[0], buff, sizeof *buff));
 }
 
 bool	message_read_len(int pipe[2], size_t *buff)
 {
-	return (read_complete(pipe[0], buff, sizeof buff));
+	return (read_complete(pipe[0], buff, sizeof *buff));
 }
 
 bool	message_read_data(int pipe[2], void *buff, size_t len)
