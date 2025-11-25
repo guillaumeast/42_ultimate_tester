@@ -1,29 +1,29 @@
 #!/usr/bin/env zsh
 
-NAME="42_ultimate_tester"
-REPO_URL="https://github.com/guillaumeast/42_ultimate_tester"
+typeset -g NAME="42_ultimate_tester"
+typeset -g REPO_URL="https://github.com/guillaumeast/42_ultimate_tester"
 
-TMP_DIR="/tmp/${NAME}"
-INSTALL_DIR="${HOME}/.${NAME}"
-LAUNCHER_DIR="${INSTALL_DIR}/launcher"
-RUNNER="${LAUNCHER_DIR}/run.zsh"
-UNINSTALLER="${LAUNCHER_DIR}/uninstall.zsh"
+typeset -g TMP_DIR="/tmp/${NAME}"
+typeset -g INSTALL_DIR="${HOME}/.${NAME}"
+typeset -g LAUNCHER_DIR="${INSTALL_DIR}/1_launcher"
+typeset -g RUNNER="${LAUNCHER_DIR}/run.zsh"
+typeset -g UNINSTALLER="${LAUNCHER_DIR}/uninstall.zsh"
 
-ZSHRC="${HOME}/.zshrc"
-ZSHRC_CONTENT_START="#-----------------------42_ultimate_tester----------------------#"
-ZSHRC_CONTENT_END="#---------------------------------------------------------------#"
-ZSHRC_CONTENT="alias test=\"${RUNNER}\"\nalias rmtest=\"${UNINSTALLER}\""
+typeset -g ZSHRC="${HOME}/.zshrc"
+typeset -g ZSHRC_CONTENT_START="#-----------------------42_ultimate_tester----------------------#"
+typeset -g ZSHRC_CONTENT_END="#---------------------------------------------------------------#"
+typeset -g ZSHRC_CONTENT="alias test=\"${RUNNER}\"\nalias rmtest=\"${UNINSTALLER}\""
 
-TEST_CMD="${RUNNER}"
-UNINSTALL_CMD="${UNINSTALLER}"
+typeset -g TEST_CMD="${RUNNER}"
+typeset -g UNINSTALL_CMD="${UNINSTALLER}"
 
-GREY="\033[90m"
-RED="\033[0;31m"
-ORANGE="\033[38;5;214m"
-GREEN="\033[0;32m"
-YELLOW="\033[0;33m"
-BLUE="\033[34m"
-NONE="\033[0m"
+typeset -g GREY="\033[90m"
+typeset -g RED="\033[0;31m"
+typeset -g ORANGE="\033[38;5;214m"
+typeset -g GREEN="\033[0;32m"
+typeset -g YELLOW="\033[0;33m"
+typeset -g BLUE="\033[34m"
+typeset -g NONE="\033[0m"
 
 main()
 {
@@ -48,18 +48,19 @@ print_ascii_art()
 
 download()
 {
-	echo " ${BLUE}⏱ Downloading...${NONE}"
+	printf " ${BLUE}⏱ Downloading...${NONE}\n"
 
 	rm -rf "${TMP_DIR}" > /dev/null 2>&1
 	if ! git clone --depth=1 "${REPO_URL}" "${TMP_DIR}" > /dev/null 2>&1; then
 		local error_code=$?
-		echo -e "\n 🚨 ${RED}Installation canceled: Unable to clone ${REPO_URL}${NONE}" >&2
+
+		printf "\n 🚨 ${RED}Installation canceled: Unable to clone ${REPO_URL}${NONE}\n" >&2
 
 		rm -rf "${TMP_DIR}" > /dev/null 2>&1
-		echo " 🧹 All downloaded files have been deleted"
+		printf " 🧹 All downloaded files have been deleted\n"
 
 		clean_zshrc
-		echo " 🧹 ${ZSHRC} has been restored"
+		printf " 🧹 ${ZSHRC} has been restored\n"
 
 		exit $error_code
 	fi
@@ -72,11 +73,9 @@ update_zshrc()
 	if [[ ! -f "${ZSHRC}" ]]; then
 		ZSHRC=$(find "${HOME}" -maxdepth 3 -type f -name ".zshrc" 2>/dev/null | head -n 1)
 		if [[ ! -f "${ZSHRC}" ]]; then
-			echo
-			echo " ${YELLOW}⚠ Unable to find .zshrc inside ${HOME}/${NONE}" >&2
-			echo " ℹ You should manually add an alias to run tests : ${RUNNER}" >&2
-			echo " ℹ You should manually add an alias to uninstall tests : ${UNINSTALLER}" >&2
-			echo
+			printf "\n ${YELLOW}⚠ Unable to find .zshrc inside ${HOME}/${NONE}\n" >&2
+			printf " ℹ You should manually add an alias to run tests : ${RUNNER}\n" >&2
+			printf " ℹ You should manually add an alias to uninstall tests : ${UNINSTALLER}\n\n" >&2
 			return 1
 		fi
 	fi
@@ -85,11 +84,9 @@ update_zshrc()
 
 	for alias_name in test rmtest; do
 		if grep -qE "^[[:space:]]*alias[[:space:]]+${alias_name}=" "${ZSHRC}"; then
-			echo
-			echo " ${YELLOW}⚠ Alias '${alias_name}' already exists in ${ZSHRC}.${NONE}" >&2
-			echo " ℹ You should manually add an alias to run tests : ${RUNNER}" >&2
-			echo " ℹ You should manually add an alias to uninstall tests : ${UNINSTALLER}" >&2
-			echo
+			printf "\n ${YELLOW}⚠ Alias '${alias_name}' already exists in ${ZSHRC}.${NONE}\n" >&2
+			printf " ℹ You should manually add an alias to run tests : ${RUNNER}\n" >&2
+			printf " ℹ You should manually add an alias to uninstall tests : ${UNINSTALLER}\n\n" >&2
 			return 1
 		fi
 	done
@@ -112,11 +109,11 @@ clean_zshrc()
 
 print_help()
 {
-	echo -e " ${GREEN}✔ Downloaded${NONE}\n"
+	printf " ${GREEN}✔ Downloaded${NONE}\n"
 
-	echo " 👉 ${YELLOW}Reload your terminal${NONE} or run ${YELLOW}source \"${ZSHRC}\"${NONE}, then:"
-	echo " 💡 Run ${YELLOW}${TEST_CMD}${NONE} inside a 42 project to test it"
-	echo " 💡 Run ${YELLOW}${UNINSTALL_CMD}${NONE} anywhere to uninstall ${NAME}\n"
+	printf " 👉 ${YELLOW}Reload your terminal${NONE} or run ${YELLOW}source \"${ZSHRC}\"${NONE}, then:\n"
+	printf " 💡 Run ${YELLOW}${TEST_CMD}${NONE} inside a 42 project to test it\n"
+	printf " 💡 Run ${YELLOW}${UNINSTALL_CMD}${NONE} anywhere to uninstall ${NAME}\n\n"
 }
 
 main
