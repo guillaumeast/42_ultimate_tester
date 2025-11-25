@@ -72,11 +72,13 @@ This will:
 
 This tester ships with:
 
-1. **All Francinette tests** (for supported projects)
+1. **All [Francinette](https://github.com/xicodomingues/francinette) tests** (for supported projects)
 2. **Extra tests** I wrote myself  
 3. **Memory leaks tests** (`malloc`’d pointers that are not `free`'d)  
 4. **Memory safety tests** (unprotected `malloc` calls)  
 5. **Makefile checks** (`all`, `clean`, `fclean` and `re` rules)
+
+💡 My custom test framework is written entirely in **POSIX C**, so it works almost **everywhere** (well… except on **Windows**, of course 💩).
 
 > If your project survives `42 Ultimate Tester`, the `Moulinette` will be a formality.
 
