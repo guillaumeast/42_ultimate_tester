@@ -48,16 +48,16 @@ void	print_report(const t_result *result)
 	get_colors(result, &colors);
 	get_content(result, &colors, &content);
 
-	print_stdout("    %s╭─────────────────────────────────────────╮%s\n", colors.borders, NONE);
-	print_stdout("    %s\n", content.title);
-	print_stdout("    %s╞════════╤════════╤═══════╤═══════╤═══════╡%s\n", colors.borders, NONE);
-	print_stdout("    %s %sPASSED %s %sFAILED %s %sTIMED %s %sCRASH %s %sLEAKS %s\n", \
+	print_stdout("   %s╭─────────────────────────────────────────╮%s\n", colors.borders, NONE);
+	print_stdout("   %s\n", content.title);
+	print_stdout("   %s╞════════╤════════╤═══════╤═══════╤═══════╡%s\n", colors.borders, NONE);
+	print_stdout("   %s %sPASSED %s %sFAILED %s %sTIMED %s %sCRASH %s %sLEAKS %s\n", \
 		content.separator, colors.passed, content.separator, colors.failed, \
 		content.separator, colors.timed, content.separator, colors.crashed, \
 		content.separator, colors.leaks, content.separator);
-	print_stdout("    %s├────────┼────────┼───────┼───────┼───────┤%s\n", colors.borders, NONE);
-	print_stdout("    %s %s %s %s %s\n", content.passed, content.failed, content.timed, content.crashed, content.leaks);
-	print_stdout("    %s╰────────┴────────┴───────┴───────┴───────╯%s\n", colors.borders, NONE);
+	print_stdout("   %s├────────┼────────┼───────┼───────┼───────┤%s\n", colors.borders, NONE);
+	print_stdout("   %s %s %s %s %s\n", content.passed, content.failed, content.timed, content.crashed, content.leaks);
+	print_stdout("   %s╰────────┴────────┴───────┴───────┴───────╯%s\n", colors.borders, NONE);
 }
 
 static inline void	get_colors(const t_result *res, t_res_colors *col)

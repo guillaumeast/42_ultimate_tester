@@ -1,14 +1,8 @@
 #include "ft_ultimate_tester.h"
-#include "libftprintf.h"
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <inttypes.h>
 
 // Test(unnamed, 0)
 // {
 
-// 	assert_eq(RET, 1, (printf("%c", 'a')), (ft_printf("%c", 'a')));
 // 	assert_eq("assert_eq(expl char)", (char)'a', (char)'a');
 // 	assert_eq("assert_eq(expl signed char)", (signed char)'a', (signed char)'a');
 // 	assert_eq("assert_eq(expl unsigned char)", (unsigned char)'a', (unsigned char)'a');

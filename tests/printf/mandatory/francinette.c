@@ -17,6 +17,13 @@ Test(francinette_percent, 0)
 {
 	compare(RET_OUT, 1, printf, ft_printf, ("%%"));
 	compare(RET_OUT, 1, printf, ft_printf, (" %%"));
+	compare(RET_OUT, 1, printf, ft_printf, (" %% "));
+	compare(RET_OUT, 1, printf, ft_printf, (" %%%% "));
+	compare(RET_OUT, 1, printf, ft_printf, (" %% %% %% "));
+	compare(RET_OUT, 1, printf, ft_printf, (" %%  %%  %% "));
+	compare(RET_OUT, 1, printf, ft_printf, (" %%   %%   %% "));
+	compare(RET_OUT, 1, printf, ft_printf, ("%%"));
+	compare(RET_OUT, 1, printf, ft_printf, ("%% %%"));
 	compare(RET_OUT, 1, printf, ft_printf, ("%%c"));
 	compare(RET_OUT, 1, printf, ft_printf, ("aa%%bb"));
 	compare(RET_OUT, 1, printf, ft_printf, ("%%%%%%%%%%"));
@@ -38,9 +45,18 @@ Test(francinette_c, 0)
 Test(francinette_s, 0)
 {
 	static char *s_hidden = "null char inside string \0don't print me lol\0";
+	static char *s_long = "Mussum Ipsum, cacilds vidis litro abertis. Posuere libero varius. Nullam a nisl ut ante blandit hendrerit. Aenean sit amet nisi. Atirei o pau no gatis, per gatis num morreus.";
 
 	compare(RET_OUT, 1, printf, ft_printf, ("%s", ""));
 	compare(RET_OUT, 1, printf, ft_printf, ("{%s}", ""));
+	compare(RET_OUT, 1, printf, ft_printf, (" %s", ""));
+	compare(RET_OUT, 1, printf, ft_printf, ("%s ", ""));
+	compare(RET_OUT, 1, printf, ft_printf, (" %s ", ""));
+	compare(RET_OUT, 1, printf, ft_printf, (" %s ", "-"));
+	compare(RET_OUT, 1, printf, ft_printf, (" %s %s ", "", "-"));
+	compare(RET_OUT, 1, printf, ft_printf, (" %s %s ", " - ", ""));
+	compare(RET_OUT, 1, printf, ft_printf, (" %s %s %s %s %s ", " - ", "", "4", "", "2 "));
+	compare(RET_OUT, 1, printf, ft_printf, (" %s %s %s %s %s", " - ", "", "4", "", s_long));
 	compare(RET_OUT, 1, printf, ft_printf, ("%s", "some string with %s hehe"));
 	compare(RET_OUT, 1, printf, ft_printf, (" %s", "can it handle \t and \n?"));
 	compare(RET_OUT, 1, printf, ft_printf, ("%sx", "} { al$#@@@^&$$^#^@@^$*((&"));
@@ -54,7 +70,7 @@ Test(francinette_s, 0)
 	compare(RET_OUT, 1, printf, ft_printf, ("%ss%ss%ss", "And ", "some other", "joined"));
 	compare(RET_OUT, 1, printf, ft_printf, ("%s%s%s%s%s", "1", "2", "3", "4", "5"));
 	compare(RET_OUT, 1, printf, ft_printf, ("%s", s_hidden));
-	compare(RET_OUT, 1, printf, ft_printf, ("%s", (char *)NULL));
+	compare(RET_OUT, 1, printf, ft_printf, ("NULL ->%s<- NULL", (char *)NULL));
 }
 
 Test(francinette_d, 0)
@@ -75,6 +91,7 @@ Test(francinette_d, 0)
 	compare(RET_OUT, 1, printf, ft_printf, ("d%dd%dd%dd", 1, -2, 3));
 	compare(RET_OUT, 1, printf, ft_printf, ("%d", INT_MIN));
 	compare(RET_OUT, 1, printf, ft_printf, ("%d", INT_MAX));
+	compare(RET_OUT, 1, printf, ft_printf, ("%d", UINT_MAX));
 }
 
 Test(francinette_i, 0)
@@ -95,6 +112,7 @@ Test(francinette_i, 0)
 	compare(RET_OUT, 1, printf, ft_printf, ("d%id%id%id", 1, -2, 3));
 	compare(RET_OUT, 1, printf, ft_printf, ("%i", INT_MIN));
 	compare(RET_OUT, 1, printf, ft_printf, ("%i", INT_MAX));
+	compare(RET_OUT, 1, printf, ft_printf, ("%i", UINT_MAX));
 }
 
 Test(francinette_u, 0)
@@ -117,6 +135,7 @@ Test(francinette_u, 0)
 	compare(RET_OUT, 1, printf, ft_printf, ("%u", INT_MAX));
 	compare(RET_OUT, 1, printf, ft_printf, ("%u", UINT_MAX));
 	compare(RET_OUT, 1, printf, ft_printf, ("%u", UINT_MAX + 1));
+	compare(RET_OUT, 1, printf, ft_printf, (" %u ", (unsigned int)9223372036854775807LL));
 }
 
 Test(francinette_x, 0)
@@ -140,6 +159,7 @@ Test(francinette_x, 0)
 	compare(RET_OUT, 1, printf, ft_printf, ("%x", INT_MAX));
 	compare(RET_OUT, 1, printf, ft_printf, ("%x", UINT_MAX));
 	compare(RET_OUT, 1, printf, ft_printf, ("%x, %x", 0, UINT_MAX));
+	compare(RET_OUT, 1, printf, ft_printf, (" %x ", (unsigned int)9223372036854775807LL));
 }
 
 Test(francinette_X, 0)
@@ -163,6 +183,7 @@ Test(francinette_X, 0)
 	compare(RET_OUT, 1, printf, ft_printf, ("%X", INT_MAX));
 	compare(RET_OUT, 1, printf, ft_printf, ("%X", UINT_MAX));
 	compare(RET_OUT, 1, printf, ft_printf, ("%X, %X", 0, UINT_MAX));
+	compare(RET_OUT, 1, printf, ft_printf, (" %X ", (unsigned int)9223372036854775807LL));
 }
 
 Test(francinette_p, 0)
@@ -171,6 +192,8 @@ Test(francinette_p, 0)
 	unsigned long	l;
 	char			*str;
 
+	compare(RET_OUT, 1, printf, ft_printf, ("%p", (void *)-1));
+	compare(RET_OUT, 1, printf, ft_printf, ("%p", (void *)1));
 	compare(RET_OUT, 1, printf, ft_printf, ("%p", &i));
 	compare(RET_OUT, 1, printf, ft_printf, ("%p", &l));
 	compare(RET_OUT, 1, printf, ft_printf, ("%p", &str));
@@ -179,6 +202,7 @@ Test(francinette_p, 0)
 	compare(RET_OUT, 1, printf, ft_printf, ("%p", NULL));
 	compare(RET_OUT, 1, printf, ft_printf, ("%p", (void *)-14523));
 	compare(RET_OUT, 1, printf, ft_printf, ("0x%p-", (void *)ULONG_MAX));
+	compare(RET_OUT, 1, printf, ft_printf, (" %p %p ", (void *)-ULONG_MAX, (void *)ULONG_MAX));
 	compare(RET_OUT, 1, printf, ft_printf, ("%pp%p%p", (void *)LONG_MAX + 423856, (void *)0, (void *)INT_MAX));
 }
 
@@ -189,4 +213,5 @@ Test(francinette_mix, 0)
 	compare(RET_OUT, 1, printf, ft_printf, ("%%%c", 'x'));
 	compare(RET_OUT, 1, printf, ft_printf, ("s: %s, p: %p, d:%d", "a string", &i, 42));
 	compare(RET_OUT, 1, printf, ft_printf, ("%s%p%d%d%p%s%p%p%s", "a", &free, 1, 2, &malloc, "b", &free, &malloc, "c"));
+	compare(RET_OUT, 1, printf, ft_printf, ("%%%c%%%s%%%d%%%i%%%u%%%x%%%X%%%% %%%c%%%s%%%d%%%i%%%u%%%x%%%X%%%% %%%c%%%s%%%d%%%i%%%u%%%x%%%X%%%% %c%%", 'A', "42", 42, 42 ,42 , 42, 42, 'B', "-42", -42, -42 ,-42 ,-42, 42, 'C', "0", 0, 0 ,0 ,0, 42, 0));
 }
