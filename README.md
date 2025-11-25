@@ -49,7 +49,7 @@ This will:
 
 > 👇 Example output when running tests for `ft_printf`
 
-<img width="514" height="866" alt="Capture d’écran 2025-11-08 à 19 30 05" src="https://github.com/user-attachments/assets/4580112c-06b2-4bcc-89be-44127e68bdd2" />
+<img width="754" height="883" alt="Capture d’écran 2025-11-25 à 19 11 45" src="https://github.com/user-attachments/assets/8f5cd830-49fe-496a-82c1-911bf75d87fa" />
 
 > The best bugs are the ones you didn’t expect.
 
@@ -74,7 +74,9 @@ This tester ships with:
 
 1. **All Francinette tests** (for supported projects)
 2. **Extra tests** I wrote myself  
-3. **Makefile checks** (because your Makefile *will* betray you at some point)
+3. **Memory leaks tests** (`malloc`’d pointers that are not `free`'d)  
+4. **Memory safety tests** (unprotected `malloc` calls)  
+5. **Makefile checks** (`all`, `clean`, `fclean` and `re` rules)
 
 > If your project survives `42 Ultimate Tester`, the `Moulinette` will be a formality.
 
