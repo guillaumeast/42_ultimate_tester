@@ -12,7 +12,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 
-#define H1_CAP 128
+#define H1_CAP 256
 #define INDICATOR_CAP 16
 
 const char	*format_h1(const char *fmt, va_list args)
@@ -20,8 +20,9 @@ const char	*format_h1(const char *fmt, va_list args)
 	static char	buff[H1_CAP];
 	size_t	offset;
 
-	offset = snprintf(buff, sizeof buff, " %s%s%s ", GREY, EMJ_ARW_RIGHT, NONE);
-	(void)vsnprintf(buff + offset, sizeof buff - offset, fmt, args);
+	offset = snprintf(buff, sizeof buff, " %s%s%s ", GREY, EMJ_ARW_RIGHT, BBLUE);
+	offset += vsnprintf(buff + offset, sizeof buff - offset, fmt, args);
+	(void)snprintf(buff + offset, sizeof buff - offset, "%s", NONE);
 
 	return (buff);
 }

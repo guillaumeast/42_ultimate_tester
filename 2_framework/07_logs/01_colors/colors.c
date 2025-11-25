@@ -5,9 +5,13 @@ typedef struct s_colors
 {
 	char	*grey;
 	char	*red;
+	char	*bred;
 	char	*green;
+	char	*bgreen;
 	char	*yellow;
 	char	*blue;
+	char	*bblue;
+	char	*cyan;
 	char	*none;
 }	t_colors;
 
@@ -31,11 +35,15 @@ static inline void	colors_init(void)
 	bool		istty;
 
 	istty = isatty(STDOUT_FILENO);
-	g_colors.grey =		istty ? "\033[90m" : "";
-	g_colors.red =		istty ? "\033[31m" : "";
-	g_colors.green =	istty ? "\033[32m" : "";
-	g_colors.yellow =	istty ? "\033[33m" : "";
-	g_colors.blue =		istty ? "\033[34m" : "";
-	g_colors.none =		istty ? "\033[00m" : "";
+	g_colors.grey =		istty ? "\033[0;90m" : "";
+	g_colors.red =		istty ? "\033[0;31m" : "";
+	g_colors.bred =		istty ? "\033[1;31m" : "";
+	g_colors.green =	istty ? "\033[0;32m" : "";
+	g_colors.bgreen =	istty ? "\033[1;32m" : "";
+	g_colors.yellow =	istty ? "\033[0;33m" : "";
+	g_colors.blue =		istty ? "\033[0;34m" : "";
+	g_colors.bblue =	istty ? "\033[1;34m" : "";
+	g_colors.cyan =		istty ? "\033[1;36m" : "";
+	g_colors.none =		istty ? "\033[0m" : "";
 	s_colors_initialized = true;
 }

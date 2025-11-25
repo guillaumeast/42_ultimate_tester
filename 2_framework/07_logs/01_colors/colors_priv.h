@@ -15,9 +15,13 @@
 
 #define GREY	colors_get_grey()
 #define RED		colors_get_red()
+#define BRED	colors_get_bred()
 #define GREEN	colors_get_green()
+#define BGREEN	colors_get_bgreen()
 #define YELLOW	colors_get_yellow()
 #define BLUE	colors_get_blue()
+#define BBLUE	colors_get_bblue()
+#define CYAN	colors_get_cyan()
 #define NONE	colors_get_none()
 
 #endif /* __FUT_INSIDE__ */

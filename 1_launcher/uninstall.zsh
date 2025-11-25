@@ -31,4 +31,4 @@ else
 fi
 
 printf " 🧹 ${ZSHRC} has been restored\n"
-printf " ${GREEN}✔ ${NAME} has been uninstalled${NONE}\n"
+printf "\n ${GREEN}✔ ${NAME} has been uninstalled${NONE}\n\n"

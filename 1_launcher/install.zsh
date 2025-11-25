@@ -111,7 +111,7 @@ print_help()
 {
 	printf " ${GREEN}✔ Downloaded${NONE}\n"
 
-	printf " 👉 ${YELLOW}Reload your terminal${NONE} or run ${YELLOW}source \"${ZSHRC}\"${NONE}, then:\n"
+	printf "\n 👉 ${YELLOW}Reload your terminal${NONE} or run ${YELLOW}source \"${ZSHRC}\"${NONE}, then:\n"
 	printf " 💡 Run ${YELLOW}${TEST_CMD}${NONE} inside a 42 project to test it\n"
 	printf " 💡 Run ${YELLOW}${UNINSTALL_CMD}${NONE} anywhere to uninstall ${NAME}\n\n"
 }

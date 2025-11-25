@@ -92,25 +92,25 @@ OBJS			:= $(SRCS:%.c=$(OBJ_DIR)/%.o)
 
 all: $(NAME)
 
-project:
-	@make -C $(PROJ_DIR) || true
-
-$(NAME): project $(OBJS)
+$(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(INCLUDES) $(OBJS) -o $(NAME) $(LIBS)
 
 $(OBJ_DIR)/%.o : %.c
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
-run: $(NAME)
+run:
+	@$(MAKE) -s all > /dev/null 2>&1 || { \
+		printf '❗️ Internal error: unable to compile\n' >&2; \
+		exit 1; \
+	}
+	@$(MAKE) -s all > /dev/null 2>&1
 	@./$(NAME)
 
 clean:
-	@make -C $(PROJ_DIR) clean || true
 	@rm -rf $(OBJ_DIR)
 
 fclean: clean
-	@make -C $(PROJ_DIR) fclean || true
 	@rm -f $(NAME)
 
 re: fclean all

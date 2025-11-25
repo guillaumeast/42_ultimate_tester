@@ -23,7 +23,8 @@ void	set_run(t_set *set)
 	else
 		set_run_child(set);
 
-	print_stdout("\n");
+	if (set->result.status.type != PASSED)
+		print_stdout("\n");
 }
 
 void	set_init(t_set *first_set, t_set *last_set)

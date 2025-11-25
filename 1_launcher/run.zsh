@@ -2,7 +2,7 @@
 
 # Variables for update()
 typeset -g INSTALL_DIR="${HOME}/.42_ultimate_tester"
-typeset -g REPO_URL="https://github.com/guillaumeast/42_ultimate_tester"
+typeset -g REPO_URL="github.com/guillaumeast/42_ultimate_tester"
 typeset -g INSTALLER_URL="https://raw.githubusercontent.com/guillaumeast/42_ultimate_tester/master/install.zsh"
 
 # Variables for Makefile
@@ -13,12 +13,25 @@ typeset -ga PROJ_INCLUDES=()
 typeset -ga PROJ_LIBS=()
 
 # Colors
-typeset -g GREY="\033[90m"
+typeset -g BGREY="\033[1;90m"
+typeset -g GREY="\033[0;90m"
+typeset -g BORANGE="\033[1;38;5;214m"
 typeset -g ORANGE="\033[38;5;214m"
-typeset -g RED="\033[31m"
-typeset -g GREEN="\033[32m"
-typeset -g YELLOW="\033[33m"
-typeset -g NONE="\033[0m"
+typeset -g BRED="\033[1;31m"
+typeset -g RED="\033[0;31m"
+typeset -g BGREEN="\033[1;32m"
+typeset -g GREEN="\033[0;32m"
+typeset -g BYELLOW="\033[1;33m"
+typeset -g YELLOW="\033[0;33m"
+typeset -g BBLUE="\033[1;34m"
+typeset -g BLUE="\033[0;34m"
+typeset -g BMAG="\033[1;35m"
+typeset -g MAG="\033[0;35m"
+typeset -g CYAN="\033[0;36m"
+typeset -g BCYAN="\033[1;36m"
+typeset -g BWHITE="\033[1;37m"
+typeset -g NC="\033[0m"
+
 
 main()
 {
@@ -28,61 +41,76 @@ main()
 }
 #-------------------------- Printer -------------------------#
 
+# print_ascii_art()
+# {
+# 	printf "\n${BYELLOW}                               )\\      \`           *                         * )    \` )\\     \n"
+# 	printf "  \` *           (  \`.         /((                \`      /((    \`   )          /(\`   /((.\\    \n"
+# 	printf "${BORANGE}    (           )\\ /(        / (*   .     *    (        )\\        ()   \`     /)(_))\\ /( (    \n"
+# 	printf " ${BRED}_  ${BORANGE})\\ ${BRED}___    _ ${BORANGE}((_|_${BORANGE})   ${BRED}___${BORANGE}(_|_))${BRED}_${BORANGE}()${BRED}_  __${BORANGE})\\ ${BRED}_${BORANGE} ))\\ ${BRED}_____${BORANGE}(_)   ${BRED}___${BORANGE}(_)${BRED}_______ ${BORANGE}(_(_()|(${BRED}_${BORANGE})(${BRED}__${BORANGE})${BRED}   \n"
+# 	printf "| |_${BORANGE}(_)${BRED}_  )  | | | | |  |_   _|_ _||  \\/  ${BORANGE}(_)${BRED} \\"
+# 	printf "${BORANGE}(_)${BRED}   _| __| |_   _| __/ __||_   _| __| _ \\  \n"
+# 	printf "|_  _| / /   | |_| | |__  | |  | | | |\\/| |/ _ \\  | | | _|    | | | _|\\__ \\  | | | _||   /  \n"
+# 	printf "  |_| /___|   \\___/|____| |_| |___||_|  |_/_/ \\_\\ |_| |___|   |_| |___|___/  |_| |___|_|_\\  \n"
+# 	printf "\n${GREY}${REPO_URL}${NC}\n\n"
+# }
+
 print_ascii_art()
 {
-	printf "\n${YELLOW}                               )\\      \`           *                         * )    \` )\\     \n"
-	printf "  \` *           (  \`.         /((                \`      /((    \`   )          /(\`   /((.\\    \n"
-	printf "${ORANGE}    (           )\\ /(        / (*   .     *    (        )\\        ()   \`     /)(_))\\ /( (    \n"
-	printf " ${RED}_  ${ORANGE})\\ ${RED}___    _ ${ORANGE}((_|_${ORANGE})   ${RED}___${ORANGE}(_|_))${RED}_${ORANGE}()${RED}_  __${ORANGE})\\ _ )\\ ${RED}_____ ${ORANGE}(_)   ${RED}___${ORANGE}(_)${RED}_______ ${ORANGE}(_(_()|(${RED}_${ORANGE})(${RED}__${ORANGE})${RED}   \n"
-	printf "| |_${ORANGE}(_)${RED}_  )  | | | | |  |_   _|_ _||  \\/  ${ORANGE}(_)${RED}_\\"
-	printf "${ORANGE}(_)${RED}_   _| __| |_   _| __/ __||_   _| __| _ \\  \n"
-	printf "|_  _| / /   | |_| | |__  | |  | | | |\\/| |/ _ \\   | | | _|    | | | _|\\__ \\  | | | _||   /  \n"
-	printf "  |_| /___|   \\___/|____| |_| |___||_|  |_/_/ \\_\\  |_| |___|   |_| |___|___/  |_| |___|_|_\\  \n"
-	printf "\n${GREY}${REPO_URL}${NONE}\n\n"
+	printf "\n   ${CYAN}╭─────────────────────────────────────────╮${NC}\n"
+	printf "   ${CYAN}│           ${BBLUE}42 ULTIMATE TESTER${CYAN}            │\n"
+	printf "   ${CYAN}╰─────────────────────────────────────────╯${NC}\n\n"
 }
 
-# TODO: update with framework graphic style
 print_project_name()
 {
-	printf " 🧪 Testing ${YELLOW}${PROJ_NAME}${NONE} project...\n"
+	printf "   ${CYAN}╭─────────────────────────────────────────╮${NC}\n"
+	if [[ "$PROJ_NAME" == "printf" ]]; then
+		printf "   ${CYAN}│                 ${BBLUE}PRINTF${CYAN}                  │\n"
+	elif [[ "$PROJ_NAME" == "gnl" ]]; then
+		printf "   ${CYAN}│                   ${BBLUE}GNL${CYAN}                   │\n"
+	else
+		printf "   ${CYAN}│                  ${BBLUE}TESTS${CYAN}                  │\n"
+	fi
+	printf "   ${CYAN}╰─────────────────────────────────────────╯${NC}\n\n"
 }
 
 print_h1()
 {
-	printf " ${GREY}➜${NONE} ${1} "
+	printf " ${GREY}➜${BORANGE} ${1} ${NC}"
 }
 
 print_indicator_pass()
 {
-	printf "${GREEN}✔${NONE} "
+	printf "${GREEN}✔${NC} "
 }
 
 print_indicator_fail()
 {
-	printf "${RED}✖${NONE} "
+	printf "${RED}✖${NC} "
 }
 
 print_error()
 {
-	printf "    ${GREY}⤷ ${RED}${1}${NONE}\n" >&2
+	printf "    ${GREY}⤷ ${RED}${1}${NC}\n" >&2
 }
 
 #-------------------------- Updater -------------------------#
 
 update()
 {
-	printf "${GREY} ⏱ Updating...${NONE}\n"
+	printf "${GREY} ➜ ${REPO_URL}${NC}\n\n"
+	printf "${GREY} ⏱ Updating...${NC}\n"
 	(
 		cd "${INSTALL_DIR}"
 		if ! git pull > /dev/null 2>&1; then
 			if ! curl -fsSL "${INSTALLER_URL}" | zsh > /dev/null 2>&1; then
-				printf " ${YELLOW}⚠ Update failed. Skipping.${NONE}\n" >&2
-				printf " ${GREY}ℹ Manual update: 'curl -fsSL ${INSTALLER_URL}'${NONE}\n" >&2
+				printf " ${YELLOW}⚠ Update failed. Skipping.${NC}\n" >&2
+				printf " ${GREY}ℹ Manual update: 'curl -fsSL ${INSTALLER_URL}'${NC}\n" >&2
 			else
-				printf " ${GREY}✔ Updated${NONE}"
+				printf " ${GREY}✔ Updated${NC}\n"
 			fi
 		else
-			printf " ${GREY}✔ Updated${NONE}"
+			printf " ${GREY}✔ Updated${NC}\n"
 		fi
 		printf "\n"
 	)
@@ -97,7 +125,7 @@ dispatch()
 	elif grep -q "libftprintf\.a" Makefile 2>/dev/null; then
 		test_printf
 	else
-		printf " ${RED}✖ Unable to identify current project${NONE}\n" >&2
+		printf " ${RED}✖ Unable to identify current project${NC}\n" >&2
 		exit 1
 	fi
 }
@@ -111,14 +139,13 @@ test_printf()
 
 	init_proj_srcs
 	init_proj_includes
-	PROJ_LIBS=("libftprintf.a")
+	init_proj_libs
 
 	print_project_name
 
 	test_makefile
-	printf "\n"
 
-	make -C .. \
+	make -C "${INSTALL_DIR}" \
 		PROJ_NAME="$PROJ_NAME" \
 		PROJ_DIR="$PROJ_DIR" \
 		PROJ_SRCS="${PROJ_SRCS[*]}" \
@@ -152,10 +179,19 @@ init_proj_includes()
 	while IFS= read -r dir; do
 		PROJ_INCLUDES+=("-I${(q)dir}")
 	done < <(
-		find "$PWD" -type f -name '*.h' -print0 \
+		find "$PWD" -type f \( -name '*.h' -o -name '*.a' \) -print0 \
 			| xargs -0 -I{} dirname "{}" \
 			| sort -u
 	)
+}
+
+init_proj_libs()
+{
+	local file
+
+	while IFS= read -r -d '' file; do
+		PROJ_LIBS+=("${(q)file}")
+	done < <(find "$PWD" -type f -name '*.a' -print0)
 }
 
 #---------------------- Makefile tester ---------------------#
@@ -176,9 +212,9 @@ test_makefile_rule()
 	local rule="$1"
 
 	if [[ -z "$rule" ]]; then
-		make -C "${PROJ_DIR}"
+		make -C "${PROJ_DIR}" > /dev/null 2>&1
 	else
-		make -C "${PROJ_DIR}" "${rule}"
+		make -C "${PROJ_DIR}" "${rule}" > /dev/null 2>&1
 	fi
 
 	if [[ $? -ne 0 ]]; then
@@ -196,10 +232,10 @@ test_makefile_relink()
 	local build_before build_after
 
 	make -C "${PROJ_DIR}" fclean > /dev/null 2>&1
-	make -C "${PROJ_DIR}"
+	make -C "${PROJ_DIR}" > /dev/null 2>&1
 	build_before=$(find "${PROJ_DIR}" -type f -name "libftprintf.a" -exec md5sum {} + 2>/dev/null)
 
-	make -C "${PROJ_DIR}"
+	make -C "${PROJ_DIR}" > /dev/null 2>&1
 
 	build_after=$(find "${PROJ_DIR}" -type f -name "libftprintf.a" -exec md5sum {} + 2>/dev/null)
 	if [[ "$build_before" != "$build_after" ]]; then
