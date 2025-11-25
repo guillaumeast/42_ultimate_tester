@@ -113,13 +113,13 @@ rmtest
 
 ## ⚠️ Important Warnings
 
-- **Norminette** is **NOT** checked by the tester  
+- **`Norminette`** is **NOT** checked by the tester  
   *(wip: coming very soon)*  
-- Only **ft_printf mandatory** is fully available for now  
+- Only **`ft_printf` mandatory** is fully available for now  
   *(wip: `libft`, `gnl`, and bonus tests coming very soon)*  
-- Tested **only on macOS ARM** for now  
+- Tested **only on `macOS` `ARM`** for now  
   *(wip: `macOS x86` and `Linux` support coming soon)*  
-- Stacktraces may show **incorrect source locations**  
+- **Stacktraces** may show **incorrect source locations**  
   *(still work in progress — but it crashes beautifully)*
 
 > Knowing the limitations is part of mastering the tool.
