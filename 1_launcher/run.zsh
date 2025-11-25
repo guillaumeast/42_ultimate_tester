@@ -98,16 +98,29 @@ print_error()
 
 update()
 {
+	local fetch_cmd
+
 	printf "${GREY} ➜ ${REPO_URL}${NC}\n\n"
 	printf "${GREY} ⏱ Updating...${NC}\n"
 	(
 		cd "${INSTALL_DIR}"
 		if ! git pull > /dev/null 2>&1; then
-			if ! curl -fsSL "${INSTALLER_URL}" | zsh > /dev/null 2>&1; then
-				printf " ${YELLOW}⚠ Update failed. Skipping.${NC}\n" >&2
-				printf " ${GREY}ℹ Manual update: 'curl -fsSL ${INSTALLER_URL}'${NC}\n" >&2
+			if command -v curl >/dev/null 2>&1; then
+				if ! curl -fsSL "${INSTALLER_URL}" | zsh > /dev/null 2>&1; then
+					printf " ${YELLOW}⚠ Update failed. Skipping.${NC}\n" >&2
+					printf " ${GREY}ℹ Manual update: 'curl -fsSL ${INSTALLER_URL}'${NC}\n" >&2
+				else
+					printf " ${GREY}✔ Updated${NC}\n"
+				fi
+			elif command -v wget >/dev/null 2>&1; then
+				if ! wget -qO- "${INSTALLER_URL}" | zsh > /dev/null 2>&1; then
+					printf " ${YELLOW}⚠ Update failed. Skipping.${NC}\n" >&2
+					printf " ${GREY}ℹ Manual update: 'wget -qO- ${INSTALLER_URL}'${NC}\n" >&2
+				else
+					printf " ${GREY}✔ Updated${NC}\n"
+				fi
 			else
-				printf " ${GREY}✔ Updated${NC}\n"
+				printf " ${YELLOW}⚠ Update failed: curl or wget is required. Skipping.${NC}\n" >&2
 			fi
 		else
 			printf " ${GREY}✔ Updated${NC}\n"
