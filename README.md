@@ -87,7 +87,7 @@ Nothing fancy - just make sure you've got these:
 | Tool | Why |
 |------|--------|
 | `zsh` | Because we're not animals |
-| `curl` or `get` | To fetch the **installer** |
+| `curl` or `wget` | To fetch the **installer** |
 | `git` | To pull **automatic updates** |
 | `make` | To **build** the tester |
 
@@ -124,7 +124,6 @@ rmtest
 
 ### 🧩 Contributing
 
-Want to make other 42 students cry too? 😈  
 You can help expand `42_ultimate_tester` by adding new test suites!
 
 1. Fork the repo: [guillaumeast/42_ultimate_tester](https://github.com/guillaumeast/42_ultimate_tester)
