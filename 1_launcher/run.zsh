@@ -3,7 +3,7 @@
 # Variables for update()
 typeset -g INSTALL_DIR="${HOME}/.42_ultimate_tester"
 typeset -g REPO_URL="github.com/guillaumeast/42_ultimate_tester"
-typeset -g INSTALLER_URL="https://raw.githubusercontent.com/guillaumeast/42_ultimate_tester/master/install.zsh"
+typeset -g INSTALLER_URL="https://raw.githubusercontent.com/guillaumeast/42_ultimate_tester/master/1_launcher/install.zsh"
 
 # Variables for Makefile
 typeset -g PROJ_NAME=""
@@ -39,20 +39,6 @@ main()
 	update
 	dispatch
 }
-#-------------------------- Printer -------------------------#
-
-# print_ascii_art()
-# {
-# 	printf "\n${BYELLOW}                               )\\      \`           *                         * )    \` )\\     \n"
-# 	printf "  \` *           (  \`.         /((                \`      /((    \`   )          /(\`   /((.\\    \n"
-# 	printf "${BORANGE}    (           )\\ /(        / (*   .     *    (        )\\        ()   \`     /)(_))\\ /( (    \n"
-# 	printf " ${BRED}_  ${BORANGE})\\ ${BRED}___    _ ${BORANGE}((_|_${BORANGE})   ${BRED}___${BORANGE}(_|_))${BRED}_${BORANGE}()${BRED}_  __${BORANGE})\\ ${BRED}_${BORANGE} ))\\ ${BRED}_____${BORANGE}(_)   ${BRED}___${BORANGE}(_)${BRED}_______ ${BORANGE}(_(_()|(${BRED}_${BORANGE})(${BRED}__${BORANGE})${BRED}   \n"
-# 	printf "| |_${BORANGE}(_)${BRED}_  )  | | | | |  |_   _|_ _||  \\/  ${BORANGE}(_)${BRED} \\"
-# 	printf "${BORANGE}(_)${BRED}   _| __| |_   _| __/ __||_   _| __| _ \\  \n"
-# 	printf "|_  _| / /   | |_| | |__  | |  | | | |\\/| |/ _ \\  | | | _|    | | | _|\\__ \\  | | | _||   /  \n"
-# 	printf "  |_| /___|   \\___/|____| |_| |___||_|  |_/_/ \\_\\ |_| |___|   |_| |___|___/  |_| |___|_|_\\  \n"
-# 	printf "\n${GREY}${REPO_URL}${NC}\n\n"
-# }
 
 print_ascii_art()
 {
@@ -61,10 +47,14 @@ print_ascii_art()
 	printf "   ${CYAN}╰─────────────────────────────────────────╯${NC}\n\n"
 }
 
+#-------------------------- Printer -------------------------#
+
 print_project_name()
 {
 	printf "   ${CYAN}╭─────────────────────────────────────────╮${NC}\n"
-	if [[ "$PROJ_NAME" == "printf" ]]; then
+	if [[ "$PROJ_NAME" == "libft" ]]; then
+		printf "   ${CYAN}│                  ${BBLUE}LIBFT${CYAN}                  │\n"
+	elif [[ "$PROJ_NAME" == "printf" ]]; then
 		printf "   ${CYAN}│                 ${BBLUE}PRINTF${CYAN}                  │\n"
 	elif [[ "$PROJ_NAME" == "gnl" ]]; then
 		printf "   ${CYAN}│                   ${BBLUE}GNL${CYAN}                   │\n"
@@ -133,10 +123,12 @@ update()
 
 dispatch()
 {
-	if [[ -f "get_next_line.c" ]]; then
-		test_gnl
+	if [[ -f "libft.h" ]]; then
+		test_libft
 	elif grep -q "libftprintf\.a" Makefile 2>/dev/null; then
 		test_printf
+	elif [[ -f "get_next_line.c" ]]; then
+		test_gnl
 	else
 		printf " ${RED}✖ Unable to identify current project${NC}\n" >&2
 		exit 1
@@ -144,6 +136,30 @@ dispatch()
 }
 
 #---------------------- Project testers ---------------------#
+
+test_libft()
+{
+	PROJ_NAME="libft"
+	PROJ_DIR="${PWD}"
+
+	init_proj_srcs
+	init_proj_includes
+	init_proj_libs
+
+	print_project_name
+
+	print_h1 "Makefile   "
+	test_makefile
+
+	make -C "${INSTALL_DIR}" \
+		PROJ_NAME="$PROJ_NAME" \
+		PROJ_DIR="$PROJ_DIR" \
+		PROJ_SRCS="${PROJ_SRCS[*]}" \
+		PROJ_INCLUDES="${PROJ_INCLUDES[*]}" \
+		PROJ_LIBS="${PROJ_LIBS[*]}" \
+		run
+	exit $?
+}
 
 test_printf()
 {
@@ -156,6 +172,7 @@ test_printf()
 
 	print_project_name
 
+	print_h1 "Makefile           "
 	test_makefile
 
 	make -C "${INSTALL_DIR}" \
@@ -192,7 +209,7 @@ init_proj_includes()
 	while IFS= read -r dir; do
 		PROJ_INCLUDES+=("-I${(q)dir}")
 	done < <(
-		find "$PWD" -type f \( -name '*.h' -o -name '*.a' \) -print0 \
+		find "$PWD" -type f -name '*.h' -print0 \
 			| xargs -0 -I{} dirname "{}" \
 			| sort -u
 	)
@@ -211,13 +228,13 @@ init_proj_libs()
 
 test_makefile()
 {
-	print_h1 "Makefile"
-
 	test_makefile_rule fclean
 	test_makefile_rule ""
 	test_makefile_rule clean
 	test_makefile_rule fclean
 	test_makefile_relink
+
+	printf "\n"
 }
 
 test_makefile_rule()

@@ -104,7 +104,6 @@ run:
 		printf '❗️ Internal error: unable to compile\n' >&2; \
 		exit 1; \
 	}
-	@$(MAKE) -s all > /dev/null 2>&1
 	@./$(NAME)
 
 clean:
