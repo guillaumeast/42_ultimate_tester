@@ -91,6 +91,6 @@ void	_assert_run(t_assert *assert);
 #define assert_neq(cap_mode, time_out, got_expr, exp_expr)					\
 	_assert(false, cap_mode, time_out, got_expr, exp_expr)
 #define compare(cap_mode, time_out, fn1_name, fn2_name, fn_args)			\
-	_assert(true, cap_mode, time_out, fn1_name fn_args, fn2_name fn_args)
+	assert_eq(cap_mode, time_out, fn1_name fn_args, fn2_name fn_args)
 
 #endif

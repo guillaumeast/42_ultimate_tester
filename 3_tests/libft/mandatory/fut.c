@@ -4,21 +4,18 @@
 #include <limits.h>
 #include <stdlib.h>
 
-/* --------------- TODO: tmp debug --------------- */
-
-Test(tmp_debug, 1)
-{
-	assert(1, 2 < 3);
-	assert(1, 2 > 3);
-
-	assert_label(1, "my label", 2 < 3);
-	assert_label(1, "my label", 2 > 3);
-
-	_assert(true, RET, 1, 2 < 3, 2 < 3);
-	_assert(true, RET, 1, 2 < 3, 2 > 3);
-}
-
 /* --------------- helper --------------- */
+
+static bool is_valid_pointer(void *ptr)
+{
+	bool	passed;
+
+	passed = ptr != NULL;
+	if (ptr)
+		free(ptr);
+	
+	return passed;
+}
 
 // static inline void fill_pattern_1(unsigned char *buf, size_t n)
 // {
@@ -34,170 +31,199 @@ Test(tmp_debug, 1)
 
 /* --------------- atoi --------------- */
 
-// Test(fut_atoi, 0)
-// {
-// 	/* Basics */
-// 	compare(RET, 1, atoi, ft_atoi, ("-1"));
-// 	compare(RET, 1, atoi, ft_atoi, ("-0"));
-// 	compare(RET, 1, atoi, ft_atoi, ("0"));
-// 	compare(RET, 1, atoi, ft_atoi, ("+0"));
-// 	compare(RET, 1, atoi, ft_atoi, ("+1"));
-// 	compare(RET, 1, atoi, ft_atoi, ("42"));
-// 	compare(RET, 1, atoi, ft_atoi, ("+42"));
+Test(fut_atoi, 0)
+{
+	/* Basics */
+	compare(RET, 1, atoi, ft_atoi, ("-1"));
+	compare(RET, 1, atoi, ft_atoi, ("-0"));
+	compare(RET, 1, atoi, ft_atoi, ("0"));
+	compare(RET, 1, atoi, ft_atoi, ("+0"));
+	compare(RET, 1, atoi, ft_atoi, ("+1"));
+	compare(RET, 1, atoi, ft_atoi, ("42"));
+	compare(RET, 1, atoi, ft_atoi, ("+42"));
 
-// 	/* Spaces */
-// 	compare(RET, 1, atoi, ft_atoi, ("   123"));
-// 	compare(RET, 1, atoi, ft_atoi, ("123   "));
-// 	compare(RET, 1, atoi, ft_atoi, ("   123   "));
+	/* Spaces */
+	compare(RET, 1, atoi, ft_atoi, ("   123"));
+	compare(RET, 1, atoi, ft_atoi, ("123   "));
+	compare(RET, 1, atoi, ft_atoi, ("   123   "));
 
-// 	/* Special chars */
-// 	compare(RET, 1, atoi, ft_atoi, ("${(-!@&;:/,?.=%`€456"));
-// 	compare(RET, 1, atoi, ft_atoi, ("\t\n\r\v\f\n\t\n\r\v\f\n456"));
-// 	compare(RET, 1, atoi, ft_atoi, ("\t\n\r\v\f\n\t\n\r\v\f\n ${(-!@&;:/,?.=%`€   789"));
+	/* Special chars */
+	compare(RET, 1, atoi, ft_atoi, ("${(-!@&;:/,?.=%`€456"));
+	compare(RET, 1, atoi, ft_atoi, ("\t\n\r\v\f\n\t\n\r\v\f\n456"));
+	compare(RET, 1, atoi, ft_atoi, ("\t\n\r\v\f\n\t\n\r\v\f\n ${(-!@&;:/,?.=%`€   789"));
 
-// 	/* Leading signs and zeros */
-// 	compare(RET, 1, atoi, ft_atoi, ("+0064578"));
-// 	compare(RET, 1, atoi, ft_atoi, ("-0064578"));
+	/* Leading signs and zeros */
+	compare(RET, 1, atoi, ft_atoi, ("+0064578"));
+	compare(RET, 1, atoi, ft_atoi, ("-0064578"));
 
-// 	/* Stops at first non-digit */
-// 	compare(RET, 1, atoi, ft_atoi, ("123abc"));
+	/* Stops at first non-digit */
+	compare(RET, 1, atoi, ft_atoi, ("123abc"));
 
-// 	/* Non digits first */
-// 	compare(RET, 1, atoi, ft_atoi, ("abc123"));
+	/* Non digits first */
+	compare(RET, 1, atoi, ft_atoi, ("abc123"));
 
-// 	/* Sign without digit */
-// 	compare(RET, 1, atoi, ft_atoi, ("+"));
-// 	compare(RET, 1, atoi, ft_atoi, ("-"));
+	/* Sign without digit */
+	compare(RET, 1, atoi, ft_atoi, ("+"));
+	compare(RET, 1, atoi, ft_atoi, ("-"));
 
-// 	/* Multiple signs */
-// 	compare(RET, 1, atoi, ft_atoi, ("--5"));
-// 	compare(RET, 1, atoi, ft_atoi, ("+-5"));
-// 	compare(RET, 1, atoi, ft_atoi, ("-+5"));
+	/* Multiple signs */
+	compare(RET, 1, atoi, ft_atoi, ("--5"));
+	compare(RET, 1, atoi, ft_atoi, ("+-5"));
+	compare(RET, 1, atoi, ft_atoi, ("-+5"));
 
-// 	/* Limits */
-// 	compare(RET, 1, atoi, ft_atoi, ("-2147483648"));
-// 	compare(RET, 1, atoi, ft_atoi, ("2147483647"));
-// }
+	/* Limits */
+	compare(RET, 1, atoi, ft_atoi, ("-2147483648"));
+	compare(RET, 1, atoi, ft_atoi, ("2147483647"));
+}
 
-// /* --------------- bzero --------------- */
+/* --------------- bzero --------------- */
 
-// #define test_bzero(buff_size, n)											\
-// 	do {																	\
-// 		unsigned char buffer_1[buff_size];									\
-// 		unsigned char buffer_2[buff_size];									\
-// 																			\
-// 		memset(buffer_1, 'A', buff_size);									\
-// 		memset(buffer_2, 'A', buff_size);									\
-// 																			\
-// 		assert_label(1, "ft_bzero(s, " #n ") with s of size " #buff_size, (	\
-// 			bzero(buffer_1, n),												\
-// 			ft_bzero(buffer_2, n),											\
-// 			memcmp(buffer_1, buffer_2, buff_size) == 0						\
-// 		));																	\
-// 	}	while (0)
+#define test_bzero(buff_size, n)											\
+	do {																	\
+		unsigned char buffer_1[buff_size];									\
+		unsigned char buffer_2[buff_size];									\
+																			\
+		memset(buffer_1, 'A', buff_size);									\
+		memset(buffer_2, 'A', buff_size);									\
+																			\
+		assert_label(1, "ft_bzero(s, " #n ") with s of size " #buff_size, (	\
+			bzero(buffer_1, n),												\
+			ft_bzero(buffer_2, n),											\
+			memcmp(buffer_1, buffer_2, buff_size) == 0						\
+		));																	\
+	}	while (0)
 
-// Test(fut_bzero, 0)
-// {
-// 	test_bzero(1, 0);
-// 	test_bzero(1, 1);
+Test(fut_bzero, 0)
+{
+	test_bzero(1, 0);
+	test_bzero(1, 1);
 
-// 	test_bzero(128, 0);
-// 	test_bzero(128, 1);
-// 	test_bzero(128, 64);
-// 	test_bzero(128, 128);
+	test_bzero(128, 0);
+	test_bzero(128, 1);
+	test_bzero(128, 64);
+	test_bzero(128, 128);
 
-// 	test_bzero(4096, 0);
-// 	test_bzero(4096, 1);
-// 	test_bzero(4096, 2048);
-// 	test_bzero(4096, 4096);
-// }
+	test_bzero(4096, 0);
+	test_bzero(4096, 1);
+	test_bzero(4096, 2048);
+	test_bzero(4096, 4096);
+}
 
-// /* --------------- calloc --------------- */
+/* --------------- calloc --------------- */
 
-// static bool test_ft_calloc(size_t count, size_t size)
-// {
-// 	bool	passed;
-// 	void	*p;
+static bool test_ft_calloc(size_t count, size_t size)
+{
+	void	*p;
+	bool	passed;
+
+	p = ft_calloc(count, size);
+	if (!p)
+		return (false);
+
+	passed = true;
+	for (size_t i = 0; i < count * size; i++)
+	{
+		if (((unsigned char *)p)[i] != 0)
+		{
+			passed = false;
+			break;
+		}
+	}
 	
-// 	passed = true;
+	free(p);
+	return (passed);
+}
 
-// 	p = ft_calloc(count, size);
-// 	if (!p)
-// 		return false;
+#define test_calloc(count, size)										\
+	do {																\
+		assert_label(1,													\
+			"ft_calloc(" #count ", " #size ") returned valid pointer",	\
+			is_valid_pointer(ft_calloc(count, size)) == true			\
+		);																\
+																		\
+		assert_label(1,													\
+			"ft_calloc(" #count ", " #size ")",							\
+			test_ft_calloc(count, size)	== true							\
+		);																\
+	}	while (0)
 
-// 	for (size_t i = 0; i < count * size; i++)
-// 	{
-// 		if (((unsigned char *)p)[i] != 0)
-// 		{
-// 			passed = false;
-// 			break;
-// 		}
-// 	}
+static bool test_ft_calloc_dont_crash(size_t count, size_t size)
+{
+	void	*p;
 
-// 	free(p);
-// 	return passed;
-// }
+	p = ft_calloc(count, size);
+	if (!p)
+		free(p);
 
-// Test(fut_calloc, 0)
-// {
-// 	void *p;
+	return (true);
+}
 
-// 	/* Basic allocations */
-// 	assert(0, test_ft_calloc(1, sizeof(int)));
-// 	assert(0, test_ft_calloc(4096, 1));
-// 	assert(0, test_ft_calloc(1, 4096));
-// 	assert(0, test_ft_calloc(1024, 1024));
+#define test_calloc_dont_crash(count, size)								\
+	do {																\
+		assert_label(1,													\
+			"ft_calloc(" #count ", " #size ")",							\
+			test_ft_calloc_dont_crash(count, size) == true				\
+		);																\
+	}	while (0)
 
-// 	/* Zero-size (implementation-defined but must not crash) */
-// 	assert(0, (p = ft_calloc(0, 4096), free(p), 1));
-// 	assert(0, (p = ft_calloc(4096, 0), free(p), 1));
+Test(fut_calloc, 0)
+{
+	/* Basic allocations */
+	test_calloc(1, sizeof(int));
+	test_calloc(4096, 1);
+	test_calloc(1, 4096);
+	test_calloc(1024, 1024);
 
-// 	/* Overflow (must not crash, ptr may be NULL) */
-// 	assert(0, (p = ft_calloc(SIZE_MAX, 2), free(p), 1));
-// 	assert(0, (p = ft_calloc(2, SIZE_MAX), free(p), 1));
-// }
+	/* Zero-size (implementation-defined but must not crash) */
+	test_calloc_dont_crash(0, 4096);
+	test_calloc_dont_crash(4096, 0);
 
-// /* --------------- is* --------------- */
+	/* Overflow (implementation-defined but must not crash) */
+	test_calloc_dont_crash(SIZE_MAX, 2);
+	test_calloc_dont_crash(2, SIZE_MAX);
+}
 
-// Test(fut_isalnum, 0)
-// {
-// 	for (int i = - 128; i < 256; i++)
-// 		compare(RET, 1, ft_isalnum, isalnum, ((char)i));
+/* --------------- is* --------------- */
 
-// 	compare(RET, 1, ft_isalnum, isalnum, (EOF));
-// }
+Test(fut_isalnum, 0)
+{
+	for (int i = - 128; i < 256; i++)
+		compare(RET, 1, ft_isalnum, isalnum, (i));
 
-// Test(fut_isalpha, 0)
-// {
-// 	for (int i = - 128; i < 256; i++)
-// 		compare(RET, 1, ft_isalpha, isalpha, ((char)i));
+	compare(RET, 1, ft_isalnum, isalnum, (EOF));
+}
 
-// 	compare(RET, 1, ft_isalpha, isalpha, (EOF));
-// }
+Test(fut_isalpha, 0)
+{
+	for (int i = - 128; i < 256; i++)
+		compare(RET, 1, ft_isalpha, isalpha, (i));
 
-// Test(fut_isascii, 0)
-// {
-// 	for (int i = -128; i < 256; i++)
-// 		compare(RET, 1, ft_isascii, isascii, ((char)i));
+	compare(RET, 1, ft_isalpha, isalpha, (EOF));
+}
 
-// 	compare(RET, 1, ft_isascii, isascii, (EOF));
-// }
+Test(fut_isascii, 0)
+{
+	for (int i = -128; i < 256; i++)
+		compare(RET, 1, ft_isascii, isascii, (i));
 
-// Test(fut_isdigit, 0)
-// {
-// 	for (int i = -128; i < 256; i++)
-// 		compare(RET, 1, ft_isdigit, isdigit, ((char)i));
+	compare(RET, 1, ft_isascii, isascii, (EOF));
+}
 
-// 	compare(RET, 1, ft_isdigit, isdigit, (EOF));
-// }
+Test(fut_isdigit, 0)
+{
+	for (int i = -128; i < 256; i++)
+		compare(RET, 1, ft_isdigit, isdigit, (i));
 
-// Test(fut_isprint, 0)
-// {
-// 	for (int i = -128; i < 256; i++)
-// 		compare(RET, 1, ft_isprint, isprint, ((char)i));
+	compare(RET, 1, ft_isdigit, isdigit, (EOF));
+}
 
-// 	compare(RET, 1, ft_isprint, isprint, (EOF));
-// }
+Test(fut_isprint, 0)
+{
+	for (int i = -128; i < 256; i++)
+		compare(RET, 1, ft_isprint, isprint, (i));
+
+	compare(RET, 1, ft_isprint, isprint, (EOF));
+}
 
 // /* --------------- atoi --------------- */
 
