@@ -1,5 +1,4 @@
 #include "ft_ultimate_tester.h"
-#include "libftprintf.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -68,8 +67,8 @@ Test(generic_assert_check, 0)
 	assert(0, add(1, 2) > 2 && add(1, 2) < 4);						// PASS
 	assert(0, add(1, 2) > 3 && add(1, 2) < 4);						// FAIL
 	redirect_start(R_STDOUT);
-	assert(0, printf("Hello World") == ft_printf("Hello World"));	// PASS
-	assert(0, printf("Hello World") == ft_printf("Not same ret"));	// FAIL
+	assert(0, printf("Hello World") == printf("Hello World"));	// PASS
+	assert(0, printf("Hello World") == printf("Not same ret"));	// FAIL
 	redirect_stop();
 }
 
@@ -80,11 +79,11 @@ Test(get_output_check, 0)
 	char *out1;
 	char *out2;
 	get_output(R_STDOUT, printf("Hello World"), out1);
-	get_output(R_STDOUT, ft_printf("Hello World"), out2);
+	get_output(R_STDOUT, printf("Hello World"), out2);
 	assert_eq(RET, 0, out1, out2);							// PASS
 	assert(0, strcmp(out1, out2) == 0);			// PASS
 	get_output(R_STDOUT, printf("Hello World"), out1);
-	get_output(R_STDOUT, ft_printf("Not sameout"), out2);
+	get_output(R_STDOUT, printf("Not sameout"), out2);
 	assert_eq(RET, 0, out1, out2);							// FAIL
 }
 
@@ -221,14 +220,14 @@ Test(variadic, 0)
 
 Test(comparison_ok, 0)
 {
-	compare(RET_BOTH, 1, printf, ft_printf, ("Hello world"));			// PASS
-	compare(RET_BOTH, 1, printf, ft_printf, ("%s", "Hello world"));	// PASS
+	compare(RET_BOTH, 1, printf, printf, ("Hello world"));			// PASS
+	compare(RET_BOTH, 1, printf, printf, ("%s", "Hello world"));	// PASS
 	compare(RET_BOTH, 1, just_timeout_bro, just_timeout_bro, );				// PASS
 	compare(RET_BOTH, 1, just_crash_bro, just_crash_bro, );					// PASS
 	compare(RET_BOTH, 1, my_void_func, my_void_func, );						// PASS
 	
-	compare(RET_BOTH, 1, fake_fn, ft_printf, ("Hello world"));	// FAIL
-	compare(RET_BOTH, 1, fake_fn2, ft_printf, ("%s", "Hello world"));	// FAIL
+	compare(RET_BOTH, 1, fake_fn, printf, ("Hello world"));	// FAIL
+	compare(RET_BOTH, 1, fake_fn2, printf, ("%s", "Hello world"));	// FAIL
 	compare(RET_BOTH, 1, just_timeout_bro, my_void_func, );					// FAIL
 	compare(RET_BOTH, 1, just_crash_bro, my_void_func, );						// FAIL
 	compare(RET_BOTH, 1, my_void_func, just_timeout_bro, );					// FAIL

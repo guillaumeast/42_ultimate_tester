@@ -1,5 +1,4 @@
 #include "ft_ultimate_tester.h"
-#include "libftprintf.h"
 
 // typedef struct s_test
 // {

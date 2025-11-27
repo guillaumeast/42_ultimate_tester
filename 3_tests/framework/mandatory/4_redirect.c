@@ -1,11 +1,8 @@
 #include "ft_ultimate_tester.h"
-#include "libftprintf.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <inttypes.h>
-
-// TODO: test multiple redirection handling
 
 Test(Redirect_stdout, 0)
 {
@@ -13,14 +10,14 @@ Test(Redirect_stdout, 0)
 
 	output = NULL;
 
-	printf("1\n");
+	printf("\n1\n");
 	fprintf(stderr, "2\n");
 	print_stdout("3\n");
 	print_stderr("4\n");
 
 	redirect_start(R_STDOUT);
 
-	printf("12\n");
+	printf("\n12\n");
 	fprintf(stderr, "5\n");
 	print_stdout("6\n");
 	print_stderr("7\n");
@@ -56,7 +53,7 @@ Test(Redirect_stderr, 0)
 
 	output = NULL;
 
-	printf("1\n");
+	printf("\n1\n");
 	fprintf(stderr, "2\n");
 	print_stdout("3\n");
 	print_stderr("4\n");
@@ -99,14 +96,14 @@ Test(Redirect_both, 0)
 
 	output = NULL;
 
-	printf("1\n");
+	printf("\n1\n");
 	fprintf(stderr, "2\n");
 	print_stdout("3\n");
 	print_stderr("4\n");
 
 	redirect_start(R_BOTH);
 
-	printf("11\n");
+	printf("\n11\n");
 	fprintf(stderr, "12\n");
 	print_stdout("5\n");
 	print_stderr("6\n");
@@ -144,13 +141,13 @@ Test(Stacked_redirections, 0)
 	output1 = NULL;
 	output2 = NULL;
 
-	printf("1\n");
+	printf("\n1\n");
 	fprintf(stderr, "2\n");
 	print_stdout("3\n");
 	print_stderr("4\n");
 
 	redirect_start(R_BOTH);
-	printf("14\n");
+	printf("\n14\n");
 
 	redirect_start(R_STDERR);
 	fprintf(stderr, "13\n");

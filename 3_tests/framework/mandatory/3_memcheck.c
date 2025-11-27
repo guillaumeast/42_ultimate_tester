@@ -1,5 +1,4 @@
 #include "ft_ultimate_tester.h"
-#include "libftprintf.h"
 #include <stdlib.h>
 
 void	correct_func(void)

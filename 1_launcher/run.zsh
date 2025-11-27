@@ -123,7 +123,9 @@ update()
 
 dispatch()
 {
-	if [[ -f "libft.h" ]]; then
+	if grep -q "ultimate_tester" Makefile 2>/dev/null; then
+		test_framework
+	elif [[ -f "libft.h" ]]; then
 		test_libft
 	elif grep -q "libftprintf\.a" Makefile 2>/dev/null; then
 		test_printf
@@ -136,6 +138,30 @@ dispatch()
 }
 
 #---------------------- Project testers ---------------------#
+
+test_framework()
+{
+	PROJ_NAME="framework"
+	PROJ_DIR="${PWD}"
+
+	PROJ_SRCS=()
+	PROJ_INCLUDES=()
+	PROJ_LIBS=()
+
+	print_project_name
+
+	print_h1 "Makefile   "
+	test_makefile
+
+	make -C "${INSTALL_DIR}" \
+		PROJ_NAME="$PROJ_NAME" \
+		PROJ_DIR="$PROJ_DIR" \
+		PROJ_SRCS="${PROJ_SRCS[*]}" \
+		PROJ_INCLUDES="${PROJ_INCLUDES[*]}" \
+		PROJ_LIBS="${PROJ_LIBS[*]}" \
+		run
+	exit $?
+}
 
 test_libft()
 {

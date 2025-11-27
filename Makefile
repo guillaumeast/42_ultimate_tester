@@ -1,7 +1,6 @@
 #------- This variables are exported by shell scripts -------#
 
 # PROJ_NAME		:= e.g. `libft` / `printf` / `gnl`
-# PROJ_DIR		:= e.g. `/Users/me/my_project`
 
 # PROJ_SRCS		:= e.g. `/Users/me/my_project/main.c`
 # PROJ_INCLUDES	:= e.g. `-I/Users/me/my_project/includes`
