@@ -10,8 +10,7 @@ typedef struct s_assert
 {
 	t_capture_mode	mode;
 	bool			eq;
-	const char		*got_name;
-	const char		*exp_name;
+	const char		*lab;
 	t_capture		*got_capt;
 	t_capture		*exp_capt;
 	t_format		format;
@@ -20,77 +19,66 @@ typedef struct s_assert
 
 void	_assert_run(t_assert *assert);
 
-#define assert_label(time_out, label, expr) 								\
-	do {																	\
-		t_capture _capt_got = {0};											\
-		capture(RET, time_out, (expr), _capt_got);							\
-																			\
-		t_capture _capt_exp = {0};											\
-		_capt_exp.status.type = DONE;										\
-		_capt_exp.ret = true;												\
-																			\
-		t_assert _assert = {0};												\
-		_assert.mode = RET;													\
-		_assert.eq = true;													\
-		_assert.got_name = label;											\
-		_assert.exp_name = "true";											\
-		_assert.got_capt = &_capt_got;										\
-		_assert.exp_capt = &_capt_exp;										\
-		_assert.ret_size = sizeof(bool);									\
-		_assert.format = F_BOOL;											\
-																			\
-		_assert_run(&_assert);												\
+#define _assert(should_be_equal, cap_mode, time_out, label, got_expr, exp_expr)	\
+	do {																		\
+		t_capture _capt_got = {0};												\
+		capture(cap_mode, time_out, (got_expr), _capt_got);						\
+																				\
+		t_capture _capt_exp = {0};												\
+		capture(cap_mode, time_out, (exp_expr), _capt_exp);						\
+																				\
+		t_assert _assert = {0};													\
+		_assert.mode = cap_mode;												\
+		_assert.eq = should_be_equal;											\
+		_assert.lab = label;													\
+		_assert.got_capt = &_capt_got;											\
+		_assert.exp_capt = &_capt_exp;											\
+		if (__type_is_void(exp_expr) && __type_is_void(got_expr))				\
+		{																		\
+			_assert.ret_size = sizeof(int);										\
+			_assert.format = F_SIGNED;											\
+		}																		\
+		else																	\
+		{																		\
+			_assert.ret_size = sizeof(__typeof__(exp_expr)); 					\
+			_assert.format = _Generic((exp_expr), 								\
+					bool: F_BOOL, 												\
+					char: F_CHAR, 												\
+					signed char: F_SIGNED, 										\
+					short: F_SIGNED, 											\
+					int: F_SIGNED, 												\
+					long: F_SIGNED, 											\
+					long long: F_SIGNED, 										\
+					unsigned char: F_UNSIGNED, 									\
+					unsigned short: F_UNSIGNED, 								\
+					unsigned int: F_UNSIGNED, 									\
+					unsigned long: F_UNSIGNED, 									\
+					unsigned long long: F_UNSIGNED, 							\
+					char *: F_STRING,											\
+					const char *: F_STRING,										\
+					default: F_STRUCT);											\
+		}																		\
+		_assert_run(&_assert);													\
 	} while (0)
 
-#define assert(time_out, expr) assert_label(time_out, #expr, expr)
+#define assert(time_out, expr)													\
+	_assert(true, RET, time_out, #expr, expr, (bool)true)
+#define assert_label(time_out, label, expr)										\
+	_assert(true, RET, time_out, label, expr, (bool)true)
 
-#define _assert(should_be_equal, cap_mode, time_out, got_expr, exp_expr)	\
-	do {																	\
-		t_capture _capt_got = {0};											\
-		capture(cap_mode, time_out, (got_expr), _capt_got);					\
-																			\
-		t_capture _capt_exp = {0};											\
-		capture(cap_mode, time_out, (exp_expr), _capt_exp);					\
-																			\
-		t_assert _assert = {0};												\
-		_assert.mode = cap_mode;											\
-		_assert.eq = should_be_equal;										\
-		_assert.got_name = #got_expr;										\
-		_assert.exp_name = #exp_expr;										\
-		_assert.got_capt = &_capt_got;										\
-		_assert.exp_capt = &_capt_exp;										\
-		if (__type_is_void(exp_expr) && __type_is_void(got_expr))			\
-		{																	\
-			_assert.ret_size = sizeof(int);									\
-			_assert.format = F_SIGNED;										\
-		}																	\
-		else																\
-		{																	\
-			_assert.ret_size = sizeof(__typeof__(exp_expr)); 				\
-			_assert.format = _Generic((exp_expr), 							\
-					char: F_CHAR, 											\
-					signed char: F_SIGNED, 									\
-					short: F_SIGNED, 										\
-					int: F_SIGNED, 											\
-					long: F_SIGNED, 										\
-					long long: F_SIGNED, 									\
-					unsigned char: F_UNSIGNED, 								\
-					unsigned short: F_UNSIGNED, 							\
-					unsigned int: F_UNSIGNED, 								\
-					unsigned long: F_UNSIGNED, 								\
-					unsigned long long: F_UNSIGNED, 						\
-					char *: F_STRING,										\
-					const char *: F_STRING,									\
-					default: F_STRUCT);										\
-		}																	\
-		_assert_run(&_assert);												\
-	} while (0)
+#define assert_eq(cap_mode, time_out, got_expr, exp_expr)						\
+	_assert(true, cap_mode, time_out, #got_expr, got_expr, exp_expr)
+#define assert_eq_label(cap_mode, time_out, label, got_expr, exp_expr)			\
+	_assert(true, cap_mode, time_out, label, got_expr, exp_expr)
 
-#define assert_eq(cap_mode, time_out, got_expr, exp_expr)					\
-	_assert(true, cap_mode, time_out, got_expr, exp_expr)
-#define assert_neq(cap_mode, time_out, got_expr, exp_expr)					\
-	_assert(false, cap_mode, time_out, got_expr, exp_expr)
-#define compare(cap_mode, time_out, fn1_name, fn2_name, fn_args)			\
-	assert_eq(cap_mode, time_out, fn1_name fn_args, fn2_name fn_args)
+#define assert_neq(cap_mode, time_out, got_expr, exp_expr)						\
+	_assert(false, cap_mode, time_out, #got_expr, got_expr, exp_expr)
+#define assert_neq_label(cap_mode, time_out, label, got_expr, exp_expr)			\
+	_assert(false, cap_mode, time_out, label, got_expr, exp_expr)
+
+#define compare(cap_mode, time_out, fn1_name, fn2_name, fn_args)				\
+	_assert(true, cap_mode, time_out, #fn1_name#fn_args, fn1_name fn_args, fn2_name fn_args)
+#define compare_label(cap_mode, time_out, label, fn1_name, fn2_name, fn_args)	\
+	_assert(true, cap_mode, time_out, label, fn1_name fn_args, fn2_name fn_args)
 
 #endif
