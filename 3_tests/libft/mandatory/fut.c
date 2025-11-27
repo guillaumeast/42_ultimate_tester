@@ -4,20 +4,6 @@
 #include <limits.h>
 #include <stdlib.h>
 
-/* --------------- TODO: tmp debug --------------- */
-
-Test(tmp_debug, 1)
-{
-	assert(1, 2 < 3);
-	assert(1, 2 > 3);
-
-	assert_label(1, "my label", 2 < 3);
-	assert_label(1, "my label", 2 > 3);
-
-	_assert(true, RET, 1, 2 < 3, 2 < 3);
-	_assert(true, RET, 1, 2 < 3, 2 > 3);
-}
-
 /* --------------- helper --------------- */
 
 // static inline void fill_pattern_1(unsigned char *buf, size_t n)
@@ -34,50 +20,50 @@ Test(tmp_debug, 1)
 
 /* --------------- atoi --------------- */
 
-// Test(fut_atoi, 0)
-// {
-// 	/* Basics */
-// 	compare(RET, 1, atoi, ft_atoi, ("-1"));
-// 	compare(RET, 1, atoi, ft_atoi, ("-0"));
-// 	compare(RET, 1, atoi, ft_atoi, ("0"));
-// 	compare(RET, 1, atoi, ft_atoi, ("+0"));
-// 	compare(RET, 1, atoi, ft_atoi, ("+1"));
-// 	compare(RET, 1, atoi, ft_atoi, ("42"));
-// 	compare(RET, 1, atoi, ft_atoi, ("+42"));
+Test(fut_atoi, 0)
+{
+	/* Basics */
+	compare(RET, 1, atoi, ft_atoi, ("-1"));
+	compare(RET, 1, atoi, ft_atoi, ("-0"));
+	compare(RET, 1, atoi, ft_atoi, ("0"));
+	compare(RET, 1, atoi, ft_atoi, ("+0"));
+	compare(RET, 1, atoi, ft_atoi, ("+1"));
+	compare(RET, 1, atoi, ft_atoi, ("42"));
+	compare(RET, 1, atoi, ft_atoi, ("+42"));
 
-// 	/* Spaces */
-// 	compare(RET, 1, atoi, ft_atoi, ("   123"));
-// 	compare(RET, 1, atoi, ft_atoi, ("123   "));
-// 	compare(RET, 1, atoi, ft_atoi, ("   123   "));
+	/* Spaces */
+	compare(RET, 1, atoi, ft_atoi, ("   123"));
+	compare(RET, 1, atoi, ft_atoi, ("123   "));
+	compare(RET, 1, atoi, ft_atoi, ("   123   "));
 
-// 	/* Special chars */
-// 	compare(RET, 1, atoi, ft_atoi, ("${(-!@&;:/,?.=%`€456"));
-// 	compare(RET, 1, atoi, ft_atoi, ("\t\n\r\v\f\n\t\n\r\v\f\n456"));
-// 	compare(RET, 1, atoi, ft_atoi, ("\t\n\r\v\f\n\t\n\r\v\f\n ${(-!@&;:/,?.=%`€   789"));
+	/* Special chars */
+	compare(RET, 1, atoi, ft_atoi, ("${(-!@&;:/,?.=%`€456"));
+	compare(RET, 1, atoi, ft_atoi, ("\t\n\r\v\f\n\t\n\r\v\f\n456"));
+	compare(RET, 1, atoi, ft_atoi, ("\t\n\r\v\f\n\t\n\r\v\f\n ${(-!@&;:/,?.=%`€   789"));
 
-// 	/* Leading signs and zeros */
-// 	compare(RET, 1, atoi, ft_atoi, ("+0064578"));
-// 	compare(RET, 1, atoi, ft_atoi, ("-0064578"));
+	/* Leading signs and zeros */
+	compare(RET, 1, atoi, ft_atoi, ("+0064578"));
+	compare(RET, 1, atoi, ft_atoi, ("-0064578"));
 
-// 	/* Stops at first non-digit */
-// 	compare(RET, 1, atoi, ft_atoi, ("123abc"));
+	/* Stops at first non-digit */
+	compare(RET, 1, atoi, ft_atoi, ("123abc"));
 
-// 	/* Non digits first */
-// 	compare(RET, 1, atoi, ft_atoi, ("abc123"));
+	/* Non digits first */
+	compare(RET, 1, atoi, ft_atoi, ("abc123"));
 
-// 	/* Sign without digit */
-// 	compare(RET, 1, atoi, ft_atoi, ("+"));
-// 	compare(RET, 1, atoi, ft_atoi, ("-"));
+	/* Sign without digit */
+	compare(RET, 1, atoi, ft_atoi, ("+"));
+	compare(RET, 1, atoi, ft_atoi, ("-"));
 
-// 	/* Multiple signs */
-// 	compare(RET, 1, atoi, ft_atoi, ("--5"));
-// 	compare(RET, 1, atoi, ft_atoi, ("+-5"));
-// 	compare(RET, 1, atoi, ft_atoi, ("-+5"));
+	/* Multiple signs */
+	compare(RET, 1, atoi, ft_atoi, ("--5"));
+	compare(RET, 1, atoi, ft_atoi, ("+-5"));
+	compare(RET, 1, atoi, ft_atoi, ("-+5"));
 
-// 	/* Limits */
-// 	compare(RET, 1, atoi, ft_atoi, ("-2147483648"));
-// 	compare(RET, 1, atoi, ft_atoi, ("2147483647"));
-// }
+	/* Limits */
+	compare(RET, 1, atoi, ft_atoi, ("-2147483648"));
+	compare(RET, 1, atoi, ft_atoi, ("2147483647"));
+}
 
 // /* --------------- bzero --------------- */
 
