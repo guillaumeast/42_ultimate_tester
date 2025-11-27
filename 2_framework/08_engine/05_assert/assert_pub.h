@@ -20,6 +20,28 @@ typedef struct s_assert
 
 void	_assert_run(t_assert *assert);
 
+#define assert_label(time_out, label, expr) 								\
+	do {																	\
+		t_capture _capt_got = {0};											\
+		capture(RET, time_out, (expr), _capt_got);							\
+																			\
+		t_capture _capt_exp = {0};											\
+		_capt_exp.status.type = DONE;										\
+		_capt_exp.ret = true;												\
+																			\
+		t_assert _assert = {0};												\
+		_assert.mode = RET;													\
+		_assert.eq = true;													\
+		_assert.got_name = label;											\
+		_assert.exp_name = "true";											\
+		_assert.got_capt = &_capt_got;										\
+		_assert.exp_capt = &_capt_exp;										\
+		_assert.ret_size = sizeof(bool);									\
+		_assert.format = F_BOOL;											\
+																			\
+		_assert_run(&_assert);												\
+	} while (0)
+
 #define assert(time_out, expr) 												\
 	do {																	\
 		t_capture _capt_got = {0};											\
