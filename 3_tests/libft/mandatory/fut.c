@@ -14,8 +14,8 @@ Test(tmp_debug, 1)
 	assert_label(1, "my label", 2 < 3);
 	assert_label(1, "my label", 2 > 3);
 
-	// _assert(true, RET, 1, 2 < 3, 2 < 3);
-	// _assert(true, RET, 1, 2 > 3, 2 < 3);
+	_assert(true, RET, 1, 2 < 3, 2 < 3);
+	_assert(true, RET, 1, 2 < 3, 2 > 3);
 }
 
 /* --------------- helper --------------- */

@@ -42,27 +42,7 @@ void	_assert_run(t_assert *assert);
 		_assert_run(&_assert);												\
 	} while (0)
 
-#define assert(time_out, expr) 												\
-	do {																	\
-		t_capture _capt_got = {0};											\
-		capture(RET, time_out, (expr), _capt_got);							\
-																			\
-		t_capture _capt_exp = {0};											\
-		_capt_exp.status.type = DONE;										\
-		_capt_exp.ret = true;												\
-																			\
-		t_assert _assert = {0};												\
-		_assert.mode = RET;													\
-		_assert.eq = true;													\
-		_assert.got_name = #expr;											\
-		_assert.exp_name = "true";											\
-		_assert.got_capt = &_capt_got;										\
-		_assert.exp_capt = &_capt_exp;										\
-		_assert.ret_size = sizeof(bool);									\
-		_assert.format = F_BOOL;											\
-																			\
-		_assert_run(&_assert);												\
-	} while (0)
+#define assert(time_out, expr) assert_label(time_out, #expr, expr)
 
 #define _assert(should_be_equal, cap_mode, time_out, got_expr, exp_expr)	\
 	do {																	\
@@ -111,6 +91,6 @@ void	_assert_run(t_assert *assert);
 #define assert_neq(cap_mode, time_out, got_expr, exp_expr)					\
 	_assert(false, cap_mode, time_out, got_expr, exp_expr)
 #define compare(cap_mode, time_out, fn1_name, fn2_name, fn_args)			\
-	assert_eq(cap_mode, time_out, fn1_name fn_args, fn2_name fn_args)
+	_assert(true, cap_mode, time_out, fn1_name fn_args, fn2_name fn_args)
 
 #endif
