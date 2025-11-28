@@ -41,7 +41,7 @@ void	_assert_run(t_assert *assert);
 		else																	\
 		{																		\
 			_assert.ret_size = sizeof(__typeof__(exp_expr)); 					\
-			_assert.format = _Generic((exp_expr), 								\
+			_assert.format = _Generic(__typeof__(exp_expr), 					\
 					bool: F_BOOL, 												\
 					char: F_CHAR, 												\
 					signed char: F_SIGNED, 										\
@@ -49,14 +49,17 @@ void	_assert_run(t_assert *assert);
 					int: F_SIGNED, 												\
 					long: F_SIGNED, 											\
 					long long: F_SIGNED, 										\
+					void *: F_HEX,												\
+					char *: F_STRING,											\
+					const char *: F_STRING,										\
 					unsigned char: F_UNSIGNED, 									\
 					unsigned short: F_UNSIGNED, 								\
 					unsigned int: F_UNSIGNED, 									\
 					unsigned long: F_UNSIGNED, 									\
 					unsigned long long: F_UNSIGNED, 							\
-					char *: F_STRING,											\
-					const char *: F_STRING,										\
-					default: F_STRUCT);											\
+					unsigned char *: F_STRING,									\
+					const unsigned char *: F_STRING,							\
+					default: F_HEX);											\
 		}																		\
 		_assert_run(&_assert);													\
 	} while (0)

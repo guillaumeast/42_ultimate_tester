@@ -91,6 +91,6 @@ static inline void	add_formatted_value(char *buff, size_t cap, size_t *offset, t
 		case F_CHAR:		*offset+= snprintf(buff + *offset, cap - *offset, "%c", (char)value); break;
 		case F_STRING:		*offset+= snprintf(buff + *offset, cap - *offset, "%s", (char *)value); break;
 		case F_STRUCT:		*offset+= snprintf(buff + *offset, cap - *offset, "unexpected struct content"); break;
-		default:			*offset+= snprintf(buff + *offset, cap - *offset, "%" PRIxPTR, (uintptr_t)value); break;
+		default:			*offset+= snprintf(buff + *offset, cap - *offset, "%#" PRIxPTR, (uintptr_t)value); break;
 	}
 }

@@ -266,17 +266,23 @@ test_makefile()
 test_makefile_rule()
 {
 	local rule="$1"
+	local logs=""
 
 	if [[ -z "$rule" ]]; then
-		make -C "${PROJ_DIR}" > /dev/null 2>&1
+		logs="$(make -C "${PROJ_DIR}" 2>&1 >/dev/null)"
 	else
-		make -C "${PROJ_DIR}" "${rule}" > /dev/null 2>&1
+		logs="$(make -C "${PROJ_DIR}" "${rule}" 2>&1 >/dev/null)"
 	fi
 
 	if [[ $? -ne 0 ]]; then
 		print_indicator_fail
 		printf "\n"
-		print_error "Your Makefile is incorrect: 'make ${rule}' doesn't work"
+		if [[ -z "$rule" ]]; then
+			print_error "Doesn't compile"
+		else
+			print_error "Your Makefile is incorrect: 'make ${rule}' doesn't work"
+		fi
+		printf "\n${logs}\n"
 		exit 1
 	fi
 
