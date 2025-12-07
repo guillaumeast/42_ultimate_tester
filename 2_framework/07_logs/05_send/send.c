@@ -6,6 +6,7 @@
 
 #include <inttypes.h>
 #include <stdio.h>
+#include <string.h>
 
 static inline void	add_formatted_value(char *buff, size_t cap, size_t *offset, t_format fmt, intptr_t value);
 
@@ -59,10 +60,13 @@ void	send_incorrect_output(const char *expr, const char *got, const char *exp)
 	char	log[H2_CAP];
 	size_t	offset;
 
-	offset = snprintf(log, sizeof log, "%s%s %s%s %s%s", RED, expr, YELLOW, "outputed", RED, got);
+	offset = snprintf(log, sizeof log, "%s%s %s%s %s", RED, expr, YELLOW, "outputed", RED);
+	add_formatted_value(log, sizeof log, &offset, F_STRING, (intptr_t)got);
 	if (exp)
-		offset += snprintf(log + offset, sizeof log - offset, " %sinstead of %s%s", GREY, RED, exp);
-
+	{
+		offset += snprintf(log + offset, sizeof log - offset, " %sinstead of %s", GREY, RED);
+		add_formatted_value(log, sizeof log, &offset, F_STRING, (intptr_t)exp);
+	}
 	snprintf(log + offset, sizeof log - offset, "%s\n", NONE);
 	message_send(g_context.pipe_to_parent, LOG, (t_message_data *)log);
 }
@@ -89,7 +93,13 @@ static inline void	add_formatted_value(char *buff, size_t cap, size_t *offset, t
 		case F_SIGNED:		*offset+= snprintf(buff + *offset, cap - *offset, "%" PRIdPTR, (intptr_t)value); break;
 		case F_UNSIGNED:	*offset+= snprintf(buff + *offset, cap - *offset, "%" PRIuPTR, (uintptr_t)value); break;
 		case F_CHAR:		*offset+= snprintf(buff + *offset, cap - *offset, "%c", (char)value); break;
-		case F_STRING:		*offset+= snprintf(buff + *offset, cap - *offset, "%s", (char *)value); break;
+		case F_STRING:
+			// TODO: Remove log max size + don't truncate logs anymore
+			if (strlen((char *)value) > 64)
+				*offset+= snprintf(buff + *offset, cap - *offset, "%s'%s%.20s[...]%s'%s", GREY, RED, (char *)value, GREY, RED);
+			else
+				*offset+= snprintf(buff + *offset, cap - *offset, "%s'%s%s%s'%s", GREY, RED, (char *)value, GREY, RED);
+			break;
 		case F_STRUCT:		*offset+= snprintf(buff + *offset, cap - *offset, "unexpected struct content"); break;
 		default:			*offset+= snprintf(buff + *offset, cap - *offset, "%#" PRIxPTR, (uintptr_t)value); break;
 	}

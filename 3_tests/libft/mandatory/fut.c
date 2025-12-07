@@ -2,7 +2,9 @@
 #include "libft.h"
 
 #include <limits.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 /* ------- helper ------- */
 
@@ -494,3 +496,253 @@ Test(fut_memset, 0)
 	test_memset('!', STRESS_TEST_SIZE);
 }
 
+/* ------- ft_putchar_fd ------- */
+
+Test(fut_putchar_fd, 0)
+{
+	char	label[64];
+	char	got[32];
+	char	exp[32];
+	FILE	*tmp_file;
+	
+	for (int i = - 128; i < 256; i++)
+	{
+		snprintf(label, sizeof label, "ft_putchar_fd(%d, %d)", i, STDOUT_FILENO);
+		assert_eq_label(OUT, 1, label, 
+			ft_putchar_fd(i, STDOUT_FILENO), 
+			fprintf(stdout, "%c", i)
+		);
+	}
+
+	for (int i = - 128; i < 256; i++)
+	{
+		snprintf(label, sizeof label, "ft_putchar_fd(%d, %d)", i, STDERR_FILENO);
+		assert_eq_label(ERR, 1, label, 
+			ft_putchar_fd(i, STDERR_FILENO), 
+			fprintf(stderr, "%c", i)
+		);
+	}
+
+	tmp_file = fopen(".tmp_putchar_fd", "w+");
+	if (fileno(tmp_file) == -1)
+	{
+		fprintf(stdout, "❗️ Internal error: Unable to create temporary file.\n");
+		return ;
+	}
+	for (int i = - 128; i < 256; i++)
+	{
+		snprintf(label, sizeof label, "ft_putchar_fd(%d, %d)", i, fileno(tmp_file));
+		
+		memset(got, 0, sizeof got);
+		ftruncate(fileno(tmp_file), 0);
+		rewind(tmp_file);
+		ft_putchar_fd(i, fileno(tmp_file));
+		fflush(tmp_file);
+		rewind(tmp_file);
+		fread(got, sizeof(char), sizeof got, tmp_file);
+		
+		memset(exp, 0, sizeof exp);
+		ftruncate(fileno(tmp_file), 0);
+		rewind(tmp_file);
+		fprintf(tmp_file, "%c", i);
+		fflush(tmp_file);
+		rewind(tmp_file);
+		fread(exp, sizeof(char), sizeof exp, tmp_file);
+
+		assert_eq_label(OUT, 1, label, printf("%s", got), printf("%s", exp));
+	}
+	fclose(tmp_file);
+}
+
+/* ------- ft_putendl_fd ------- */
+
+#define COL_RED		"\033[31m"
+#define COL_BLUE	"\033[34m"
+#define COL_CYAN	"\033[36m"
+#define COL_NO		"\033[0m"
+
+static char *s_strings_for_putendl[11];
+
+static void	init_strings(void)
+{
+	static char	dumb_chars[14];
+
+	dumb_chars[0] = (char)-256;
+	dumb_chars[1] = (char)-255;
+	dumb_chars[2] = (char)-1;
+	dumb_chars[3] = (char)-0;
+	dumb_chars[4] = (char)0;
+	dumb_chars[5] = (char)+0;
+	dumb_chars[6] = (char)1;
+	dumb_chars[7] = (char)32;
+	dumb_chars[8] = (char)33;
+	dumb_chars[9] = (char)126;
+	dumb_chars[10] = (char)127;
+	dumb_chars[11] = (char)255;
+	dumb_chars[12] = (char)256;
+	dumb_chars[13] = '\0';
+
+	s_strings_for_putendl[0] = "";
+	s_strings_for_putendl[1] = " ";
+	s_strings_for_putendl[2] = "Hello world";
+	s_strings_for_putendl[3] = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+	s_strings_for_putendl[4] = "\t\n\r\v\f\n\t\n\r\v\f\n";
+	s_strings_for_putendl[5] = COL_RED;
+	s_strings_for_putendl[6] = COL_CYAN COL_RED;
+	s_strings_for_putendl[7] = COL_CYAN "Colored string" COL_RED;
+	s_strings_for_putendl[8] = "Multi" COL_CYAN " colored" COL_BLUE " string" COL_RED;
+	s_strings_for_putendl[9] = NULL;
+	s_strings_for_putendl[10] = dumb_chars;
+}
+
+Test(fut_putendl_fd, 0)
+{
+	FILE	*tmp_file;
+	char	label[128];
+	char	got[2048];
+	char	exp[2048];
+
+	init_strings();
+
+	for (size_t i = 0; i < sizeof s_strings_for_putendl / sizeof *s_strings_for_putendl; i ++)
+	{
+		if (s_strings_for_putendl[i] && strlen(s_strings_for_putendl[i]) > 64)
+			snprintf(label, sizeof label, "ft_putendl_fd(\"%.15s[...]\", %i)", s_strings_for_putendl[i], STDOUT_FILENO);
+		else if (s_strings_for_putendl[i])
+			snprintf(label, sizeof label, "ft_putendl_fd(\"%s\", %i)", s_strings_for_putendl[i], STDOUT_FILENO);
+		else
+			snprintf(label, sizeof label, "ft_putendl_fd(NULL, %i)", STDOUT_FILENO);
+		assert_eq_label(OUT, 1, label,
+			ft_putendl_fd(s_strings_for_putendl[i], STDOUT_FILENO),
+			fprintf(stdout, "%s\n", s_strings_for_putendl[i])
+		);
+	}
+
+	for (size_t i = 0; i < sizeof s_strings_for_putendl / sizeof *s_strings_for_putendl; i ++)
+	{
+		if (s_strings_for_putendl[i] && strlen(s_strings_for_putendl[i]) > 64)
+			snprintf(label, sizeof label, "ft_putendl_fd(\"%.15s[...]\", %i)", s_strings_for_putendl[i], STDERR_FILENO);
+		else if (s_strings_for_putendl[i])
+			snprintf(label, sizeof label, "ft_putendl_fd(\"%s\", %i)", s_strings_for_putendl[i], STDERR_FILENO);
+		else
+			snprintf(label, sizeof label, "ft_putendl_fd(NULL, %i)", STDERR_FILENO);
+		assert_eq_label(ERR, 1, label,
+			ft_putendl_fd(s_strings_for_putendl[i], STDERR_FILENO),
+			fprintf(stderr, "%s\n", s_strings_for_putendl[i])
+		);
+	}
+
+	tmp_file = fopen(".tmp_putendl_fd", "w+");
+	if (fileno(tmp_file) == -1)
+	{
+		fprintf(stdout, "❗️ Internal error: Unable to create temporary file.\n");
+		return ;
+	}
+	for (size_t i = 0; i < sizeof s_strings_for_putendl / sizeof *s_strings_for_putendl; i ++)
+	{
+		if (s_strings_for_putendl[i] && strlen(s_strings_for_putendl[i]) > 64)
+			snprintf(label, sizeof label, "ft_putendl_fd(\"%.15s[...]\", %i)", s_strings_for_putendl[i], fileno(tmp_file));
+		else if (s_strings_for_putendl[i])
+			snprintf(label, sizeof label, "ft_putendl_fd(\"%s\", %i)", s_strings_for_putendl[i], fileno(tmp_file));
+		else
+			snprintf(label, sizeof label, "ft_putendl_fd(NULL, %i)", fileno(tmp_file));
+		
+		memset(got, 0, sizeof got);
+		ftruncate(fileno(tmp_file), 0);
+		rewind(tmp_file);
+		ft_putendl_fd(s_strings_for_putendl[i], fileno(tmp_file));
+		fflush(tmp_file);
+		rewind(tmp_file);
+		fread(got, sizeof(char), sizeof got, tmp_file);
+		
+		memset(exp, 0, sizeof exp);
+		ftruncate(fileno(tmp_file), 0);
+		rewind(tmp_file);
+		fprintf(tmp_file, "%s\n", s_strings_for_putendl[i]);
+		fflush(tmp_file);
+		rewind(tmp_file);
+		fread(exp, sizeof(char), sizeof exp, tmp_file);
+
+		assert_eq_label(OUT, 1, label, printf("%s", got), printf("%s", exp));
+	}
+	fclose(tmp_file);
+}
+
+/* ------- ft_putstr_fd ------- */
+
+// TODO
+
+/* ------- ft_putstr_fd ------- */
+
+Test(fut_putstr_fd, 0)
+{
+	FILE	*tmp_file;
+	char	label[128];
+	char	got[2048];
+	char	exp[2048];
+
+	init_strings();
+
+	for (size_t i = 0; i < sizeof s_strings_for_putendl / sizeof *s_strings_for_putendl; i ++)
+	{
+		if (s_strings_for_putendl[i] && strlen(s_strings_for_putendl[i]) > 64)
+			snprintf(label, sizeof label, "ft_putstr_fd(\"%.15s[...]\", %i)", s_strings_for_putendl[i], STDOUT_FILENO);
+		else if (s_strings_for_putendl[i])
+			snprintf(label, sizeof label, "ft_putstr_fd(\"%s\", %i)", s_strings_for_putendl[i], STDOUT_FILENO);
+		else
+			snprintf(label, sizeof label, "ft_putstr_fd(NULL, %i)", STDOUT_FILENO);
+		assert_eq_label(OUT, 1, label,
+			ft_putstr_fd(s_strings_for_putendl[i], STDOUT_FILENO),
+			fprintf(stdout, "%s", s_strings_for_putendl[i])
+		);
+	}
+
+	for (size_t i = 0; i < sizeof s_strings_for_putendl / sizeof *s_strings_for_putendl; i ++)
+	{
+		if (s_strings_for_putendl[i] && strlen(s_strings_for_putendl[i]) > 64)
+			snprintf(label, sizeof label, "ft_putstr_fd(\"%.15s[...]\", %i)", s_strings_for_putendl[i], STDERR_FILENO);
+		else if (s_strings_for_putendl[i])
+			snprintf(label, sizeof label, "ft_putstr_fd(\"%s\", %i)", s_strings_for_putendl[i], STDERR_FILENO);
+		else
+			snprintf(label, sizeof label, "ft_putstr_fd(NULL, %i)", STDERR_FILENO);
+		assert_eq_label(ERR, 1, label,
+			ft_putstr_fd(s_strings_for_putendl[i], STDERR_FILENO),
+			fprintf(stderr, "%s", s_strings_for_putendl[i])
+		);
+	}
+
+	tmp_file = fopen(".tmp_putstr_fd", "w+");
+	if (fileno(tmp_file) == -1)
+	{
+		fprintf(stdout, "❗️ Internal error: Unable to create temporary file.\n");
+		return ;
+	}
+	for (size_t i = 0; i < sizeof s_strings_for_putendl / sizeof *s_strings_for_putendl; i ++)
+	{
+		if (s_strings_for_putendl[i] && strlen(s_strings_for_putendl[i]) > 64)
+			snprintf(label, sizeof label, "ft_putstr_fd(\"%.15s[...]\", %i)", s_strings_for_putendl[i], fileno(tmp_file));
+		else if (s_strings_for_putendl[i])
+			snprintf(label, sizeof label, "ft_putstr_fd(\"%s\", %i)", s_strings_for_putendl[i], fileno(tmp_file));
+		else
+			snprintf(label, sizeof label, "ft_putstr_fd(NULL, %i)", fileno(tmp_file));
+		
+		memset(got, 0, sizeof got);
+		ftruncate(fileno(tmp_file), 0);
+		rewind(tmp_file);
+		ft_putstr_fd(s_strings_for_putendl[i], fileno(tmp_file));
+		fflush(tmp_file);
+		rewind(tmp_file);
+		fread(got, sizeof(char), sizeof got, tmp_file);
+		
+		memset(exp, 0, sizeof exp);
+		ftruncate(fileno(tmp_file), 0);
+		rewind(tmp_file);
+		fprintf(tmp_file, "%s", s_strings_for_putendl[i]);
+		fflush(tmp_file);
+		rewind(tmp_file);
+		fread(exp, sizeof(char), sizeof exp, tmp_file);
+
+		assert_eq_label(OUT, 1, label, printf("%s", got), printf("%s", exp));
+	}
+	fclose(tmp_file);
+}

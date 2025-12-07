@@ -96,6 +96,7 @@ update()
 		cd "${INSTALL_DIR}"
 		if ! git pull > /dev/null 2>&1; then
 			if command -v curl >/dev/null 2>&1; then
+				# TODO: mask curl errors (e.g. no internet connection)
 				if ! curl -fsSL "${INSTALLER_URL}" | zsh > /dev/null 2>&1; then
 					printf " ${YELLOW}⚠ Update failed. Skipping.${NC}\n" >&2
 					printf " ${GREY}ℹ Manual update: 'curl -fsSL ${INSTALLER_URL}'${NC}\n" >&2
@@ -103,6 +104,7 @@ update()
 					printf " ${GREY}✔ Updated${NC}\n"
 				fi
 			elif command -v wget >/dev/null 2>&1; then
+				# TODO: mask wget errors (e.g. no internet connection)
 				if ! wget -qO- "${INSTALLER_URL}" | zsh > /dev/null 2>&1; then
 					printf " ${YELLOW}⚠ Update failed. Skipping.${NC}\n" >&2
 					printf " ${GREY}ℹ Manual update: 'wget -qO- ${INSTALLER_URL}'${NC}\n" >&2
