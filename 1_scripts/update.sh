@@ -152,7 +152,7 @@ rebuild()
 {
 	print_info "Rebuilding libfut.so..."
 
-	if ! make -C "${INSTALL_DIR}" >/dev/null 2>&1; then
+	if ! make re -C "${INSTALL_DIR}" >/dev/null 2>&1; then
 		print_err "Compilation failed. Keeping previous library version."
 		exit 1
 	fi
