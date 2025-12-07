@@ -1,5 +1,5 @@
-#ifndef FT_ULTIMATE_TESTER_H
-#define FT_ULTIMATE_TESTER_H
+#ifndef FUT_H
+#define FUT_H
 
 #include "result_pub.h"
 #include "print_wrapper_pub.h"

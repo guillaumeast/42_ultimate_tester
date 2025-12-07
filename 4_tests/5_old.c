@@ -1,4 +1,4 @@
-#include "ft_ultimate_tester.h"
+#include "fut.h"
 
 // Test(unnamed, 0)
 // {

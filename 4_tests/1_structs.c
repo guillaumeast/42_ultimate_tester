@@ -1,4 +1,4 @@
-#include "ft_ultimate_tester.h"
+#include "fut.h"
 
 // typedef struct s_test
 // {
