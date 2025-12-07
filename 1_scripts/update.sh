@@ -157,6 +157,10 @@ rebuild()
 		exit 1
 	fi
 
+	if [ "$(uname)" = "Darwin" ]; then
+		install_name_tool -id "${lib_dir}/${LIB_NAME}" "${LIB_PATH}"
+	fi
+
 	print_ok "Done"
 }
 
