@@ -14,7 +14,7 @@ typedef void (*t_test_fn)(void);
 
 typedef struct s_set
 {
-	char		*name;
+	const char	*name;
 	size_t		timeout;
 	t_test_fn	func;
 	t_result	result;
