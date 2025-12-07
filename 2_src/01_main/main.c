@@ -6,28 +6,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#if defined(__APPLE__)
-    extern t_set __data_ult_tester_start[] __asm("section$start$__DATA$__ult_tester");
-    extern t_set __data_ult_tester_end[]   __asm("section$end$__DATA$__ult_tester");
-    #define START_SET __data_ult_tester_start
-    #define STOP_SET  __data_ult_tester_end
-#else
-    extern t_set __start_ult_tester;
-    extern t_set __stop_ult_tester;
-    #define START_SET  &__start_ult_tester
-    #define STOP_SET   &__stop_ult_tester
-#endif
-
-__attribute__((constructor))
+__attribute__((constructor(102)))
 static void	ult_main(void)
 {
 	t_set	*set;
-	
-	set_init((t_set *)START_SET, (t_set *)STOP_SET);
 
-	for (set = START_SET; set < STOP_SET; set++)
+	set = set_get_first();
+	while (set)
+	{
 		set_run(set);
-	
+		set = set->next;
+	}
+
 	print_report(&g_result);
 
 	exit(EXIT_SUCCESS);
