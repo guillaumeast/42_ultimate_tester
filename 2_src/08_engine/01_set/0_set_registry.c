@@ -1,5 +1,6 @@
 #include "set_pub.h"
 #include <stddef.h>
+#include <stdio.h>
 
 static t_set	*g_registry_head = NULL;
 static t_set	*g_registry_tail = NULL;
@@ -7,6 +8,7 @@ static size_t	g_registry_count = 0;
 
 void	set_register(t_set *set)
 {
+	fprintf(stderr, "[DEBUG] set_register appelé avec set=%p, name=%s\n", (void*)set, set ? set->name : "NULL");
 	if (!set)
 		return ;
 	set->next = NULL;
