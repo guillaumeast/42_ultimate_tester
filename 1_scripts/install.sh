@@ -254,6 +254,10 @@ link_with_sudo()
 		print_err "Failed to create library symlink. All downloaded files have been removed."
 		exit 1
 	fi
+
+	if [ "$(uname)" = "Darwin" ]; then
+		sudo install_name_tool -id "/usr/local/lib/${LIB_NAME}" "${LIB_PATH}"
+	fi
 }
 
 link_without_sudo()
@@ -277,6 +281,10 @@ link_without_sudo()
 		rm -f "${include_dir}/${HEADER_NAME}"
 		print_err "Failed to create library symlink. All downloaded files have been removed."
 		exit 1
+	fi
+
+	if [ "$(uname)" = "Darwin" ]; then
+		install_name_tool -id "${lib_dir}/${LIB_NAME}" "${LIB_PATH}"
 	fi
 }
 
