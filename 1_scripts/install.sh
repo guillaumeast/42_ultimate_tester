@@ -35,8 +35,11 @@ main()
 	print_header
 
 	check_dependencies
+	printf "\n"
 	download
+	printf "\n"
 	build
+	printf "\n"
 	link
 
 	print_installed
@@ -208,7 +211,13 @@ link()
 	print_info "If YES, you'll be able to compile with: 'cc -lfut my_test.c'"
 	print_info "If NO, you'll need to compile with:     'cc -I \$HOME/.local/include -L \$HOME/.local/lib -lfut my_test.c'"
 
-	read answer
+	if [ -e /dev/tty ]; then
+		printf " > "
+		read answer </dev/tty
+	else
+		answer="n"
+		print_warn "Non-interactive environment detected. Defaulting to local install."
+	fi
 
 	case "$answer" in
 		y|Y|yes|YES)
