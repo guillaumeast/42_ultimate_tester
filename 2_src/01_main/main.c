@@ -1,4 +1,6 @@
 #define __FUT_INSIDE__
+#include "colors_priv.h"
+#include "print_wrapper_pub.h"
 #include "report_priv.h"
 #include "set_priv.h"
 #undef __FUT_INSIDE__
@@ -18,11 +20,14 @@
     #define STOP_SET   &__stop_ult_tester
 #endif
 
+static void	print_start(void);
+
 __attribute__((constructor))
 static void	ult_main(void)
 {
 	t_set	*set;
 	
+	print_start();
 	set_init((t_set *)START_SET, (t_set *)STOP_SET);
 
 	for (set = START_SET; set < STOP_SET; set++)
@@ -37,4 +42,11 @@ __attribute__((weak))
 int	main(void)
 {
 	return (0);
+}
+
+static void	print_start(void)
+{
+	print_stdout("\n   %s╭────────────────────────────────────────╮%s\n", CYAN, NONE);
+	print_stdout("   %s│           %s42 ULTIMATE TESTER%s           │%s\n", CYAN, BBLUE, CYAN, NONE);
+	print_stdout("   %s╰────────────────────────────────────────╯%s\n\n", CYAN, NONE);
 }
