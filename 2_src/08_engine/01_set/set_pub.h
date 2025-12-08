@@ -4,34 +4,31 @@
 #include "result_pub.h"
 #include <stddef.h>
 
+#if defined(__APPLE__)
+	#define ULT_SECTION __attribute__((used, section("__DATA,__ult_tester")))
+#else
+	#define ULT_SECTION __attribute__((section(".ult_tester")))
+#endif
+
 typedef void (*t_test_fn)(void);
 
 typedef struct s_set
 {
-	const char		*name;
-	size_t			timeout;
-	t_test_fn		func;
-	t_result		result;
-	struct s_set	*next;
+	const char	*name;
+	size_t		timeout;
+	t_test_fn	func;
+	t_result	result;
 }	t_set;
 
-void	set_register(t_set *set);
-
-#define Test(name, timeout) 									\
-	static void name(void); 									\
-	static t_set _set_##name =									\
-	{															\
-		#name,													\
-		timeout,												\
-		name,													\
-		{ {QUEUED, 0, 0, 0}, 0, 0, 0, 0, 0, 0 },				\
-		NULL													\
-	};															\
-	__attribute__((constructor(101)))							\
-	static void _register_##name(void)							\
-	{															\
-		set_register(&_set_##name);								\
-	}															\
+#define Test(name, timeout) 							\
+	static void name(void); 							\
+	static t_set ULT_SECTION _##name##__##__COUNTER__ =	\
+	{													\
+		#name,											\
+		timeout,										\
+		name,											\
+		{ {QUEUED, 0, 0, 0}, 0, 0, 0, 0, 0, 0 }			\
+	};													\
 	static void name(void)
 
 #endif

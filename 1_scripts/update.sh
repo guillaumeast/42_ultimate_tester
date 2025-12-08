@@ -152,13 +152,9 @@ rebuild()
 {
 	print_info "Rebuilding libfut.so..."
 
-	if ! make re -C "${INSTALL_DIR}" >/dev/null 2>&1; then
+	if ! make -C "${INSTALL_DIR}" >/dev/null 2>&1; then
 		print_err "Compilation failed. Keeping previous library version."
 		exit 1
-	fi
-
-	if [ "$(uname)" = "Darwin" ]; then
-		install_name_tool -id "${lib_dir}/${LIB_NAME}" "${LIB_PATH}"
 	fi
 
 	print_ok "Done"
