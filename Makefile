@@ -1,4 +1,4 @@
-NAME		:= libfut.so
+NAME		:= libfut.a
 CC			:= cc
 CFLAGS		:= -Wall -Wextra -Werror -fPIC -g3
 
@@ -68,7 +68,7 @@ OBJS		:= $(SRCS:%.c=$(OBJ_DIR)/%.o)
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	$(CC) -shared $(CFLAGS) $(INCLUDES) $(OBJS) -o $(NAME) $(LIBS)
+	ar rcs $(NAME) $(OBJS)
 
 $(OBJ_DIR)/%.o : %.c
 	@mkdir -p $(dir $@)

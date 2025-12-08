@@ -9,7 +9,7 @@ INSTALL_DIR="${HOME}/.${NAME}"
 HEADER_NAME="fut.h"
 HEADER_PATH="${INSTALL_DIR}/3_include/${HEADER_NAME}"
 
-LIB_NAME="libfut.so"
+LIB_NAME="libfut.a"
 LIB_PATH="${INSTALL_DIR}/${LIB_NAME}"
 
 BOLD=""
@@ -194,7 +194,7 @@ download()
 
 build()
 {
-	print_info "Building libfut.so..."
+	print_info "Building libfut.a..."
 	
 	if ! make -C "${INSTALL_DIR}" >/dev/null 2>&1; then
 		rm -rf "${INSTALL_DIR}"
@@ -254,10 +254,6 @@ link_with_sudo()
 		print_err "Failed to create library symlink. All downloaded files have been removed."
 		exit 1
 	fi
-
-	if [ "$(uname)" = "Darwin" ]; then
-		sudo install_name_tool -id "/usr/local/lib/${LIB_NAME}" "${LIB_PATH}"
-	fi
 }
 
 link_without_sudo()
@@ -281,10 +277,6 @@ link_without_sudo()
 		rm -f "${include_dir}/${HEADER_NAME}"
 		print_err "Failed to create library symlink. All downloaded files have been removed."
 		exit 1
-	fi
-
-	if [ "$(uname)" = "Darwin" ]; then
-		install_name_tool -id "${lib_dir}/${LIB_NAME}" "${LIB_PATH}"
 	fi
 }
 

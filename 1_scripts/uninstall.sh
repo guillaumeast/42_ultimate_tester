@@ -6,7 +6,7 @@ HEADER_NAME="fut.h"
 HEADER_SYSTEM_SYMLINK="/usr/local/include/${HEADER_NAME}"
 HEADER_LOCAL_SYMLINK="${HOME}/.local/include/${HEADER_NAME}"
 
-LIB_NAME="libfut.so"
+LIB_NAME="libfut.a"
 LIB_SYSTEM_SYMLINK="/usr/local/lib/${LIB_NAME}"
 LIB_LOCAL_SYMLINK="${HOME}/.local/lib/${LIB_NAME}"
 
