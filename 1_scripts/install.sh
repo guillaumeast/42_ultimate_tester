@@ -208,8 +208,8 @@ build()
 link()
 {
 	print_warn "Install into /usr/local (requires sudo) ? [y/N]"
-	print_info "If YES, you'll be able to compile with: 'cc -lfut my_test.c'"
-	print_info "If NO, you'll need to compile with:     'cc -I \$HOME/.local/include -L \$HOME/.local/lib -lfut my_test.c'"
+	print_info "If YES, you'll be able to compile with: 'cc my_test.c -g -lfut'"
+	print_info "If NO, you'll need to compile with:     'cc my_test.c -g -I \$HOME/.local/include -L \$HOME/.local/lib -lfut'"
 
 	if [ -e /dev/tty ]; then
 		printf " > "
