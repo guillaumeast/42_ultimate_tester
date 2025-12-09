@@ -23,11 +23,16 @@ No complex frameworks, no dependencies — just you, your code, and the cold har
 
 > ✌️ Just write what you want to test, the framework handles all the complicated stuff.
 
+<div style="display: flex; gap: 10px;">
+    <img src="docs/assets/passed_tests.png" width="49%">
+    <img src="docs/assets/failed_tests.png" width="49%">
+</div>
+
 ## Table of contents
-- [⚙️ Install](#️-install)
-- [🛠️ Update and uninstall](#️-update-and-uninstall)
-- [📚 Documentation](#-documentation)
-- [⚠️ Limitations](#️-limitations)
+- [Install](#️-install)
+- [Update and uninstall](#️-update-and-uninstall)
+- [Documentation](#-documentation)
+- [Limitations](#️-limitations)
 
 ## ⚙️ Install
 
@@ -51,8 +56,17 @@ You can now run your first test in just a few seconds by following this [guide](
 
 ## 🛠️ Update and uninstall
 
-To make your life easier, set up aliases in your shell config.
+You can update by running the following command:
+```bash
+~/.42_ultimate_tester/1_scripts/update.sh
+```
 
+You can uninstall the framework by running the following command:
+```bash
+~/.42_ultimate_tester/1_scripts/uninstall.sh
+```
+
+To make your life easier, you can set up aliases in your shell config.  
 For example, if you use `zsh` shell, run the following commands:
 
 ```bash

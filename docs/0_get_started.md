@@ -34,12 +34,12 @@ Link against the `fut` library.
 
 If you installed the library **globally**, you only need the `-lfut` flag:
 ```bash
-cc test.c -lfut -o my_tester
+cc test.c -g -lfut -o my_tester
 ```
 
 If you installed the library **locally**, you'll need to add `-I` and `-L` flags:
 ```bash
-cc test.c -I ~/.local/include -L ~/.local/lib -lfut -o my_tester
+cc test.c -g -I ~/.local/include -L ~/.local/lib -lfut -o my_tester
 ```
 
 ## 3. Run
@@ -50,7 +50,7 @@ Execute the binary to run your tests.
 ```
 
 You should see output similar to this:  
-[_**TODO: add screenshot**_]
+![example_log](assets/get_started_logs.png)
 
 ## Go further
 
