@@ -53,11 +53,9 @@ Say hello to clean, automated, crash-proof testing for your C projects.
 > ✌️ Just write what you want to test, and let the framework handle all the complicated stuff.
 
 <div style="display: flex; gap: 10px;">
-    <img src="docs/assets/passed_tests.png" width="50%">
-    <img src="docs/assets/failed_tests.png" width="50%">
+    <img src="docs/assets/passed_tests.png" width="49%">
+    <img src="docs/assets/failed_tests.png" width="49%">
 </div>
-
-
 
 ## ⚙️ Install
 
