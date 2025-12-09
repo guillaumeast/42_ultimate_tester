@@ -1,0 +1,4 @@
+- Create a simple Test() with basic assert()
+- Compile
+- Run
+- Example of Makefile implementation

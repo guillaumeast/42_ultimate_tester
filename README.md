@@ -1,19 +1,16 @@
-# THIS README NEEDS TO BE UPDATED
+# 42 ULTIMATE TESTER
 
 <p>
-  <img width="100%" alt="Capture d’écran 2025-11-08 à 19 52 42" src="https://github.com/user-attachments/assets/22ebd326-5736-4643-897f-db7c725c5bc1" />
-</p>
-
-<p>
-  
   [![42](https://img.shields.io/badge/-black?logo=42&style=flat)](#)
   [![Zsh](https://img.shields.io/badge/Shell-Zsh-89e051?style=flat&logo=gnu-bash)](#)
   [![C](https://img.shields.io/badge/Language-C-A8B9CC?style=flat&logo=c&logoColor=white)](#)
-  [![Version](https://img.shields.io/badge/version-1.0.0-blue)](#)
-  
+  [![Version](https://img.shields.io/badge/version-1.0.0-darkgreen)](#)
 </p>
 
-**Think your 42 project is bulletproof? Test it!** 💥
+**Think your project is bulletproof? Test it!** 💥
+
+42 Ultimate Tester is a **lightweight, standalone C unit testing library**.  
+No complex frameworks, no dependencie—just you, your code, and the cold hard truth.
 
 ---
 
@@ -21,122 +18,166 @@
 
 From anywhere, just run:
 ```bash
-curl -fsSL https://raw.githubusercontent.com/guillaumeast/42_ultimate_tester/master/1_launcher/install.zsh | zsh
+curl -fsSL https://raw.githubusercontent.com/guillaumeast/42_ultimate_tester/master/1_scripts/install.sh | sh
 ```
 or:
 ```bash
-wget -qO- https://raw.githubusercontent.com/guillaumeast/42_ultimate_tester/master/1_launcher/install.zsh | zsh
+wget -qO- https://raw.githubusercontent.com/guillaumeast/42_ultimate_tester/master/1_scripts/install.sh | sh
 ```
 
 This will:
-1. Install `42 Ultimate Tester` globally in `~/.42_ultimate_tester/`
-2. Add the aliases `test` and `rmtest` to your `.zshrc` file
+1. Clone the repo to `~/.42_ultimate_tester/`
+2. Build the `libfut.a` static library
+3. Link the library and header to your system (Global or Local)
 
 > ✌️ No setup, no dependency, no editing, no excuses.
 
 ---
 
-## 🚀 Use
+## 🛠️ Management
 
-From your project root (e.g. `get_next_line/`), just run:
+To make your life easier, set up aliases in your shell config.
 
-``` bash
-test
+For example, if you use `zsh` shell, run the following commands:
+
+```bash
+echo "alias fut_update='~/.42_ultimate_tester/1_scripts/update.sh'" >> ~/.zshrc
+echo "alias fut_uninstall='~/.42_ultimate_tester/1_scripts/uninstall.sh'" >> ~/.zshrc
+source ~/.zshrc
 ```
 
-This will:
-1. Auto-update
-2. Detect which project you're in
-3. Run the matching test suite
-
-> 👇 Example output when running tests for `ft_printf`
-
-<img width="754" height="883" alt="Capture d’écran 2025-11-25 à 19 11 45" src="https://github.com/user-attachments/assets/8f5cd830-49fe-496a-82c1-911bf75d87fa" />
-
-> The best bugs are the ones you didn’t expect.
+Now you can simply:
+- Update with `fut_update`
+- Uninstall with `fut_uninstall` (but you won't, right?)
 
 ---
 
-## 📦 Supported Projects
+## 🚀 Usage
 
-| Project | Status | Mandatory Test Cases | Bonus Test Cases |
-|---------|--------|----------------------|------------------|
-| `libft` | 🧱 Work in progress | _ | _ |
-| `ft_printf` | ✅ Ready | 300+ 🧨 | _ |
-| `get_next_line` | 🧱 Work in progress | _ | _ |
-| Others | 🤷‍♂️ We'll see | _ | _ |
-
-> More will come — when they’re good enough to hurt you.
-
----
-
-## 🧰 What’s included
-
-This tester ships with:
-
-1. **All [Francinette](https://github.com/xicodomingues/francinette) tests** (for supported projects)
-2. **Extra tests** I wrote myself  
-3. **Memory leaks tests** (`malloc`’d pointers that are not `free`'d)  
-4. **Memory safety tests** (unprotected `malloc` calls)  
-5. **Makefile checks** (`all`, `clean`, `fclean` and `re` rules)
-
-💡 My custom test framework is written entirely in **POSIX C**, so it works almost **everywhere** (well… except on **Windows**, of course 💩).
-
-> If your project survives `42 Ultimate Tester`, the `Moulinette` will be a formality.
-
----
-
-## 🔧 Requirements
-
-Nothing fancy - just make sure you've got these:
-
-| Tool | Why |
-|------|--------|
-| `zsh` | Because we're not animals |
-| `curl` or `wget` | To fetch the **installer** |
-| `git` | To pull **automatic updates** |
-| `make` | To **build** the tester |
-
-> 💡 Don't worry - all of these come preinstalled on the 42 Ubuntu machines.
-
----
-
-## 🧹 Cleanup
-
-Wanna start fresh? Easy:
-
-``` bash
-rmtest
+### 1. Include the header
+```c
+#include <fut.h>
 ```
 
-> You’ll be able to pretend this never happened — and that you nailed it on the first try.
+### 2. Write your tests
+Wrap your tests in `Test()` blocks. No main function required—we handle that.
+
+### TODO: add link to docs
+
+```c
+#include <fut.h>
+#include <string.h>
+
+Test(test_strlen, 0) // Name, Timeout (0 = disabled)
+{
+    // Simple verification
+    assert(1, strlen("Hello") == 5);
+
+    // Advanced comparison
+    compare(RET, 1, strlen, ft_strlen, ("Hello"));
+}
+```
+
+### 3. Compile & Run
+Link against the library (`-lfut`) and run the executable.
+
+```bash
+# If installed globally (/usr/local)
+cc my_tests.c -lfut && ./a.out
+
+# If installed locally (~/.local)
+cc my_tests.c -I ~/.local/include -L ~/.local/lib -lfut && ./a.out
+```
 
 ---
 
-## ⚠️ Important Warnings
+## 📚 API Reference
 
-- **`Norminette`** is **NOT** checked by the tester  
-  *(wip: coming very soon)*  
-- Only **`ft_printf` mandatory** is fully available for now  
-  *(wip: `libft`, `gnl`, and bonus tests coming very soon)*  
-- Tested **only on `macOS` `ARM`** for now  
-  *(wip: `macOS x86` and `Linux` support coming soon)*  
-- **Stacktraces** may show **incorrect source locations**  
-  *(still work in progress — but it crashes beautifully)*
+Here are the tools at your disposal to break your code.
+
+### 🧪 Test Sets
+Define a suite of tests with a timeout (or 0 to disable timeout).
+```c
+Test(name, timeout_s)
+{
+	// Your tests
+}
+```
+
+### 🔀 Redirections
+Manually control standard outputs.  
+Start a redirection with `redirect_start()`, ``
+```c
+redirect_start(R_STDOUT); // R_STDERR, R_BOTH
+// ... do stuff ...
+char *output = redirect_read();
+redirect_stop();
+```
+
+### ⚡ Unsafe Output
+Quickly capture output (no fork, runs in current process).
+```c
+char *out;
+get_output(R_STDOUT, printf("42"), out);
+```
+
+### 🛡️ Safe Capture
+Runs expression in a child process. Handles crashes and timeouts.
+```c
+t_capture res;
+// mode: RET, OUT, ERR, BOTH, RET_OUT...
+capture(OUT, 100, printf("42"), res); 
+
+if (res.status.type == CRASHED) ...
+if (strcmp(res.out, "42") == 0) ...
+```
+
+### ✅ Assertions
+All assertions are **safe** (forked).
+
+**Basic Assertion**
+```c
+assert(timeout, expression);
+assert(100, 1 + 1 == 2);
+```
+
+**Equality Check**
+```c
+// mode for capturing (RET, OUT...), timeout, got, expected
+assert_eq(RET, 100, ft_strlen("abc"), 3);
+```
+
+**Inequality Check**
+```c
+assert_neq(RET, 100, ft_strlen("abc"), 0);
+```
+
+**Function Comparison**
+Compare your function against the original (or another reference).
+```c
+// mode, timeout, func1, func2, (args)
+compare(RET, 100, strlen, ft_strlen, ("abc"));
+```
 
 > Knowing the limitations is part of mastering the tool.
 
 ---
 
-### 🧩 Contributing
+## ⚠️ Important Warnings
 
-You can help expand `42_ultimate_tester` by adding new test suites!
+- **Nested Timeouts**: Using `assert()` or `compare()` inside a `Test()` (which implies forking inside a forked process with timers) **may introduce race conditions**. (WIP)
+- **Struct Comparison**: `assert_eq` does not support struct comparison yet. (WIP)
+- **Direct Printing**: Using `printf` or similar inside `Test()` is **Undefined Behavior** because of how the runner manages output pipes. Use logging macros or keep it silent. (WIP)
 
-1. Fork the repo: [guillaumeast/42_ultimate_tester](https://github.com/guillaumeast/42_ultimate_tester)
-2. Add your test folder (e.g. `libft/`, `printf/`, etc.)
-3. Keep it **fully standalone** and **easily removable** (no external setup, no global installs)
-4. Open a pull request with a short description of what your tests cover
+> Bonus points if your test breaks your own code first — that’s science.
 
-Feel free to contact me at **[gastesan@student.42.fr](mailto:gastesan@student.42.fr)**.
+---
 
-> Bonus points if your test breaks your own code first — that’s science
+## 🧹 Cleanup
+
+Wanna start fresh?
+```bash
+fut_uninstall
+```
+
+> You’ll be able to pretend this never happened — and that you nailed it on the first try.

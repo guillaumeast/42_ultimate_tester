@@ -124,12 +124,12 @@ typedef struct s_set
 	t_result	result;
 }	t_set;
 
-#define Test(name, timeout) 							\
+#define Test(name, timeout_sec) 						\
 	static void name(void); 							\
 	static t_set ULT_SECTION _##name##__##__COUNTER__ =	\
 	{													\
 		#name,											\
-		timeout,										\
+		timeout_sec,									\
 		name,											\
 		{ {QUEUED, 0, 0, 0}, 0, 0, 0, 0, 0, 0 }			\
 	};													\
