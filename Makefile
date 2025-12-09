@@ -74,8 +74,6 @@ $(OBJ_DIR)/%.o : %.c
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
-# TODO: add test rule
-
 clean:
 	@rm -rf $(OBJ_DIR)
 
