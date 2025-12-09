@@ -18,7 +18,7 @@ Master `stdout` and `stderr` redirections.
 - `redirect_start()`, `redirect_read()`, `redirect_stop()`: manually redirect outputs and read them back.  
 - `get_output()`: Easily capture outputs in only one line.
 
-### ✅ [Assertions](4_assertions.md)
+### ✅ [Assertions](3_assertions.md)
 Understand how to verify correctness, compare behaviors and detect crashes/freezes with safe and flexible assertion tools.  
 - `assert()`, `assert_eq()`, `assert_neq()`: verify your code logic with type-aware comparisons.  
 - `compare()`: compare behaviors of two functions.  
