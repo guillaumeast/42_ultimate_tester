@@ -17,7 +17,7 @@ You can put as many [assertions](https://github.com/guillaumeast/42_ultimate_tes
 - `timeout_sec`: **Max execution time** in seconds (`0` for no timeout).
 
 **Example**
-```c
+```cs
 #include "fut.h"
 
 Test(name_of_the_test, 1)

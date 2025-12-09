@@ -60,12 +60,12 @@ void	redirect_start(t_redirect_mode mode);
 char	*redirect_read(void);
 void	redirect_stop(void);
 
-#define get_output(mode, expr, out_var_name)	\
+#define get_output(mode, expression, var_name)	\
 	do											\
 	{											\
 		redirect_start(mode);					\
-		expr;									\
-		out_var_name = redirect_read();			\
+		expression;								\
+		var_name = redirect_read();				\
 		redirect_stop();						\
 	} while (0)
 
@@ -152,29 +152,29 @@ void	_memcheck_parent(const char *expr);
 void	_memcheck_enable(t_mem_mode mode);
 void	_memcheck_child(const char *expr);
 
-#define memleaks(timeout, expr)				\
+#define memleaks(timeout_sec, expression)	\
 	do {									\
-		_fork_init(timeout);				\
+		_fork_init(timeout_sec);			\
 		if (g_context.child_pid > 0)		\
-			_memcheck_parent(#expr);		\
+			_memcheck_parent(#expression);	\
 		if (g_context.child_pid == 0)		\
 		{									\
 			_memcheck_enable(LEAKS);		\
-			expr;							\
-			_memcheck_child(#expr);			\
+			expression;						\
+			_memcheck_child(#expression);	\
 		}									\
 	} while (0)
 
-#define memsafety(timeout, expr)			\
+#define memsafety(timeout_sec, expression)	\
 	do {									\
-		_fork_init(timeout);				\
+		_fork_init(timeout_sec);			\
 		if (g_context.child_pid > 0)		\
-			_memcheck_parent(#expr);		\
+			_memcheck_parent(#expression);	\
 		if (g_context.child_pid == 0)		\
 		{									\
 			_memcheck_enable(SAFETY);		\
-			expr;							\
-			_memcheck_child(#expr);			\
+			expression;						\
+			_memcheck_child(#expression);	\
 		}									\
 	} while (0)
 
@@ -307,24 +307,24 @@ void	_assert_run(t_assert *assert);
 		_assert_run(&_assert);														\
 	} while (0)
 
-#define assert(timeout_sec, expr)													\
-	_assert(true, RET, timeout_sec, #expr, expr, (bool)true)
-#define assert_label(timeout_sec, label, expr)										\
-	_assert(true, RET, timeout_sec, label, expr, (bool)true)
+#define assert(timeout_sec, expression)													\
+	_assert(true, RET, timeout_sec, #expression, expression, (bool)true)
+#define assert_label(timeout_sec, label, expression)									\
+	_assert(true, RET, timeout_sec, label, expression, (bool)true)
 
-#define assert_eq(cap_mode, timeout_sec, got_expr, exp_expr)						\
-	_assert(true, cap_mode, timeout_sec, #got_expr, got_expr, exp_expr)
-#define assert_eq_label(cap_mode, timeout_sec, label, got_expr, exp_expr)			\
-	_assert(true, cap_mode, timeout_sec, label, got_expr, exp_expr)
+#define assert_eq(cap_mode, timeout_sec, got_expression, exp_expression)				\
+	_assert(true, cap_mode, timeout_sec, #got_expression, got_expression, exp_expression)
+#define assert_eq_label(cap_mode, timeout_sec, label, got_expression, exp_expression)	\
+	_assert(true, cap_mode, timeout_sec, label, got_expression, exp_expression)
 
-#define assert_neq(cap_mode, timeout_sec, got_expr, exp_expr)						\
-	_assert(false, cap_mode, timeout_sec, #got_expr, got_expr, exp_expr)
-#define assert_neq_label(cap_mode, timeout_sec, label, got_expr, exp_expr)			\
-	_assert(false, cap_mode, timeout_sec, label, got_expr, exp_expr)
+#define assert_neq(cap_mode, timeout_sec, got_expression, exp_expression)				\
+	_assert(false, cap_mode, timeout_sec, #got_expression, got_expression, exp_expression)
+#define assert_neq_label(cap_mode, timeout_sec, label, got_expression, exp_expression)	\
+	_assert(false, cap_mode, timeout_sec, label, got_expression, exp_expression)
 
-#define compare(cap_mode, timeout_sec, fn1_name, fn2_name, fn_args)					\
+#define compare(cap_mode, timeout_sec, fn1_name, fn2_name, fn_args)						\
 	_assert(true, cap_mode, timeout_sec, #fn1_name#fn_args, fn1_name fn_args, fn2_name fn_args)
-#define compare_label(cap_mode, timeout_sec, label, fn1_name, fn2_name, fn_args)	\
+#define compare_label(cap_mode, timeout_sec, label, fn1_name, fn2_name, fn_args)		\
 	_assert(true, cap_mode, timeout_sec, label, fn1_name fn_args, fn2_name fn_args)
 
 #endif
