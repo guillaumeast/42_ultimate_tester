@@ -45,16 +45,16 @@ void	_capture_child(t_capture_res *res);
 #define __expr_or_zero(expr) __builtin_choose_expr(__type_is_void(expr), 0, (expr))
 #define CAP_VOID(expr, dest) ({ (void)(expr); (dest) = 0; 0; })
 #define CAP_VALUE(expr, dest) ({ (dest) = (intptr_t)(__expr_or_zero(expr)); 0; })
-#define CAP_DISPATCH(expr, dest) \
-	__builtin_choose_expr(__type_is_void(expr), \
-		CAP_VOID(expr, dest), \
+#define CAP_DISPATCH(expr, dest)				\
+	__builtin_choose_expr(__type_is_void(expr),	\
+		CAP_VOID(expr, dest),					\
 		CAP_VALUE(expr, dest))
 
-#define capture(mode, time_out, expr, capture_var_name)			\
+#define capture(mode, timeout_sec, expr, capture_var_name)		\
 	do {														\
 		memset(&capture_var_name, 0, sizeof capture_var_name);	\
-		capture_var_name.status.timeout = time_out;				\
-		_fork_init(time_out);									\
+		capture_var_name.status.timeout = timeout_sec;			\
+		_fork_init(timeout_sec);								\
 		if (g_context.child_pid > 0)							\
 			_capture_parent(&capture_var_name);					\
 		else													\
