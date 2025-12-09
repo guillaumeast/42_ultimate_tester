@@ -5,35 +5,59 @@
 [![C](https://img.shields.io/badge/Language-C-A8B9CC?style=flat&logo=c&logoColor=white)](#)
 [![Version](https://img.shields.io/badge/version-0.9.0-orange)](#)
 
-42 Ultimate Tester is a **lightweight, standalone C unit testing library**.  
+The Testing Framework You Wish You Had Earlier.
 
-No complex frameworks, no dependencies — just you, your code, and the cold hard truth.
+Say goodbye to printf debugging.
+Say hello to clean, automated, crash-proof testing for your C projects.
 
-## 🙌 Highlights
-
-- Pure **POSIX** `sh` / `c` framework with **no dependencies**
-- **Automatic test detection and run**
-- **Automatic type detection** inside asserts
-- **Automatic redirections** handling
-- **Automatic human-readable logs**:
-	- See the exact expression which failed
-	- See both the "got" and "expected" values
-	- See the file and line in which crash / leaks happened
-	- Set up customized labels if you prefer
-
-> ✌️ Just write what you want to test, the framework handles all the complicated stuff.
-
-<div style="display: flex; gap: 10px;">
-    <img src="docs/assets/passed_tests.png" width="49%">
-    <img src="docs/assets/failed_tests.png" width="49%">
-</div>
+42 Ultimate Tester is a fast, lightweight, dependency-free testing framework built for real C developers.
 
 ## Table of contents
+- [What's inside?](#-whats-inside)
 - [Install](#️-install)
 - [Update and uninstall](#️-update-and-uninstall)
 - [Documentation](#-documentation)
 - [Limitations](#️-limitations)
 - [Contribute](#-contribute)
+
+## ✨ What’s inside?
+
+### 🔥 A testing experience that just works
+
+- No setup, no dependencies, no main function required
+- Automatic test discovery
+- Clean, readable logs with file + line info
+- Isolated execution in forked processes (no more global crashes)
+
+### 🧠 Smart & powerful checks
+
+- Type-aware assertions (check return values and/or outputs)
+- Function-to-function comparison
+- Automatic `stdout`/`stderr` redirections
+- One-liner output capturing
+- Custom labels
+
+### 🛡 Memory checks built-in
+
+- Detect unfreed allocations with precise file/line reporting
+- Detect bad malloc protection, null deref, unsafe access, SIGSEGV/SIGBUS, etc.
+
+### 🧩 Designed for 42 standards
+
+- Pure POSIX C
+- Works on Linux and macOS (`x86` and `ARM`)
+- Zero external dependencies
+- _No-`sudo`_ install option
+- Perfect for `libft`, `ft_printf`, `gnl`, `minitalk`, and all 42 projects
+
+> ✌️ Just write what you want to test, and let the framework handle all the complicated stuff.
+
+<div style="display: flex; gap: 10px;">
+    <img src="docs/assets/passed_tests.png" width="50%">
+    <img src="docs/assets/failed_tests.png" width="50%">
+</div>
+
+
 
 ## ⚙️ Install
 
@@ -49,7 +73,7 @@ wget -qO- https://raw.githubusercontent.com/guillaumeast/42_ultimate_tester/mast
 This will:
 1. Clone the repo to `~/.42_ultimate_tester/`
 2. Build the `libfut.a` static library
-3. Link the library and header to your system (Global or Local)
+3. Link the library and header to your system (global or local)
 
 You can now run your first test in just a few seconds by following this [guide](docs/0_get_started.md) ⚡️
 
