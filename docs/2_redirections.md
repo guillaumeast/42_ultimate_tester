@@ -1,142 +1,174 @@
-# Redirections and output management
+# Redirections
 
-You can easily redirect `stdout` and/or `stderr` to capture the output of tested functions.
+**Redirections** allow you to temporarily reroute `stdout` and/or `stderr` so you can capture the output of any expression or function.
 
-## Redirect modes
+> 💡 Each redirection captures exactly what the underlying function writes to `stdout` and/or `stderr`.  
+> There is **no** trimming or newline added automatically.
 
-You can redirect `stdout`, `stderr` or both by using tthe following arguments with `redirect_start()` and `get_output()`:
-- Use `R_STDOUT` to redirect **only** `stdout`
-- Use `R_STDERR` to redirect **only** `stderr`
-- Use `R_BOTH` to redirect **both** `stdout` and `stderr`
+## Table of contents
 
-## MANUAL - Basic redirection
+- [Redirect Modes](#redirect-modes)
+- [Start Redirection: `redirect_start()`](#start-redirection-redirect_start)
+- [Read Redirection: `redirect_read()`](#read-redirection-redirect_read)
+- [Stop Redirection: `redirect_stop()`](#stop-redirection-redirect_stop)
+- [One-liner: `get_output()`](#one-liner-get_output)
+- [Simple Usage Example](#simple-usage-example)
+- [Nested Usage Example](#nested-usage-example)
+- [Bypass redirections: `print_stdout()` and `print_stderr()`](#bypass-redirections-print_stdout-and-print_stderr)
 
-1. Start a redirection by calling `redirect_start()` with `R_STDOUT`, `R_STDERR` or `R_BOTH` as argument.
-2. Read the value outputed to the redirection so far by calling `redirect_read()` (⚠️ returns a `malloc`'d pointer, don't forget to `free()` it!)
-3. Stop the redirection with `redirect_stop()`
+## Redirect Modes
 
-Example:
+With the `mode` argument, you can redirect `stdout`, `stderr` or both:
+- `R_STDOUT`: redirect **only** `stdout`
+- `R_STDERR`: redirect **only** `stderr`
+- `R_BOTH`: redirect **both** `stdout` and `stderr`
+
+## Start Redirection: `redirect_start()`
+
+Start a redirection by calling `redirect_start()`
+
+**Syntax**  
+`redirect_start(mode)`
+
+**Parameters**  
+- `mode`: See [Redirect Modes](#redirect-modes)
+
+**Example**
 ```c
-#include "fut.h"
-#include <stdio.h>
-
-Test(basic_redirection, 0)
-{
-	char	*output;
-
-	redirect_start(R_STDOUT);		// Redirect stdout
-	printf("Hello world");			// Output is catched by the redirection
-	output = redirect_read();		// output = "Hello world"
-	redirect_stop();				// Restore original fds
-
-	free(output);
-}
+redirect_start(R_STDOUT);	// Redirect only stdout
+// ...
+redirect_stop();
 ```
 
-## MANUAL - Stacked redirections
+## Read Redirection: `redirect_read()`
 
-You can _stack_ redirections by nestedly calling `redirect_start()`.
+Read the output value stored in the active redirection by calling `redirect_read()`
 
-Example:
+> ⚠️ `redirect_read()` returns a `malloc`'d pointer, don't forget to `free()` it!
+
+**Syntax**  
+`redirect_read()`
+
+**Example**
 ```c
-#include "fut.h"
-#include <stdio.h>
+redirect_start(R_STDOUT);
+// ...
 
-Test(nested_redirections, 0)
-{
-	char	*output_1;
-	char	*output_2;
+char *output = redirect_read();	// Get output value
 
-	redirect_start(R_STDOUT);		// Start a first redirection
-	printf("first redirection");	// Output is catched by the first redirection
-
-	redirect_start(R_STDOUT);		// Start a second redirection
-	printf("second redirection");	// Output is catched by the second redirection
-
-	output_2 = redirect_read();		// output_2 = "second redirection"
-	redirect_stop();				// Restore the first redirection
-
-	output_1 = redirect_read();		// output_1 = "first redirection"
-	redirect_stop();				// Restore original fds
-
-	free(output_1);
-	free(output_2);
-}
+// ...
+redirect_stop();
+free(output);
 ```
 
-## AUTO - One-liner redirection capture
+## Stop Redirection: `redirect_stop()`
+
+Stop the active redirection by calling `redirect_stop()`
+
+**Syntax**  
+`redirect_stop()`
+
+**Example**
+```c
+redirect_start(R_STDOUT);
+// ...
+
+redirect_stop();	// Stop the active redirection
+```
+
+## One-liner: `get_output()`
 
 You can easily **create** a redirection, **read** output and **stop** the redirection all at once by using `get_output()`.
-The first argument let you choose which `fd` you want to redirect (see `## Redirect modes` TODO: add link).
 
-Example:
+**Syntax**  
+`get_output(mode, expression, var_name)`
+
+**Parameters**  
+- `mode`: See [Redirect Modes](#redirect-modes)
+- `expression`: The expression from which you want to capture the output
+- `var_name`: The name of the variable in which you want to store the captured output
+
+**Example**
 ```c
-#include "fut.h"
-#include <stdio.h>
+char	*output;
 
-Test(my_test, 0)
-{
-	char	*output;
+get_output(R_STDOUT, printf("Hello world"), output);	// output = "Hello world"
 
-	get_output(R_STDOUT, printf("Hello world"), output);
-	// output == "Hello world"
-	free(output);
-
-	get_output(R_STDERR, fprintf(stderr, "Hello world"), output);
-	// output == "Hello world"
-	free(output);
-}
+// ...
+free(output);
 ```
 
-> Warning: Only use with _safe_ expressions, since `get_output()` doesn't `fork`
-> Use `capture()` [TODO: add link] if you want to _safely_ capture output
+> 💡 You can use `get_output()` even if one or more redirections are already active
 
-## Print on stdout / stderr while a redirection is active
+## Simple Usage Example
+
+You can manually [start](#start-redirection-redirect_start), [read](#read-redirection-redirect_read) and [stop](#stop-redirection-redirect_stop) redirections:
+```c
+char	*output;
+
+redirect_start(R_STDOUT);		// Redirect stdout
+printf("Hello world");			// Output is captured by the redirection
+output = redirect_read();		// output = "Hello world"
+redirect_stop();				// Restore original fds
+
+// ...
+free(output);
+```
+
+Or you can do it [all at once](#one-liner-get_output):
+```c
+char	*output;
+
+get_output(R_STDOUT, printf("Hello world"), output);	// output = "Hello world"
+
+// ...
+free(output);
+```
+
+## Nested Usage Example
+
+You can _stack_ redirections by calling [`redirect_start()`](#start-redirection-redirect_start) inside another active redirection:
+
+```c
+char	*output_1;
+char	*output_2;
+
+redirect_start(R_STDOUT);		// Start a first redirection
+printf("first redirection");	// Output is captured by the first redirection
+
+redirect_start(R_STDOUT);		// Start a second redirection
+printf("second redirection");	// Output is captured by the second redirection
+
+output_2 = redirect_read();		// output_2 = "second redirection"
+redirect_stop();				// Restore the first redirection
+
+output_1 = redirect_read();		// output_1 = "first redirection"
+redirect_stop();				// Restore original fds
+
+free(output_1);
+free(output_2);
+```
+
+## Bypass redirections: `print_stdout()` and `print_stderr()`
 
 You can bypass the redirections and print in the _real_ `stdout` / `stderr` by using the `print_stdout()` and `print_stderr()` functions.
-Simply use them as you would use `printf()`.
+
+**Syntax**  
+- `print_stdout(const char *format, ...)`  
+- `print_stderr(const char *format, ...)`  
+
+**Parameters**
+- `format`: Format string
+- `...`: Any number of args to be converted
+
+> 💡 Use them as you would use `printf()`
 
 Example:
 ```c
-#include "fut.h"
-#include <stdio.h>
+redirect_start(R_STDOUT);		// Redirect stdout
 
-Test(bypass_redirection, 0)
-{
-	redirect_start(R_STDOUT);		// Redirect stdout
+printf("Hello world\n");		// Invisible (captured by active redirection)
+print_stdout("Hello World\n");	// Visible (bypass the active redirection)
 
-	printf("Hello world\n");		// Invisible (captured by active redirection)
-	print_stdout("Hello World\n");	// Visible (bypass the active redirection)
-
-	redirect_stop();				// Restore original fds
-}
-```
-
-## Public API
-
-```c
-typedef enum e_redirect_mode
-{
-	R_STDOUT,
-	R_STDERR,
-	R_BOTH
-}	t_redirect_mode;
-
-void	redirect_start(t_redirect_mode mode);
-char	*redirect_read(void);
-void	redirect_stop(void);
-
-#define get_output(mode, expr, out_var_name)	\
-	do											\
-	{											\
-		redirect_start(mode);					\
-		expr;									\
-		out_var_name = redirect_read();			\
-		redirect_stop();						\
-	} while (0)
-
-__attribute__((format(printf, 1, 2)))
-void	print_stdout(const char *fmt, ...);
-__attribute__((format(printf, 1, 2)))
-void	print_stderr(const char *fmt, ...);
+redirect_stop();				// Restore original fds
 ```
