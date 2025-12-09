@@ -1,40 +1,32 @@
 # Test Sets
 
-A **Test Set** is a self-contained unit of testing that is automatically registered and run by the framework.  
-You do **NOT** need to declare it in a header or register it manually. The linker magic does it for you 🪄.
+A **Test Set** is a single executable test block.  
+
+All your [assertions](https://github.com/guillaumeast/42_ultimate_tester/blob/master/docs/3_assertions.md) / [memchecks](https://github.com/guillaumeast/42_ultimate_tester/blob/master/docs/4_memchecks.md) must be enclosed in **Test Sets**.  
+You can put as many [assertions](https://github.com/guillaumeast/42_ultimate_tester/blob/master/docs/3_assertions.md) / [memchecks](https://github.com/guillaumeast/42_ultimate_tester/blob/master/docs/4_memchecks.md) as you want inside each **Test Set**.
+
+🛡️ **All Test Sets are safe**: they run in a forked process, catch crashes, handle timeouts and protect the test suite.
+
+🪄 Each **Test Set** is **automatically registered and run** by the framework.  
 
 **Syntax**  
 `Test(name, timeout_sec)`
 
 **Parameters**
-- `name`: The **unique** name of the **test set** to create.
-- `timeout_sec`: Max execution time in seconds (`0` for no timeout).
+- `name`: **Unique label** for this Test Set (shown in the test report).
+- `timeout_sec`: **Max execution time** in seconds (`0` for no timeout).
 
-## Defining a Test
-
-Use the `Test()` macro to define a new test set.  
-
+**Example**
 ```c
 #include "fut.h"
 
-Test(name_of_the_test, 0)
+Test(name_of_the_test, 1)
 {
-    // Write your test code here
+    // Assertions and memchecks go here
 }
 ```
 
-## Setting a timeout
+> If the **Test Set** takes longer than the specified `timeout_sec`, it will be killed and marked as `TIMED`.
 
-You can enforce a global timeout for the entire test set.  
-If the test set takes longer than the specified time, it will be killed and marked as `TIMED`.
-
-```c
-#include "fut.h"
-
-Test(performance_test, 2)
-{
-	// This test must complete within 2 seconds
-}
-```
-
-> If you use `capture` or `assert` [TODO: add links] inside the test set, detailed timeout handling is managed separately, but this global timer is the ultimate deadline.
+> [Assertions](https://github.com/guillaumeast/42_ultimate_tester/blob/master/docs/3_assertions.md) and [memchecks](https://github.com/guillaumeast/42_ultimate_tester/blob/master/docs/4_memchecks.md) inside the **Test Set** have their own **timeouts**,  
+but the **Test Set timeout** is the hard upper limit: if the block runs longer, the whole **Test Set** is stopped.
