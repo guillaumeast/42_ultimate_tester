@@ -5,9 +5,9 @@ You can easily redirect `stdout` and/or `stderr` to capture the output of tested
 ## Redirect modes
 
 You can redirect `stdout`, `stderr` or both by using tthe following arguments with `redirect_start()` and `get_output()`:
-- Use `R_STDOUT` to redirect only `stdout`
-- Use `R_STDERR` to redirect only `stderr`
-- Use `R_BOTH` to redirect both `stdout` and `stderr`
+- Use `R_STDOUT` to redirect **only** `stdout`
+- Use `R_STDERR` to redirect **only** `stderr`
+- Use `R_BOTH` to redirect **both** `stdout` and `stderr`
 
 ## MANUAL - Basic redirection
 

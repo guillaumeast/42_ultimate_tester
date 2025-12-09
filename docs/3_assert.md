@@ -5,6 +5,15 @@ They check if an expression evaluates to true, or if two values and/or outputs a
 
 🛡️ **All assertions are safe**: they run in a forked process, catch crashes, handle timeouts and protect the test suite.
 
+## Table of contents
+
+- [Assertion Modes](#assertion-modes)
+- [Boolean Assertion: `assert()`](#boolean-assertion-assert)
+- [Equality Assertion: `assert_eq()`](#equality-assertion-assert_eq)
+- [Inequality Assertion: `assert_neq()`](#inequality-assertion-assert_neq)
+- [Function Comparison: `compare()`](#function-comparison-compare)
+- [Custom Labels](#custom-labels)
+
 ## Assertion Modes
 
 With the `mode` argument, you can check the **return value**, `stdout` **output**, `stderr` **output**, or a combination of these:
@@ -45,7 +54,7 @@ assert(1, strlen("42") == 2);
 **Parameters**  
 - `mode`: See [Assertion Modes](#assertion-modes)
 - `timeout_sec`: Max execution time in seconds (`0` for no timeout).
-- `got_expression`: Expression whose return/output values wille be tested.
+- `got_expression`: Expression whose return/output values will be tested.
 - `expected_expr`: Control expression. `got_expression` must return/output the same values as this one to pass the test.
 
 **Example**
@@ -67,7 +76,7 @@ assert_neq(RET, 1, ptr, NULL);
 
 ## Function Comparison: `compare()`
 
-Checks if two distinct functions return/output the same values with the same parameters.
+The `compare` macro allows you to run two functions side-by-side (usually your implementation vs the original libc one) and assert that they behave identically.
 
 **Syntax**  
 `compare(mode, timeout_sec, fn1_name, fn2_name, fn_args)`
