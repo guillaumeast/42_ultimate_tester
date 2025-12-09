@@ -1,18 +1,33 @@
 # 42 ULTIMATE TESTER
 
-<p>
-  [![42](https://img.shields.io/badge/-black?logo=42&style=flat)](#)
-  [![Zsh](https://img.shields.io/badge/Shell-Zsh-89e051?style=flat&logo=gnu-bash)](#)
-  [![C](https://img.shields.io/badge/Language-C-A8B9CC?style=flat&logo=c&logoColor=white)](#)
-  [![Version](https://img.shields.io/badge/version-1.0.0-darkgreen)](#)
-</p>
-
-**Think your project is bulletproof? Test it!** 💥
+[![42](https://img.shields.io/badge/-black?logo=42&style=flat)](#)
+[![sh](https://img.shields.io/badge/Shell-sh-89e051?style=flat&logo=gnu-bash)](#)
+[![C](https://img.shields.io/badge/Language-C-A8B9CC?style=flat&logo=c&logoColor=white)](#)
+[![Version](https://img.shields.io/badge/version-0.9.0-orange)](#)
 
 42 Ultimate Tester is a **lightweight, standalone C unit testing library**.  
-No complex frameworks, no dependencie—just you, your code, and the cold hard truth.
 
----
+No complex frameworks, no dependencies — just you, your code, and the cold hard truth.
+
+## 🙌 Highlights
+
+- Pure **POSIX** `sh` / `c` framework with **no dependencies**
+- **Automatic test detection and run**
+- **Automatic type detection** inside asserts
+- **Automatic redirections** handling
+- **Automatic human-readable logs**:
+	- See the exact expression which failed
+	- See both the "got" and "expected" values
+	- See the file and line in which crash / leaks happened
+	- Set up customized labels if you prefer
+
+> ✌️ Just write what you want to test, the framework handles all the complicated stuff.
+
+## Table of contents
+- [⚙️ Install](#️-install)
+- [🛠️ Update and uninstall](#️-update-and-uninstall)
+- [📚 Documentation](#-documentation)
+- [⚠️ Limitations](#️-limitations)
 
 ## ⚙️ Install
 
@@ -30,11 +45,11 @@ This will:
 2. Build the `libfut.a` static library
 3. Link the library and header to your system (Global or Local)
 
-> ✌️ No setup, no dependency, no editing, no excuses.
+You can now run your first test in just a few seconds by following this [guide](docs/0_get_started.md) ⚡️
 
----
+> ✌️ No setup, no dependencies, no editing, no excuses.
 
-## 🛠️ Management
+## 🛠️ Update and uninstall
 
 To make your life easier, set up aliases in your shell config.
 
@@ -50,134 +65,36 @@ Now you can simply:
 - Update with `fut_update`
 - Uninstall with `fut_uninstall` (but you won't, right?)
 
----
+## 📚 Documentation
 
-## 🚀 Usage
+### 🚀 [Get Started](docs/0_get_started.md)
+Your first steps. Write a test, compile it, and run it in less than a minute.
 
-### 1. Include the header
-```c
-#include <fut.h>
-```
+### 🧩 [Test Sets](docs/1_sets.md)
+Learn more about Test Sets and global timeouts.
+- `Test()`: create isolated executable test blocks.
 
-### 2. Write your tests
-Wrap your tests in `Test()` blocks. No main function required—we handle that.
+### 🔀 [Redirections](docs/2_redirections.md)
+Master `stdout` and `stderr` redirections.  
+- `redirect_start()`, `redirect_read()`, `redirect_stop()`: manually redirect outputs and read them back.  
+- `get_output()`: Easily capture outputs in a single line.
 
-### TODO: add link to docs
+### ✅ [Assertions](docs/3_assertions.md)
+Understand how to verify correctness, compare behaviors and detect crashes/freezes with safe and flexible assertion tools.  
+- `assert()`, `assert_eq()`, `assert_neq()`: verify your code logic with type-aware comparisons.  
+- `compare()`: compare behaviors of two functions.  
+- `*_label()`: use custom labels instead of default ones.
 
-```c
-#include <fut.h>
-#include <string.h>
+### 🧠 [Memchecks](docs/4_memchecks.md)
+Catch memory leaks and unsafe memory accesses directly from your tests.
+- `memleaks()`: detect unfreed allocations.
+- `memsafety()`: detect null dereferences, unsafe malloc usage, and crash-prone memory operations.
 
-Test(test_strlen, 0) // Name, Timeout (0 = disabled)
-{
-    // Simple verification
-    assert(1, strlen("Hello") == 5);
+## ⚠️ Limitations
 
-    // Advanced comparison
-    compare(RET, 1, strlen, ft_strlen, ("Hello"));
-}
-```
-
-### 3. Compile & Run
-Link against the library (`-lfut`) and run the executable.
-
-```bash
-# If installed globally (/usr/local)
-cc my_tests.c -lfut && ./a.out
-
-# If installed locally (~/.local)
-cc my_tests.c -I ~/.local/include -L ~/.local/lib -lfut && ./a.out
-```
-
----
-
-## 📚 API Reference
-
-Here are the tools at your disposal to break your code.
-
-### 🧪 Test Sets
-Define a suite of tests with a timeout (or 0 to disable timeout).
-```c
-Test(name, timeout_s)
-{
-	// Your tests
-}
-```
-
-### 🔀 Redirections
-Manually control standard outputs.  
-Start a redirection with `redirect_start()`, ``
-```c
-redirect_start(R_STDOUT); // R_STDERR, R_BOTH
-// ... do stuff ...
-char *output = redirect_read();
-redirect_stop();
-```
-
-### ⚡ Unsafe Output
-Quickly capture output (no fork, runs in current process).
-```c
-char *out;
-get_output(R_STDOUT, printf("42"), out);
-```
-
-### 🛡️ Safe Capture
-Runs expression in a child process. Handles crashes and timeouts.
-```c
-t_capture res;
-// mode: RET, OUT, ERR, BOTH, RET_OUT...
-capture(OUT, 100, printf("42"), res); 
-
-if (res.status.type == CRASHED) ...
-if (strcmp(res.out, "42") == 0) ...
-```
-
-### ✅ Assertions
-All assertions are **safe** (forked).
-
-**Basic Assertion**
-```c
-assert(timeout, expression);
-assert(100, 1 + 1 == 2);
-```
-
-**Equality Check**
-```c
-// mode for capturing (RET, OUT...), timeout, got, expected
-assert_eq(RET, 100, ft_strlen("abc"), 3);
-```
-
-**Inequality Check**
-```c
-assert_neq(RET, 100, ft_strlen("abc"), 0);
-```
-
-**Function Comparison**
-Compare your function against the original (or another reference).
-```c
-// mode, timeout, func1, func2, (args)
-compare(RET, 100, strlen, ft_strlen, ("abc"));
-```
+- **Nested Timeouts**: Using `assert*()`/`compare*()`/`mem*()` timeouts inside a `Test()` which also have a timeout enabled **may introduce race conditions**. (WIP)
+- **Struct Comparison**: `assert_eq*()` and `assert_neq*()` do not support struct comparison yet. (WIP)
+- **Nested redirections**: Using `print_stdout()` or `print_stderr()` inside nested redirections is not supported yet. (WIP)
+- **Logs length**: Test set titles and failed assertions logs are limited to 256 characters max. (WIP)
 
 > Knowing the limitations is part of mastering the tool.
-
----
-
-## ⚠️ Important Warnings
-
-- **Nested Timeouts**: Using `assert()` or `compare()` inside a `Test()` (which implies forking inside a forked process with timers) **may introduce race conditions**. (WIP)
-- **Struct Comparison**: `assert_eq` does not support struct comparison yet. (WIP)
-- **Direct Printing**: Using `printf` or similar inside `Test()` is **Undefined Behavior** because of how the runner manages output pipes. Use logging macros or keep it silent. (WIP)
-
-> Bonus points if your test breaks your own code first — that’s science.
-
----
-
-## 🧹 Cleanup
-
-Wanna start fresh?
-```bash
-fut_uninstall
-```
-
-> You’ll be able to pretend this never happened — and that you nailed it on the first try.

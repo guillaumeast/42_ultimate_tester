@@ -10,7 +10,7 @@
 
 #include "status_pub.h"
 
-#define H2_CAP 512
+#define H2_CAP 256
 
 const char	*format_addr(void *ptr);
 const char	*format_status(t_status *status);

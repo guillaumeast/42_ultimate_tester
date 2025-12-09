@@ -49,7 +49,7 @@ Execute the binary to run your tests.
 ./my_tester
 ```
 
-You should see output similar to this:
+You should see output similar to this:  
 [_**TODO: add screenshot**_]
 
 ## Go further
