@@ -33,6 +33,7 @@ No complex frameworks, no dependencies — just you, your code, and the cold har
 - [Update and uninstall](#️-update-and-uninstall)
 - [Documentation](#-documentation)
 - [Limitations](#️-limitations)
+- [Contribute](#-contribute)
 
 ## ⚙️ Install
 
@@ -112,3 +113,25 @@ Catch memory leaks and unsafe memory accesses directly from your tests.
 - **Logs length**: Test set titles and failed assertions logs are limited to 256 characters max. (WIP)
 
 > Knowing the limitations is part of mastering the tool.
+
+## 🤝 Contribute
+
+Contributions are welcome!
+
+Whether you want to fix a bug, improve the documentation, add features, or optimize the core, feel free to open a Pull Request.
+
+### How to contribute
+1. Fork the repository  
+2. Create a feature branch:
+   ```bash
+   git checkout -b feature/my-feature
+   ```
+3. Commit your changes:
+   ```bash
+   git commit -m "feat: add my feature"
+   ```
+4. Push your branch and open a Pull Request
+
+> 💡 Make sure your contribution follows the project's structure and conventions.
+
+If you're unsure about something, feel free to open an issue — discussion is welcome.
