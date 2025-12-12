@@ -3,6 +3,7 @@
 
 #include "redirect_pub.h"
 #include "status_pub.h"
+#include <stdint.h>
 #include <string.h>
 
 typedef enum e_capture_mode

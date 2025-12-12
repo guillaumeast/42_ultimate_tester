@@ -1,13 +1,14 @@
+#if defined(__APPLE__)
+# define PATH_FALLBACK ""
+#else
+# define PATH_FALLBACK "/proc/self/exe"
+# define _GNU_SOURCE
+#endif
+
 #include <dlfcn.h>
 #include <limits.h>
 #include <stdio.h>
 #include <string.h>
-
-#if defined(__APPLE__)
-#define PATH_FALLBACK ""
-#else
-#define PATH_FALLBACK "/proc/self/exe"
-#endif
 
 #define ADDR_CAP 128
 

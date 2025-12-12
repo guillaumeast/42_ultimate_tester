@@ -11,6 +11,8 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <stdlib.h>
+#include <signal.h>
+#include <sys/wait.h>
 #include <unistd.h>
 
 static inline void	wait_for_child(int *status, t_set *set);

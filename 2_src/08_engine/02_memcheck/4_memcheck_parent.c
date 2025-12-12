@@ -6,6 +6,7 @@
 #undef __FUT_INSIDE__
 
 #include <stdlib.h>
+#include <sys/wait.h>
 
 static inline void	wait_for_child(int *status, t_result *result);
 

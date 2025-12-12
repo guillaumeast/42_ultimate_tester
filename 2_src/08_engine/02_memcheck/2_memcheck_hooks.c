@@ -5,6 +5,10 @@
 #undef __FUT_MEMCHECK_INSIDE__
 #undef __FUT_INSIDE__
 
+#ifndef __APPLE__
+# define _GNU_SOURCE
+#endif
+
 #include <dlfcn.h>
 
 static void	*(*real_malloc)(size_t) = NULL;
