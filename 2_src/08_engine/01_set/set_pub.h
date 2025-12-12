@@ -7,7 +7,7 @@
 #if defined(__APPLE__)
 	#define ULT_SECTION __attribute__((used, section("__DATA,__ult_tester")))
 #else
-	#define ULT_SECTION __attribute__((section(".ult_tester")))
+	#define ULT_SECTION __attribute__((section("ult_tester")))
 #endif
 
 typedef void (*t_test_fn)(void);
