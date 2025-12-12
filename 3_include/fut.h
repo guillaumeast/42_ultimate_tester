@@ -262,54 +262,70 @@ typedef struct s_assert
 
 void	_assert_run(t_assert *assert);
 
-#define _assert(should_be_equal, cap_mode, timeout_sec, label, got_expr, exp_expr)	\
-	do {																			\
-		t_capture _capt_got = {0};													\
-		capture(cap_mode, timeout_sec, (got_expr), _capt_got);						\
-																					\
-		t_capture _capt_exp = {0};													\
-		capture(cap_mode, timeout_sec, (exp_expr), _capt_exp);						\
-																					\
-		t_assert _assert = {0};														\
-		_assert.mode = cap_mode;													\
-		_assert.eq = should_be_equal;												\
-		_assert.lab = label;														\
-		_assert.got_capt = &_capt_got;												\
-		_assert.exp_capt = &_capt_exp;												\
-		if (__type_is_void(exp_expr) && __type_is_void(got_expr))					\
-		{																			\
-			_assert.ret_size = sizeof(int);											\
-			_assert.format = F_SIGNED;												\
-		}																			\
-		else																		\
-		{																			\
-			_assert.ret_size = sizeof(__typeof__(exp_expr)); 						\
-			_assert.format = _Generic(__typeof__(exp_expr), 						\
-				bool: F_BOOL, 														\
-				char: F_CHAR, 														\
-				unsigned char: F_CHAR, 												\
-				signed char: F_CHAR, 												\
-				short: F_SIGNED, 													\
-				unsigned short: F_UNSIGNED, 										\
-				int: F_SIGNED, 														\
-				unsigned int: F_UNSIGNED, 											\
-				long: F_SIGNED, 													\
-				unsigned long: F_UNSIGNED, 											\
-				long long: F_SIGNED, 												\
-				unsigned long long: F_UNSIGNED, 									\
-				char *: F_STRING,													\
-				char []: F_STRING,													\
-				const char *: F_STRING,												\
-				const char []: F_STRING,											\
-				unsigned char *: F_STRING,											\
-				unsigned char []: F_STRING,											\
-				const unsigned char *: F_STRING,									\
-				const unsigned char []: F_STRING,									\
-				void *: F_HEX,														\
-				const void *: F_HEX,												\
-				default: F_HEX);													\
-		}																			\
-		_assert_run(&_assert);														\
+#define _assert(should_be_equal, cap_mode, timeout_sec, label, got_expr, exp_expr)				\
+	do {																						\
+		t_capture _capt_got = {0};																\
+		capture(cap_mode, timeout_sec, (got_expr), _capt_got);									\
+																								\
+		t_capture _capt_exp = {0};																\
+		capture(cap_mode, timeout_sec, (exp_expr), _capt_exp);									\
+																								\
+		t_assert _assert = {0};																	\
+		_assert.mode = cap_mode;																\
+		_assert.eq = should_be_equal;															\
+		_assert.lab = label;																	\
+		_assert.got_capt = &_capt_got;															\
+		_assert.exp_capt = &_capt_exp;															\
+		if (__type_is_void(exp_expr) && __type_is_void(got_expr))								\
+		{																						\
+			_assert.ret_size = sizeof(int);														\
+			_assert.format = F_SIGNED;															\
+		}																						\
+		else																					\
+		{																						\
+			_assert.ret_size = sizeof(__typeof__(exp_expr)); 									\
+			if (__builtin_types_compatible_p(__typeof__(exp_expr), bool))						\
+				_assert.format = F_BOOL;														\
+			else if (																			\
+				__builtin_types_compatible_p(__typeof__(exp_expr), char) ||						\
+				__builtin_types_compatible_p(__typeof__(exp_expr), signed char) ||				\
+				__builtin_types_compatible_p(__typeof__(exp_expr), unsigned char)				\
+			)																					\
+				_assert.format = F_CHAR;														\
+			else if (																			\
+				__builtin_types_compatible_p(__typeof__(exp_expr), short) ||					\
+				__builtin_types_compatible_p(__typeof__(exp_expr), int) ||						\
+				__builtin_types_compatible_p(__typeof__(exp_expr), long) ||						\
+				__builtin_types_compatible_p(__typeof__(exp_expr), long long)					\
+			)																					\
+				_assert.format = F_SIGNED;														\
+			else if (																			\
+				__builtin_types_compatible_p(__typeof__(exp_expr), unsigned short) ||			\
+				__builtin_types_compatible_p(__typeof__(exp_expr), unsigned int) ||				\
+				__builtin_types_compatible_p(__typeof__(exp_expr), unsigned long) ||			\
+				__builtin_types_compatible_p(__typeof__(exp_expr), unsigned long long)			\
+			)																					\
+				_assert.format = F_UNSIGNED;													\
+			else if (																			\
+				__builtin_types_compatible_p(__typeof__(exp_expr), char *) ||					\
+				__builtin_types_compatible_p(__typeof__(exp_expr), char []) ||					\
+				__builtin_types_compatible_p(__typeof__(exp_expr), const char *) ||				\
+				__builtin_types_compatible_p(__typeof__(exp_expr), const char []) ||			\
+				__builtin_types_compatible_p(__typeof__(exp_expr), unsigned char *) ||			\
+				__builtin_types_compatible_p(__typeof__(exp_expr), unsigned char []) ||			\
+				__builtin_types_compatible_p(__typeof__(exp_expr), const unsigned char *) ||	\
+				__builtin_types_compatible_p(__typeof__(exp_expr), const unsigned char [])		\
+			)																					\
+				_assert.format = F_STRING;														\
+			else if (																			\
+				__builtin_types_compatible_p(__typeof__(exp_expr), void *) ||					\
+				__builtin_types_compatible_p(__typeof__(exp_expr), const void *)				\
+			)																					\
+				_assert.format = F_HEX;															\
+			else																				\
+				_assert.format = F_HEX;															\
+		}																						\
+		_assert_run(&_assert);																	\
 	} while (0)
 
 #define assert(timeout_sec, expression)													\

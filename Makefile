@@ -1,6 +1,6 @@
 NAME		:= libfut.a
 CC			:= cc
-CFLAGS		:= -Wall -Wextra -Werror -fPIC -g3 -std=gnu11
+CFLAGS		:= -Wall -Wextra -Werror -fPIC -g3
 
 SRCS		:= 										\
 	$(wildcard 2_src/01_main/*.c) 					\
