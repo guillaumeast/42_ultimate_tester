@@ -45,7 +45,7 @@ Say hello to clean, automated, crash-proof testing for your C projects.
 ### 🧩 Designed for 42 standards
 
 - Pure POSIX C
-- Works on Linux and macOS (`x86` and `ARM`)
+- Works on Linux and macOS (`ARM`)
 - Zero external dependencies
 - _No-`sudo`_ install option
 - Perfect for `libft`, `ft_printf`, `gnl`, `minitalk`, and all 42 projects
@@ -129,6 +129,8 @@ Catch memory leaks and unsafe memory accesses directly from your tests.
 
 ## ⚠️ Limitations
 
+- **x86 Archs**: This framework is not yet tested for `x86` archs (WIP)
+- **Returned Strings**: Returned strings are not yet supported because they live in the forked process memory and IPC can't handle them yet. (WIP)
 - **Nested Timeouts**: Using `assert*()`/`compare*()`/`mem*()` timeouts inside a `Test()` which also have a timeout enabled **may introduce race conditions**. (WIP)
 - **Struct Comparison**: `assert_eq*()` and `assert_neq*()` do not support struct comparison yet. (WIP)
 - **Nested redirections**: Using `print_stdout()` or `print_stderr()` inside nested redirections is not supported yet. (WIP)
